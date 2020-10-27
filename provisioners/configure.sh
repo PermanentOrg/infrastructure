@@ -39,14 +39,16 @@ echo "Configure ImageMagick"
 cp $TEMPLATES_PATH/etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml
 
 echo "Configure apache"
-# Make www-data the owner of /var/www/ because writing to this dir is required for file conversions
-chown -R www-data /var/www/
 
 # This is the Apache DocumentRoot, and where the aws php sdk will look for credentials
 mkdir /var/www/.aws
 mkdir /var/www/.cache
 envsubst < $TEMPLATES_PATH/var/www/.aws/credentials > /var/www/.aws/credentials
 envsubst < $TEMPLATES_PATH/var/www/.aws/config > /var/www/.aws/config
+
+# Make www-data the owner of /var/www/ because writing to this dir is required for file conversions
+chown -R www-data /var/www/
+
 service apache2 stop
 a2dissite 000-default
 cp $TEMPLATES_PATH/etc/apache2/apache2.conf /etc/apache2/apache2.conf
