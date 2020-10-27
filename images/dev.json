@@ -1,0 +1,70 @@
+{
+    "variables": {
+      "environment": "dev",
+      "app_user": "deployer",
+      "templates_path": "/tmp/templates",
+      "aws_region": "{{env `AWS_REGION`}}",
+      "aws_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+      "aws_secret": "{{env `AWS_SECRET_ACCESS_KEY`}}"
+    },
+    "builders": [
+      {
+          "type": "amazon-ebs",
+          "region": "{{user `aws_region`}}",
+          "source_ami_filter": {
+              "filters": {
+                  "virtualization-type": "hvm",
+                  "name": "debian-10-amd64-20200803-347",
+                  "root-device-type": "ebs"
+              },
+              "owners": [
+                  "136693071363"
+              ],
+              "most_recent": true
+          },
+          "instance_type": "m4.large",
+          "ssh_username": "admin",
+          "ami_name": "{{user `environment`}}-{{timestamp}}",
+          "ami_description": "Packer-built AMI for {{user `environment`}} API on {{isotime}}",
+          "tags": {
+            "Name" : "dev php backend",
+            "built_by": "packer",
+            "environment": "{{user `environment`}}"
+          },
+          "launch_block_device_mappings" : [
+            {
+               "device_name" : "/dev/sdb",
+               "delete_on_termination" : true,
+               "volume_size" : 100,
+               "volume_type" : "gp2"
+            }
+         ],
+         "ami_block_device_mappings" : [
+            {
+               "device_name" : "/dev/sdb",
+               "delete_on_termination" : true,
+               "volume_type" : "gp2"
+            }
+         ]
+      }
+    ],
+    "provisioners": [
+    {
+        "type": "file",
+        "source": "../templates",
+        "destination": "{{ user `templates_path`}}"
+    },
+    {
+        "type": "ansible",
+        "playbook_file": "../provisioners/setup.yml",
+        "extra_arguments": [ "-vv", "--extra-vars", 
+            "app_user={{user `app_user`}} perm_env={{user `environment`}} perm_subdomain={{user `environment`}} aws_region={{user `aws_region`}} aws_access_key_id={{user `aws_key`}} aws_secret_access_key={{user `aws_secret`}} templates_path={{user `templates_path`}}"
+        ]
+    },
+    {
+        "type": "ansible",
+        "playbook_file": "../provisioners/deploy.yml",
+        "extra_arguments": [ "-vv", "--extra-vars", "perm_env={{user `environment`}} app_user={{user `app_user`}}" ],
+        "ansible_env_vars": ["ANSIBLE_PIPELINING=True"]
+    }]
+}
