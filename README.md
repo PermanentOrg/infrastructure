@@ -1,8 +1,6 @@
-# infra
+# infrastructure
 
-The infrastructure configuration, currently written in Terraform, Packer and Ansible.
-
-Notes: there is currently a provisioner dependency between this repository and the [devenv repository](https://github.com/permanentorg/devenv). Please ensure that this repository is checked out as well.
+The infrastructure configuration, written using [Terraform](https://www.terraform.io), [Packer](https://www.packer.io) and [Ansible](https://www.ansible.com/).
 
 ## Install
 
