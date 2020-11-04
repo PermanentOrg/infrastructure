@@ -1,0 +1,15 @@
+[Unit]
+Description=Node Upload Service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/data/www/upload-service
+ExecStart=/usr/bin/nodejs /data/www/upload-service/lib/index.js
+KillMode=process
+Restart=always
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target
