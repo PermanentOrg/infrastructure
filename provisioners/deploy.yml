@@ -105,3 +105,4 @@
         - sqs-daemon.service
         - video-daemon.service
         - uploader.service
+        - node-upload.service
