@@ -23,6 +23,8 @@ cp .env.template .env # add your AWS access credentials
 source .env && cd images && packer build dev.json
 ```
 
+For Permanent employees: use the AWS access keys associated with the `build` IAM user, not the keys associated with your personal AWS account.
+
 ## Deploy Images
 
 If you've never run Terraform before:
