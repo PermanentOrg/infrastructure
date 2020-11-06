@@ -30,6 +30,7 @@
         - mdot
         - task-runner
         - uploader
+        - upload-service
         - website
     - name: Untar packages
       unarchive:
@@ -43,6 +44,7 @@
         - mdot
         - task-runner
         - uploader
+        - upload-service
         - website
     - name: Change file permissions
       file:
