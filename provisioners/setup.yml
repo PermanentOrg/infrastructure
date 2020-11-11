@@ -24,6 +24,20 @@
         dest: /etc/sudoers.d/sudo_nopasswd
         mode: 0440
 
+- name: Harden sshd_config
+  hosts: default
+  become: true
+  vars:
+    sshd:
+      X11Forwarding: no
+      UseDNS: yes
+      MaxAuthTries: 3
+      LoginGraceTime: 20
+      AllowAgentForwarding: no
+      AllowTcpForwarding: no
+  roles:
+    - role: willshersystems.sshd
+
 - name: Format and mount persistent storage
   hosts: default
   become: true
