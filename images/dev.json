@@ -1,7 +1,6 @@
 {
     "variables": {
       "environment": "dev",
-      "app_user": "deployer",
       "templates_path": "/tmp/templates",
       "aws_region": "{{env `AWS_REGION`}}",
       "aws_key": "{{env `AWS_ACCESS_KEY_ID`}}",
@@ -58,13 +57,13 @@
         "type": "ansible",
         "playbook_file": "../provisioners/setup.yml",
         "extra_arguments": [ "-vv", "--extra-vars", 
-            "app_user={{user `app_user`}} perm_env={{user `environment`}} perm_subdomain={{user `environment`}} aws_region={{user `aws_region`}} aws_access_key_id={{user `aws_key`}} aws_secret_access_key={{user `aws_secret`}} templates_path={{user `templates_path`}}"
+            "perm_env={{user `environment`}} perm_subdomain={{user `environment`}} aws_region={{user `aws_region`}} aws_access_key_id={{user `aws_key`}} aws_secret_access_key={{user `aws_secret`}} templates_path={{user `templates_path`}}"
         ]
     },
     {
         "type": "ansible",
         "playbook_file": "../provisioners/deploy.yml",
-        "extra_arguments": [ "-vv", "--extra-vars", "perm_env={{user `environment`}} app_user={{user `app_user`}}" ],
+        "extra_arguments": [ "-vv", "--extra-vars", "perm_env={{user `environment`}}" ],
         "ansible_env_vars": ["ANSIBLE_PIPELINING=True"]
     }]
 }

@@ -14,14 +14,8 @@
         user: root
         name: minute crontab
         job: "cd / && run-parts --report /etc/cron.minute"
-    - name: Add version file
-      file:
-        path: /data/tmp/version.txt
-        state: touch
-        owner: "{{ app_user }}"
-        group: "{{ app_user }}"
     - name: Copy packages from S3
-      become_user: "{{ app_user }}"
+      become_user: deployer
       command: "aws s3 cp s3://permanent-repos/{{ perm_env }}/{{ item }}.tar.gz /data/tmp/{{ item }}.tar.gz"
       loop:
         - api
@@ -52,13 +46,13 @@
         state: directory
         recurse: yes
         owner: www-data
-        group: "{{ app_user }}"
+        group: deployer
     - name: Create cronjobs
       copy:
         src: "/data/www/task-runner/scripts/{{ item }}"
         dest: "/etc/cron.{{ item }}"
         owner: www-data 
-        group: "{{ app_user }}"
+        group: deployer
         mode: "0644"
         remote_src: yes
       loop:
@@ -80,7 +74,7 @@
         src: "/data/www/daemon/scripts/{{ item }}"
         dest: "/etc/systemd/system/{{ item }}"
         owner: www-data 
-        group: "{{ app_user }}"
+        group: deployer
         mode: "0644"
         remote_src: yes
       loop:
@@ -93,14 +87,14 @@
         src: /data/www/uploader/scripts/uploader.service
         dest: /etc/systemd/system/uploader.service
         owner: www-data 
-        group: "{{ app_user }}"
+        group: deployer
         mode: "0644"
         remote_src: yes
     - name: Enable and start all services
       service:
         name: "{{ item }}" 
         enabled: yes
-        state: reloaded
+        state: restarted
       loop:
         - process-daemon.service
         - queue-daemon.service
