@@ -94,7 +94,7 @@
       service:
         name: "{{ item }}" 
         enabled: yes
-        state: reloaded
+        state: restarted
       loop:
         - process-daemon.service
         - queue-daemon.service
