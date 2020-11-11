@@ -15,7 +15,9 @@ jobs:
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
         - name: Save ssh deploy key to a file
-          run: 'echo "$SSH_KEY" > key'
+          run: | 
+            echo "$SSH_KEY" > key
+            chmod 400 key
           env:
             SSH_KEY: ${{ secrets.DEPLOYER_SSH_KEY }}
         - name: Generate Inventory
