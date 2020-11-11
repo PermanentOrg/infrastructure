@@ -19,7 +19,7 @@ jobs:
             echo "$SSH_KEY" > key
             chmod 400 key
           env:
-            SSH_KEY: ${{ secrets.DEPLOYER_SSH_KEY }}
+            SSH_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
         - name: Generate Inventory
           run: ./scripts/generate_inventory.sh
         - name: Run deploy
