@@ -1,0 +1,24 @@
+name: Deploy Code
+
+on:
+    workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v1
+        - name: Save ssh deploy key to a file
+          run: 'echo "$SSH_KEY" > key'
+          env:
+            SSH_KEY: ${{ secrets.DEPLOYER_SSH_KEY }}
+        - name: Generate Inventory
+          run: ./scripts/generate_inventory.sh
+        - name: Run deploy
+          run: ansible-playbook provisioners/deploy.yml -vv -e "perm_env=dev" -i inventory.ini
+          env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+            ANSIBLE_PIPELINING: True
+            
