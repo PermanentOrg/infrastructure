@@ -15,8 +15,9 @@ provider "aws" {
 data "aws_ami" "dev_api" {
   most_recent = true
 
- tags = {
-    environment = "dev"
+  filter {
+    name = "tag:environment"
+    values = ["dev"]
   }
   owners = ["364159549467"]
 }
