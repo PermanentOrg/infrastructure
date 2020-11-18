@@ -45,6 +45,8 @@ chgrp -R $APP_USER /home/$APP_USER/.aws
 
 mkdir /data/tmp
 chmod 774 /data/tmp
+chown -R www-data /data/tmp
+chgrp -R $APP_USER /data/tmp
 
 rm -rf $TEMPLATES_PATH
 

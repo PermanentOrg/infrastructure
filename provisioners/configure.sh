@@ -78,7 +78,7 @@ npm install -g @angular/cli@7.3.6
 mkdir /data/tmp
 chmod 774 /data/tmp
 chown -R www-data /data/tmp
-chgrp -R www-data /data/tmp
+chgrp -R $APP_USER /data/tmp
 
 cp -R /var/www/.aws /home/$APP_USER/
 chown -R $APP_USER /home/$APP_USER/.aws
