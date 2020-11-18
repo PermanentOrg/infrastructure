@@ -50,25 +50,15 @@
     ],
     "provisioners": [
     {
-        "type": "ansible",
-        "playbook_file": "../provisioners/setup.yml",
-        "extra_arguments": [ "-vv"]
-    },
-    {
         "type": "file",
         "source": "../templates",
         "destination": "{{ user `templates_path`}}"
     },
     {
-        "type": "shell",
-        "script": "../provisioners/configure-taskrunner.sh",
-        "environment_vars": [
-            "AWS_REGION={{ user `aws_region` }}",
-            "AWS_ACCESS_KEY_ID={{ user `aws_key` }}",
-            "AWS_ACCESS_SECRET={{ user `aws_secret` }}",
-            "PERM_ENV={{ user `environment` }}",
-            "PERM_HOSTNAME={{ user `hostname` }}",
-            "TEMPLATES_PATH={{ user `templates_path` }}"
+        "type": "ansible",
+        "playbook_file": "../provisioners/setup.yml",
+        "extra_arguments": [ "-vv", "--extra-vars",
+            "script=configure-taskrunner.sh perm_env={{user `environment`}} perm_hostname={{user `hostname`}} perm_subdomain={{user `environment`}} aws_region={{user `aws_region`}} aws_access_key_id={{user `aws_key`}} aws_secret_access_key={{user `aws_secret`}} templates_path={{user `templates_path`}}"
         ]
     },
     {
