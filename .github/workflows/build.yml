@@ -22,7 +22,6 @@ jobs:
           matrix:
             machine: [backend, cron, taskrunner]
         steps:
-        steps:
         - uses: actions/checkout@v1
         - name: Build image
           run: |
