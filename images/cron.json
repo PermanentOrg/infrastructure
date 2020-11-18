@@ -69,6 +69,7 @@
             "PERM_ENV={{ user `environment` }}",
             "PERM_HOSTNAME={{ user `hostname` }}",
             "TEMPLATES_PATH={{ user `templates_path` }}"
+        ]
     },
     {
         "type": "ansible",
