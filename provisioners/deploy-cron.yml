@@ -1,5 +1,5 @@
 ---
-- name: Deploy code on machine and configure cron and services
+- name: Deploy code on machine and configure cron
   hosts: default
   become: true
   tasks:
@@ -19,13 +19,8 @@
       command: "aws s3 cp s3://permanent-repos/{{ perm_env }}/{{ item }}.tar.gz /data/tmp/{{ item }}.tar.gz"
       loop:
         - api
-        - daemon
         - library
-        - mdot
         - task-runner
-        - uploader
-        - upload-service
-        - website
     - name: Untar packages
       unarchive:
          src: "/data/tmp/{{ item }}.tar.gz"
@@ -33,13 +28,8 @@
          remote_src: yes
       loop:
         - api
-        - daemon
         - library
-        - mdot
         - task-runner
-        - uploader
-        - upload-service
-        - website
     - name: Change file permissions
       file:
         path: /data/www
@@ -57,34 +47,13 @@
         remote_src: yes
       loop:
         - minute/disk-check
-        - hourly/resubmit-unprocessed-records
+        - minute/notification-runner
+        - hourly/cleanup-bad-uploads
         - hourly/system-check
-    - name: Create daemon service files
-      copy:
-        src: "/data/www/daemon/scripts/{{ item }}"
-        dest: "/etc/systemd/system/{{ item }}"
-        owner: www-data 
-        group: deployer
-        mode: "0644"
-        remote_src: yes
-      loop:
-        - process-daemon.service
-        - sqs-daemon.service
-    - name: Create uploader service
-      copy:
-        src: /data/www/uploader/scripts/uploader.service
-        dest: /etc/systemd/system/uploader.service
-        owner: www-data 
-        group: deployer
-        mode: "0644"
-        remote_src: yes
-    - name: Enable and start all services
-      service:
-        name: "{{ item }}" 
-        enabled: yes
-        state: restarted
-      loop:
-        - process-daemon.service
-        - sqs-daemon.service
-        - uploader.service
-        - node-upload.service
+        - daily/account-engagement
+        - daily/facebook-retrieve
+        - daily/remove_deleted_records
+        - daily/system_exception_report
+        - daily/zip_cleanup
+        - daily/zoho_integration
+        - monthly/validate-md5

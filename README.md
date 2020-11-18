@@ -21,7 +21,7 @@ The easiest way to create an image is to use the ["Build Image" Github Action](h
 
 ```
 cp .env.template .env # add your AWS access credentials
-source .env && cd images && packer build dev.json
+source .env && cd images && packer build backend.json
 ```
 
 For Permanent employees: use the AWS access keys associated with the `build` IAM user, not the keys associated with your personal AWS account.

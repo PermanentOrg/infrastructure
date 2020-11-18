@@ -16,6 +16,8 @@ apt-get -qq update
 apt-get -qq install -y curl htop wget build-essential zip software-properties-common gnupg awscli
 
 echo $PERM_ENV  > /data/www/host.txt
+echo $PERM_HOSTNAME > /etc/hostname
+hostname $PERM_HOSTNAME
 
 echo "Add custom sources"
 # Add mysql key
@@ -74,7 +76,9 @@ npm install -g forever
 npm install -g @angular/cli@7.3.6
 
 mkdir /data/tmp
-chmod 777 /data/tmp
+chmod 774 /data/tmp
+chown -R www-data /data/tmp
+chgrp -R www-data /data/tmp
 
 cp -R /var/www/.aws /home/$APP_USER/
 chown -R $APP_USER /home/$APP_USER/.aws

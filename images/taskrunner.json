@@ -1,0 +1,79 @@
+{
+    "variables": {
+      "environment": "{{env `PERM_ENV`}}",
+      "hostname": "taskrunner-{{env `PERM_ENV`}}",
+      "templates_path": "/tmp/templates",
+      "aws_region": "{{env `AWS_REGION`}}",
+      "aws_key": "{{env `DEV_AWS_ACCESS_KEY_ID`}}",
+      "aws_secret": "{{env `DEV_AWS_SECRET_ACCESS_KEY`}}"
+    },
+    "builders": [
+      {
+          "type": "amazon-ebs",
+          "region": "{{user `aws_region`}}",
+          "source_ami_filter": {
+              "filters": {
+                  "virtualization-type": "hvm",
+                  "name": "debian-10-amd64-20200803-347",
+                  "root-device-type": "ebs"
+              },
+              "owners": [
+                  "136693071363"
+              ],
+              "most_recent": true
+          },
+          "instance_type": "c4.xlarge",
+          "ssh_username": "admin",
+          "ami_name": "{{user `hostname`}}-{{timestamp}}",
+          "ami_description": "Packer-built AMI for {{user `hostname`}} API on {{isotime}}",
+          "tags": {
+            "Name" : "{{user `hostname`}}",
+            "built_by": "packer",
+            "environment": "{{user `environment`}}"
+          },
+          "launch_block_device_mappings" : [
+            {
+               "device_name" : "/dev/sdb",
+               "delete_on_termination" : true,
+               "volume_size" : 100,
+               "volume_type" : "gp2"
+            }
+         ],
+         "ami_block_device_mappings" : [
+            {
+               "device_name" : "/dev/sdb",
+               "delete_on_termination" : true,
+               "volume_type" : "gp2"
+            }
+         ]
+      }
+    ],
+    "provisioners": [
+    {
+        "type": "ansible",
+        "playbook_file": "../provisioners/setup.yml",
+        "extra_arguments": [ "-vv"]
+    },
+    {
+        "type": "file",
+        "source": "../templates",
+        "destination": "{{ user `templates_path`}}"
+    },
+    {
+        "type": "shell",
+        "script": "../provisioners/configure-taskrunner.sh",
+        "environment_vars": [
+            "AWS_REGION={{ user `aws_region` }}",
+            "AWS_ACCESS_KEY_ID={{ user `aws_access_key_id` }}",
+            "AWS_ACCESS_SECRET={{ user `aws_secret_access_key` }}",
+            "PERM_ENV={{ user `environment` }}",
+            "PERM_HOSTNAME={{ user `hostname` }}",
+            "TEMPLATES_PATH={{ user `templates_path` }}"
+    },
+    {
+        "type": "ansible",
+        "playbook_file": "../provisioners/deploy-task-runner.yml",
+        "extra_arguments": [ "-vv", "--extra-vars", "perm_env={{user `environment`}}" ],
+        "ansible_env_vars": ["ANSIBLE_PIPELINING=True"]
+    }]
+}
