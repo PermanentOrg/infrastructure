@@ -17,7 +17,6 @@ apt-get -qq install -y curl htop wget build-essential zip software-properties-co
 
 echo $PERM_ENV  > /data/www/host.txt
 echo $PERM_HOSTNAME > /etc/hostname
-hostname $PERM_HOSTNAME
 
 echo "Add custom sources"
 # Add mysql key
@@ -39,6 +38,8 @@ update-rc.d apache2 disable
 echo "Configure ImageMagick"
 cp $TEMPLATES_PATH/etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml
 
+mkdir /var/www/.aws
+mkdir /var/www/.cache
 envsubst < $TEMPLATES_PATH/var/www/.aws/credentials > /var/www/.aws/credentials
 envsubst < $TEMPLATES_PATH/var/www/.aws/config > /var/www/.aws/config
 chown -R www-data /var/www/

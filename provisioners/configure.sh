@@ -17,7 +17,6 @@ apt-get -qq install -y curl htop wget build-essential zip software-properties-co
 
 echo $PERM_ENV  > /data/www/host.txt
 echo $PERM_HOSTNAME > /etc/hostname
-hostname $PERM_HOSTNAME
 
 echo "Add custom sources"
 # Add mysql key
