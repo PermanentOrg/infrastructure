@@ -10,6 +10,10 @@ KillMode=process
 Restart=always
 User=www-data
 Group=www-data
+Environment="SENTRY_ENVIRONMENT=${PERM_ENV}"
+Environment="PORT=3000"
+Environment="SENTRY_DSN=${UPLOAD_SERVICE_SENTRY_DSN}"
+Environment="AWS_SDK_LOAD_CONFIG=true"
 
 [Install]
 WantedBy=multi-user.target
