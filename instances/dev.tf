@@ -68,7 +68,6 @@ resource "aws_instance" "taskrunner" {
     vpc_security_group_ids = [data.aws_security_group.dev_sg.id, data.aws_security_group.bitbucket_sg.id]
     monitoring = true
     key_name = "PermRecord"
-    private_ip = "172.31.0.79"
     tags = {
         Name = "Dev Taskrunner"
     }
@@ -80,7 +79,6 @@ resource "aws_instance" "cron" {
     vpc_security_group_ids = [data.aws_security_group.dev_sg.id, data.aws_security_group.bitbucket_sg.id]
     monitoring = true
     key_name = "PermRecord"
-    private_ip = "172.31.0.78"
     tags = {
         Name = "Dev Cron"
     }
