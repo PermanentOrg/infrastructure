@@ -58,7 +58,7 @@ resource "aws_instance" "api" {
     key_name = "PermRecord"
     private_ip = "172.31.0.80"
     tags = { 
-        Name = "Dev Backend"
+        Name = "dev backend"
     }
 }
 
@@ -69,7 +69,7 @@ resource "aws_instance" "taskrunner" {
     monitoring = true
     key_name = "PermRecord"
     tags = {
-        Name = "Dev Taskrunner"
+        Name = "dev taskrunner"
     }
 }
 
@@ -80,6 +80,6 @@ resource "aws_instance" "cron" {
     monitoring = true
     key_name = "PermRecord"
     tags = {
-        Name = "Dev Cron"
+        Name = "dev cron"
     }
 }
