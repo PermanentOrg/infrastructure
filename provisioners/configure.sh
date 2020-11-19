@@ -16,7 +16,6 @@ apt-get -qq update
 apt-get -qq install -y curl htop wget build-essential zip software-properties-common gnupg awscli
 
 echo $PERM_ENV  > /data/www/host.txt
-echo $PERM_HOSTNAME > /etc/hostname
 
 echo "Add custom sources"
 # Add mysql key

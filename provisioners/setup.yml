@@ -71,6 +71,9 @@
         mode: "0755"
         owner: "www-data"
         group: "deployer"
+    - name: Set Hostname
+      hostname:
+        name: "{{ perm_hostname }}"
     - name: Run the configure script
       script: "{{ script }}"
       environment:
@@ -78,7 +81,6 @@
         AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
         AWS_ACCESS_SECRET: "{{ aws_secret_access_key }}"
         PERM_ENV: "{{ perm_env }}"
-        PERM_HOSTNAME: "{{ perm_hostname }}"
         PERM_SUBDOMAIN: "{{ perm_subdomain }}"
         TEMPLATES_PATH: "{{ templates_path }}"
         APP_USER: "deployer"
