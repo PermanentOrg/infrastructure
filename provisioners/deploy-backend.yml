@@ -53,7 +53,7 @@
         dest: "/etc/cron.{{ item }}"
         owner: www-data 
         group: deployer
-        mode: "0644"
+        mode: "0744"
         remote_src: yes
       loop:
         - minute/disk-check

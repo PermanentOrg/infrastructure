@@ -28,6 +28,17 @@
         recurse: yes
         owner: www-data
         group: deployer
+    - name: Create cronjobs
+      copy:
+        src: "/data/www/task-runner/scripts/{{ item }}"
+        dest: "/etc/cron.{{ item }}"
+        owner: www-data
+        group: deployer
+        mode: "0744"
+        remote_src: yes
+      loop:
+        - minute/disk-check
+        - hourly/system-check
     - name: Create daemon service files
       copy:
         src: "/data/www/daemon/scripts/{{ item }}"
