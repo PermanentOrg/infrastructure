@@ -60,9 +60,6 @@ resource "aws_instance" "api" {
     tags = { 
         Name = "dev backend"
     }
-    provisioner "remote-exec" {
-      inline = ["sudo hostnamectl set-hostname dev"]
-    }
 }
 
 resource "aws_instance" "taskrunner" {
@@ -74,9 +71,6 @@ resource "aws_instance" "taskrunner" {
     tags = {
         Name = "dev taskrunner"
     }
-    provisioner "remote-exec" {
-      inline = ["sudo hostnamectl set-hostname taskrunner-dev"]
-    }
 }
 
 resource "aws_instance" "cron" {
@@ -87,8 +81,5 @@ resource "aws_instance" "cron" {
     key_name = "PermRecord"
     tags = {
         Name = "dev cron"
-    }
-    provisioner "remote-exec" {
-      inline = ["sudo hostnamectl set-hostname cron-dev"]
     }
 }

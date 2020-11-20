@@ -71,6 +71,8 @@
         mode: "0755"
         owner: "www-data"
         group: "deployer"
+    - name: Change hostname
+      shell: hostnamectl set-hostname {{ perm_hostname }}
     - name: Run the configure script
       script: "{{ script }}"
       environment:
