@@ -3,6 +3,17 @@
   hosts: default
   become: true
   tasks:
+    - name: Create minute cron dir
+      file:
+        path: /etc/cron.minute
+        state: directory
+        mode: '0755'
+    - name: Add minute crontab
+      cron:
+        cron_file: /etc/crontab
+        user: root
+        name: minute crontab
+        job: "cd / && run-parts --report /etc/cron.minute"
     - name: Copy packages from S3
       become_user: deployer
       command: "aws s3 cp s3://permanent-repos/{{ perm_env }}/{{ item }}.tar.gz /data/tmp/{{ item }}.tar.gz"
