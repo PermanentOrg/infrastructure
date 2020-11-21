@@ -1,7 +1,7 @@
 {
     "hostname": "{{env `PERM_ENV` }}",
     "instance_type": "m4.large",
-    "volume_size": 100,
+    "volume_size": "100",
     "configure_script": "configure.sh",
     "deploy_script": "deploy-backend.yml"
 }
