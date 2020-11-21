@@ -17,11 +17,11 @@ sudo pip3 install ansible
 Ansible can also be installed with your preferred local package manager (e.g. apt).
 
 ## Create Images
-The easiest way to create an image is to use the ["Build Image" Github Action](https://github.com/PermanentOrg/infrastructure/actions?query=workflow%3A%22Build+Dev+Image%22). Image creation can also be done manually on your local machine.
+The easiest way to create an image is to use the ["Build Image" Github Action](https://github.com/PermanentOrg/infrastructure/actions?query=workflow%3A%22Build+Dev+Image%22). Image creation can also be done manually on your local machine. The following example illustrates the steps for building the cron image.
 
 ```
 cp .env.template .env # add your AWS access credentials
-source .env && cd images && packer build backend.json
+source .env && cd images && packer build -var-file=cron.json image.json
 ```
 
 For Permanent employees: use the AWS access keys associated with the `build` IAM user, not the keys associated with your personal AWS account.
