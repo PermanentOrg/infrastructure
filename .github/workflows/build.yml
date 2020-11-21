@@ -14,7 +14,7 @@ jobs:
         - name: Validate json
           run: |
             cd images
-            packer validate ${{ matrix.machine }}.json
+            packer validate -var-file=${{ matrix.machine }}.json image.json
     build:
         runs-on: ubuntu-latest
         needs: ["validate"]
