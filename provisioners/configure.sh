@@ -78,9 +78,15 @@ chmod 774 /data/tmp
 chown -R www-data /data/tmp
 chgrp -R $APP_USER /data/tmp
 
+# For the deployer user to download packages from S3
 cp -R /var/www/.aws /home/$APP_USER/
 chown -R $APP_USER /home/$APP_USER/.aws
 chgrp -R $APP_USER /home/$APP_USER/.aws
+
+# For cronjobs that run as root
+cp -R /var/www/.aws /root/
+chown -R root /root/.aws
+chgrp -R root /root/.aws
 
 rm -rf $TEMPLATES_PATH
 
