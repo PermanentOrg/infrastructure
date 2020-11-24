@@ -63,6 +63,10 @@ cd ../instances/
 terraform apply
 ```
 
+## Debian notes
+
+We use the latest Debian base image published [here](https://wiki.debian.org/Cloud/AmazonEC2Image/Buster) for our builds.
+
 ## Quirks
 
 Q: Why is `ANSIBLE_PIPELINING=True` for the deploy provisioner?
