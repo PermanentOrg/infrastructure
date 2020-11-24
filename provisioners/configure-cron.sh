@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+echo "Running configuration script"
+export DEBIAN_FRONTEND=noninteractive
+
+echo "US/Central" | sudo tee /etc/timezone
+dpkg-reconfigure --frontend noninteractive tzdata
+
+if [[ -z "$AWS_REGION" || -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_ACCESS_SECRET" ]]
+    then
+	echo "ERROR! Missing critical environment variable: AWS_REGION, AWS_ACCESS_KEY_ID, AWS_ACCESS_SECRET!"
+    exit 1
+fi
+
+echo "Install essential software pacakges"
+apt-get -qq update
+apt-get -qq install -y curl htop wget build-essential zip software-properties-common gnupg awscli
+
+echo $PERM_ENV  > /data/www/host.txt
+
+echo "Add custom sources"
+# Add mysql key
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 5072E1F5
+# Add mysql source 
+cp $TEMPLATES_PATH/etc/apt/sources.list.d/mysql.list /etc/apt/sources.list.d/mysql.list
+
+apt-get -qq update
+echo "Install mysql"
+apt-get -qq install -y mysql-client
+echo "Install php packages"
+apt-get -qq install -y apache2 php7.3 php-mysql php-memcache php-curl php-cli php-imagick php-gd php-xml php-mbstring php-zip php-igbinary php-msgpack
+service apache2 stop
+update-rc.d apache2 disable
+
+mkdir /var/www/.aws
+mkdir /var/www/.cache
+envsubst < $TEMPLATES_PATH/var/www/.aws/credentials > /var/www/.aws/credentials
+envsubst < $TEMPLATES_PATH/var/www/.aws/config > /var/www/.aws/config
+chown -R www-data /var/www/
+
+mkdir /data/tmp
+chmod 774 /data/tmp
+chown -R www-data /data/tmp
+chgrp -R $APP_USER /data/tmp
+
+# For the deployer user to download packages from S3
+cp -R /var/www/.aws /home/$APP_USER/
+chown -R $APP_USER /home/$APP_USER/.aws
+chgrp -R $APP_USER /home/$APP_USER/.aws
+
+# For cronjobs that run as root
+cp -R /var/www/.aws /root/
+chown -R root /root/.aws
+chgrp -R root /root/.aws
+
+rm -rf $TEMPLATES_PATH
+
+echo "ALL DONE"

@@ -1,5 +1,5 @@
 ---
-- name: Deploy code on machine and configure cron and services
+- name: Perform taskrunner deployment steps
   hosts: default
   become: true
   tasks:
@@ -21,11 +21,7 @@
         - api
         - daemon
         - library
-        - mdot
         - task-runner
-        - uploader
-        - upload-service
-        - website
     - name: Untar packages
       unarchive:
          src: "/data/tmp/{{ item }}.tar.gz"
@@ -35,11 +31,7 @@
         - api
         - daemon
         - library
-        - mdot
         - task-runner
-        - uploader
-        - upload-service
-        - website
     - name: Change file permissions
       file:
         path: /data/www
@@ -51,24 +43,13 @@
       copy:
         src: "/data/www/task-runner/scripts/{{ item }}"
         dest: "/etc/cron.{{ item }}"
-        owner: www-data 
+        owner: www-data
         group: deployer
-        mode: "0644"
+        mode: "0744"
         remote_src: yes
       loop:
         - minute/disk-check
-        - minute/notification-runner
-        - hourly/cleanup-bad-uploads
-        - hourly/reprocess_records
-        - hourly/resubmit-unprocessed-records
         - hourly/system-check
-        - daily/account-engagement
-        - daily/facebook-retrieve
-        - daily/remove_deleted_records
-        - daily/system_exception_report
-        - daily/zip_cleanup
-        - daily/zoho_integration
-        - monthly/validate-md5
     - name: Create daemon service files
       copy:
         src: "/data/www/daemon/scripts/{{ item }}"
@@ -78,27 +59,17 @@
         mode: "0644"
         remote_src: yes
       loop:
-        - process-daemon.service
         - queue-daemon.service
+        - process-daemon.service
         - sqs-daemon.service
         - video-daemon.service
-    - name: Create uploader service
-      copy:
-        src: /data/www/uploader/scripts/uploader.service
-        dest: /etc/systemd/system/uploader.service
-        owner: www-data 
-        group: deployer
-        mode: "0644"
-        remote_src: yes
     - name: Enable and start all services
       service:
         name: "{{ item }}" 
         enabled: yes
         state: restarted
       loop:
-        - process-daemon.service
         - queue-daemon.service
+        - process-daemon.service
         - sqs-daemon.service
         - video-daemon.service
-        - uploader.service
-        - node-upload.service

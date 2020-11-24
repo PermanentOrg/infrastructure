@@ -12,12 +12,32 @@ provider "aws" {
     region  = "us-west-2"
 }
 
+data "aws_ami" "dev_cron" {
+  most_recent = true
+
+  filter {
+    name = "tag:Name"
+    values = ["cron-dev"]
+  }
+  owners = ["364159549467"]
+}
+
 data "aws_ami" "dev_api" {
   most_recent = true
 
   filter {
-    name = "tag:environment"
+    name = "tag:Name"
     values = ["dev"]
+  }
+  owners = ["364159549467"]
+}
+
+data "aws_ami" "dev_taskrunner" {
+  most_recent = true
+
+  filter {
+    name = "tag:Name"
+    values = ["taskrunner-dev"]
   }
   owners = ["364159549467"]
 }
@@ -38,6 +58,28 @@ resource "aws_instance" "api" {
     key_name = "PermRecord"
     private_ip = "172.31.0.80"
     tags = { 
-        Name = "Dev Backend"
+        Name = "dev backend"
+    }
+}
+
+resource "aws_instance" "taskrunner" {
+    ami = data.aws_ami.dev_taskrunner.id
+    instance_type = "c4.xlarge"
+    vpc_security_group_ids = [data.aws_security_group.dev_sg.id, data.aws_security_group.bitbucket_sg.id]
+    monitoring = true
+    key_name = "PermRecord"
+    tags = {
+        Name = "dev taskrunner"
+    }
+}
+
+resource "aws_instance" "cron" {
+    ami = data.aws_ami.dev_cron.id
+    instance_type = "t2.micro"
+    vpc_security_group_ids = [data.aws_security_group.dev_sg.id, data.aws_security_group.bitbucket_sg.id]
+    monitoring = true
+    key_name = "PermRecord"
+    tags = {
+        Name = "dev cron"
     }
 }

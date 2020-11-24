@@ -1,4 +1,4 @@
-name: Build Dev Image
+name: Build Dev Images
 
 on:
     workflow_dispatch:
@@ -6,26 +6,32 @@ on:
 jobs:
     validate:
         runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            machine: [backend, cron, taskrunner]
         steps:
         - uses: actions/checkout@v1
         - name: Validate json
           run: |
             cd images
-            packer validate dev.json
+            packer validate -var-file=${{ matrix.machine }}.json image.json
     build:
         runs-on: ubuntu-latest
         needs: ["validate"]
+        strategy:
+          matrix:
+            machine: [backend, cron, taskrunner]
         steps:
         - uses: actions/checkout@v1
         - name: Build image
           run: |
             ansible-galaxy install willshersystems.sshd
             cd images
-            packer build dev.json
+            packer build -var-file=${{ matrix.machine }}.json image.json
           env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             DEV_AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
             DEV_AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
             AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-            HOST: dev
+            PERM_ENV: dev

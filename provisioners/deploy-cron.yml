@@ -1,0 +1,59 @@
+---
+- name: Deploy code on machine and configure cron
+  hosts: default
+  become: true
+  tasks:
+    - name: Create minute cron dir
+      file:
+        path: /etc/cron.minute
+        state: directory
+        mode: '0755'
+    - name: Add minute crontab
+      cron:
+        cron_file: /etc/crontab
+        user: root
+        name: minute crontab
+        job: "cd / && run-parts --report /etc/cron.minute"
+    - name: Copy packages from S3
+      become_user: deployer
+      command: "aws s3 cp s3://permanent-repos/{{ perm_env }}/{{ item }}.tar.gz /data/tmp/{{ item }}.tar.gz"
+      loop:
+        - api
+        - library
+        - task-runner
+    - name: Untar packages
+      unarchive:
+         src: "/data/tmp/{{ item }}.tar.gz"
+         dest: /data/www/
+         remote_src: yes
+      loop:
+        - api
+        - library
+        - task-runner
+    - name: Change file permissions
+      file:
+        path: /data/www
+        state: directory
+        recurse: yes
+        owner: www-data
+        group: deployer
+    - name: Create cronjobs
+      copy:
+        src: "/data/www/task-runner/scripts/{{ item }}"
+        dest: "/etc/cron.{{ item }}"
+        owner: www-data 
+        group: deployer
+        mode: "0744"
+        remote_src: yes
+      loop:
+        - minute/disk-check
+        - minute/notification-runner
+        - hourly/cleanup-bad-uploads
+        - hourly/system-check
+        - daily/account-engagement
+        - daily/facebook-retrieve
+        - daily/remove_deleted_records
+        - daily/system_exception_report
+        - daily/zip_cleanup
+        - daily/zoho_integration
+        - monthly/validate-md5

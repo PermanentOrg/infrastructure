@@ -71,8 +71,15 @@
         mode: "0755"
         owner: "www-data"
         group: "deployer"
+    - name: Change hostname
+      shell: hostnamectl set-hostname --static {{ perm_hostname }}
+    - name: Preserve hostname between reboots
+      lineinfile:
+        path: /etc/cloud/cloud.cfg
+        regexp: "^preserve_hostname:"
+        line: "preserve_hostname: true"
     - name: Run the configure script
-      script: configure.sh
+      script: "{{ script }}"
       environment:
         AWS_REGION: "{{ aws_region }}"
         AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"

@@ -5,6 +5,9 @@ on:
 
 jobs:
     deploy:
+        strategy:
+          matrix:
+            machine: [backend, cron, taskrunner]
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@v1
@@ -21,9 +24,9 @@ jobs:
           env:
             SSH_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
         - name: Generate Inventory
-          run: ./scripts/generate_inventory.sh
+          run: ./scripts/generate_inventory.sh dev ${{ matrix.machine }}
         - name: Run deploy
-          run: ansible-playbook provisioners/deploy.yml -vv -e "perm_env=dev" -i inventory.ini
+          run: ansible-playbook provisioners/deploy-${{ matrix.machine }}.yml -vv -e "perm_env=dev" -i inventory.ini
           env:
             ANSIBLE_PIPELINING: True
             ANSIBLE_HOST_KEY_CHECKING: False
