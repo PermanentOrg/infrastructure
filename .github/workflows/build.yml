@@ -9,6 +9,7 @@ jobs:
         strategy:
           matrix:
             machine: [backend, cron, taskrunner]
+            environment : [dev, staging]
         steps:
         - uses: actions/checkout@v1
         - name: Validate json
@@ -34,4 +35,4 @@ jobs:
             DEV_AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
             DEV_AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
             AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-            PERM_ENV: dev
+            PERM_ENV: ${{ matrix.machine }}
