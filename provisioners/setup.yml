@@ -35,6 +35,7 @@
       LoginGraceTime: 20
       AllowAgentForwarding: no
       AllowTcpForwarding: no
+      PasswordAuthentication: no
   roles:
     - role: willshersystems.sshd
 
