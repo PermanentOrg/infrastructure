@@ -46,14 +46,10 @@ data "aws_security_group" "dev_sg" {
   name = "Development"
 }
 
-data "aws_security_group" "bitbucket_sg" {
-  name = "Bitbucket Pipelines Inbound"
-}
-
 resource "aws_instance" "api" {
     ami = data.aws_ami.dev_api.id
     instance_type = "m4.large"
-    vpc_security_group_ids = [data.aws_security_group.dev_sg.id, data.aws_security_group.bitbucket_sg.id]
+    vpc_security_group_ids = [data.aws_security_group.dev_sg.id]
     monitoring = true
     key_name = "PermRecord"
     private_ip = "172.31.0.80"
@@ -65,7 +61,7 @@ resource "aws_instance" "api" {
 resource "aws_instance" "taskrunner" {
     ami = data.aws_ami.dev_taskrunner.id
     instance_type = "c4.xlarge"
-    vpc_security_group_ids = [data.aws_security_group.dev_sg.id, data.aws_security_group.bitbucket_sg.id]
+    vpc_security_group_ids = [data.aws_security_group.dev_sg.id]
     monitoring = true
     key_name = "PermRecord"
     tags = {
@@ -76,7 +72,7 @@ resource "aws_instance" "taskrunner" {
 resource "aws_instance" "cron" {
     ami = data.aws_ami.dev_cron.id
     instance_type = "t2.micro"
-    vpc_security_group_ids = [data.aws_security_group.dev_sg.id, data.aws_security_group.bitbucket_sg.id]
+    vpc_security_group_ids = [data.aws_security_group.dev_sg.id]
     monitoring = true
     key_name = "PermRecord"
     tags = {
