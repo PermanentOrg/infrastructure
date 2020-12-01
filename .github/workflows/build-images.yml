@@ -23,11 +23,11 @@ jobs:
         machine: [backend, taskrunner, cron]
         environment:
           - perm_env: dev
-            aws_deploy_key: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
-            aws_deploy_secret: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
+            aws_deploy_key: DEV_AWS_ACCESS_KEY_ID
+            aws_deploy_secret: DEV_AWS_SECRET_ACCESS_KEY
           - perm_env: staging
-            aws_deploy_key: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
-            aws_deploy_secret: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+            aws_deploy_key: STAGING_AWS_ACCESS_KEY_ID
+            aws_deploy_secret: STAGING_AWS_SECRET_ACCESS_KEY
     steps:
       - uses: actions/checkout@v1
       - name: Build image
@@ -38,7 +38,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          DEPLOY_AWS_ACCESS_KEY_ID: ${{ matrix.environment.aws_deploy_key }}
-          DEPLOY_AWS_SECRET_ACCESS_KEY: ${{ matrix.environment.aws_deploy_secret }}
+          DEPLOY_AWS_ACCESS_KEY_ID: ${{ secrets[matrix.environment.aws_deploy_key] }}
+          DEPLOY_AWS_SECRET_ACCESS_KEY: ${{ secrets[matrix.environment.aws_deploy_secret] }}
           AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           PERM_ENV: ${{ matrix.environment.perm_env }}
