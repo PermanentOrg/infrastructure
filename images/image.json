@@ -3,8 +3,8 @@
       "environment": "{{ env `PERM_ENV` }}",
       "templates_path": "/tmp/templates",
       "aws_region": "{{env `AWS_REGION`}}",
-      "aws_key": "{{env `DEV_AWS_ACCESS_KEY_ID`}}",
-      "aws_secret": "{{env `DEV_AWS_SECRET_ACCESS_KEY`}}"
+      "aws_key": "{{env `DEPLOY_AWS_ACCESS_KEY_ID`}}",
+      "aws_secret": "{{env `DEPLOY_AWS_SECRET_ACCESS_KEY`}}"
     },
     "builders": [
       {

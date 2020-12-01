@@ -1,0 +1,44 @@
+name: Build Images
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        machine: [backend, cron, taskrunner]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Validate json
+        run: |
+          cd images
+          packer validate -var-file=${{ matrix.machine }}.json image.json
+  build:
+    runs-on: ubuntu-latest
+    needs: ["validate"]
+    strategy:
+      matrix:
+        machine: [backend, taskrunner, cron]
+        environment:
+          - perm_env: dev
+            aws_deploy_key: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
+            aws_deploy_secret: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
+          - perm_env: staging
+            aws_deploy_key: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+            aws_deploy_secret: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build image
+        run: |
+          ansible-galaxy install willshersystems.sshd
+          cd images
+          packer build -var-file=${{ matrix.machine }}.json image.json
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DEPLOY_AWS_ACCESS_KEY_ID: ${{ matrix.environment.aws_deploy_key }}
+          DEPLOY_AWS_SECRET_ACCESS_KEY: ${{ matrix.environment.aws_deploy_secret }}
+          AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          PERM_ENV: ${{ matrix.environment.perm_env }}
