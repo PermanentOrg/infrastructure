@@ -10,12 +10,6 @@ variable "perm_ami_owner" {
   default     = "364159549467"
 }
 
-variable "key_name" {
-  description = "Owner ID for Permanent-built AMIs"
-  type        = string
-  default     = "364159549467"
-}
-
 variable "perm_env" {
   description = "Permanent environment keywords"
   type = object({
