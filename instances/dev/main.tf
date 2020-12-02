@@ -16,6 +16,13 @@ provider "aws" {
   region  = "us-west-2"
 }
 
+locals {
+  perm_env = {
+    "name" : "dev",
+    "sg" : "Development",
+  }
+}
+
 resource "aws_instance" "api" {
   ami                    = module.amis.backend_ami_id
   instance_type          = "m4.large"
@@ -23,7 +30,7 @@ resource "aws_instance" "api" {
   monitoring             = true
   private_ip             = "172.31.0.80"
   tags = {
-    Name = "${terraform.workspace.name} backend"
+    Name = "${locals.perm_env.name} backend"
   }
 }
 
@@ -33,7 +40,7 @@ resource "aws_instance" "taskrunner" {
   vpc_security_group_ids = [module.amis.perm_env_sg_id]
   monitoring             = true
   tags = {
-    Name = "${terraform.workspace.name} taskrunner"
+    Name = "${locals.perm_env.name} taskrunner"
   }
 }
 
@@ -43,14 +50,11 @@ resource "aws_instance" "cron" {
   vpc_security_group_ids = [module.amis.perm_env_sg_id]
   monitoring             = true
   tags = {
-    Name = "${terraform.workspace.name} cron"
+    Name = "${locals.perm_env.name} cron"
   }
 }
 
 module "amis" {
   source = "../modules/get-amis"
-  perm_env = {
-    "name" : "dev",
-    "sg" : "Development",
-  }
+  perm_env = locals.perm_env
 }
