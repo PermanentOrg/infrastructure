@@ -9,9 +9,6 @@ terraform {
     hostname     = "app.terraform.io"
     organization = "PermanentOrg"
   }
-  workspaces {
-    name = "development"
-  }
 }
 
 provider "aws" {
