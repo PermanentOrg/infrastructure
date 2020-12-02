@@ -23,7 +23,7 @@ resource "aws_instance" "api" {
   monitoring             = true
   private_ip             = "172.31.0.80"
   tags = {
-    Name = "${vars.perm_env.name} backend"
+    Name = "${var.perm_env.name} backend"
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_instance" "taskrunner" {
   vpc_security_group_ids = [module.amis.perm_env_sg_id]
   monitoring             = true
   tags = {
-    Name = "${vars.perm_env.name} taskrunner"
+    Name = "${var.perm_env.name} taskrunner"
   }
 }
 
@@ -43,11 +43,11 @@ resource "aws_instance" "cron" {
   vpc_security_group_ids = [module.amis.perm_env_sg_id]
   monitoring             = true
   tags = {
-    Name = "${vars.perm_env.name} cron"
+    Name = "${var.perm_env.name} cron"
   }
 }
 
 module "amis" {
   source = "../modules/get-amis"
-  perm_env = vars.perm_env
+  perm_env = var.perm_env
 }
