@@ -66,9 +66,9 @@ resource "aws_launch_configuration" "backend_lc" {
 
 resource "aws_launch_configuration" "taskrunner_lc" {
   name_prefix       = "${var.perm_env.name}-taskrunner-"
-  image_id          = data.aws_ami.taskrunner.id
+  image_id          = module.amis.taskrunner_ami_id
   instance_type     = "c4.xlarge"
-  security_groups   = [data.aws_security_group.perm_sg.id]
+  security_groups   = [module.amis.perm_env_sg_id]
   enable_monitoring = true
   lifecycle {
     create_before_destroy = true
