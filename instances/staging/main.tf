@@ -48,9 +48,11 @@ resource "aws_instance" "cron" {
   vpc_security_group_ids = [module.amis.perm_env_sg_id]
   monitoring             = true
   subnet_id              = var.subnet_ids[0]
+
   tags = {
     Name = "${var.perm_env.name} cron"
   }
+
 }
 
 resource "aws_launch_configuration" "backend_lc" {
@@ -62,15 +64,6 @@ resource "aws_launch_configuration" "backend_lc" {
 
   lifecycle {
     create_before_destroy = true
-  }
-
-  root_block_device {
-    delete_on_termination = true
-  }
-
-  ebs_block_device {
-    delete_on_termination = true
-    device_name = "/dev/sdb"
   }
 }
 
@@ -84,15 +77,6 @@ resource "aws_launch_configuration" "taskrunner_lc" {
   lifecycle {
     create_before_destroy = true
   }
-
-  root_block_device {
-    delete_on_termination = true
-  }
-
-  ebs_block_device {
-    delete_on_termination = true
-    device_name = "/dev/sdb"
-  }
 }
 
 resource "aws_autoscaling_group" "taskrunner_as" {
@@ -104,6 +88,12 @@ resource "aws_autoscaling_group" "taskrunner_as" {
 
   lifecycle {
     create_before_destroy = true
+  }
+
+  tag {
+    key                 = "Name"
+    value               = "${var.perm_env.name} taskrunner"
+    propagate_at_launch = true
   }
 }
 
@@ -117,6 +107,12 @@ resource "aws_autoscaling_group" "backend_as" {
 
   lifecycle {
     create_before_destroy = true
+  }
+
+  tag {
+    key                 = "Name"
+    value               = "${var.perm_env.name} backend"
+    propagate_at_launch = true
   }
 }
 

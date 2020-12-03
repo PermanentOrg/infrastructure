@@ -2,9 +2,9 @@
 
 The infrastructure configuration, written using [Terraform](https://www.terraform.io), [Packer](https://www.packer.io) and [Ansible](https://www.ansible.com/).
 
-## Workflow
+## Image Modification Workflow
 
-This is the general workflow for provisioning and deploying a new infrastructure.
+This is the general workflow for provisioning and deploying a new images. Reasons to deploy a new image include: new operating system packages, webserver modifications, filesystem changes, onboarding a new user with SSH access, etc.
 
 1. Create a branch with your changes to the provisioners or image builders.
 2. Push your changes up to Github, and open a pull request.
@@ -12,6 +12,10 @@ This is the general workflow for provisioning and deploying a new infrastructure
 4. When your change is merged, head over to our [Terraform Workspaces](https://app.terraform.io/app/PermanentOrg/workspaces) and select the workspace where you would like to deploy the newly built AMIs.
 5. Click "Queue plan" in the top right corner, and confirm once the workflow reaches the "Plan Finished" state.
 6. Repeat steps 4-5 for each workspace once the new configuration has been rolled out across the entire fleet.
+
+## Infrastructure Modification Worflow
+
+The `instances` directory contains the Terraform configuration. You would want to make changes to Terraform to modify the infrastructure layout or hardware (e.g. new autoscaling groups, larger or more EC2 instances, etc). Our Terraform configuration currently manages all Permanent AMIs, EC2 instances, Autoscaling Groups, Launch Configurations, and Target Groups for the Load Balacers. Terraform does NOT manage: the Load Balancer itself, S3 buckets, SQS queues, VPCs, Security Groups, subnets, IAM, etc. To make changes to the infrastructure, push your changes to a branch, open a PR, and get a code review. Once the PR is merged, the change (depending on the directory they are in), should queue a `terraform plan` job our [Terraform Cloud organization](https://app.terraform.io/app/PermanentOrg/workspaces). Review the plan, and approve the changes if they look good. Terraform will then roll-out the new infrastructure.
 
 ## Local development
 ### Install required software
