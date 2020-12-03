@@ -30,8 +30,8 @@ variable "perm_env" {
 
 variable "subnet_ids" {
   description = "The subnet to bring up all of the instances in."
-  type = list
-  default = ["subnet-a3f202fa", "subnet-0fc91a78"]
+  type        = list
+  default     = ["subnet-a3f202fa", "subnet-0fc91a78"]
 }
 
 data "aws_lb_target_group" "webapp" {
@@ -51,6 +51,7 @@ resource "aws_instance" "cron" {
   tags = {
     Name = "${var.perm_env.name} cron"
   }
+}
 
 resource "aws_launch_configuration" "backend_lc" {
   name_prefix       = "${var.perm_env.name}-backend-"
@@ -98,6 +99,6 @@ resource "aws_autoscaling_group" "backend_as" {
 }
 
 module "amis" {
-  source = "../modules/get-amis"
+  source   = "../modules/get-amis"
   perm_env = var.perm_env
 }
