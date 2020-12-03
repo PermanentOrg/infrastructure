@@ -1,4 +1,4 @@
-data "aws_ami" "cron_ami" {
+data "aws_ami" "cron" {
   most_recent = true
 
   filter {
@@ -8,7 +8,7 @@ data "aws_ami" "cron_ami" {
   owners = [var.perm_ami_owner]
 }
 
-data "aws_ami" "backend_ami" {
+data "aws_ami" "backend" {
   most_recent = true
 
   filter {
@@ -18,7 +18,7 @@ data "aws_ami" "backend_ami" {
   owners = [var.perm_ami_owner]
 }
 
-data "aws_ami" "taskrunner_ami" {
+data "aws_ami" "taskrunner" {
   most_recent = true
 
   filter {
@@ -28,7 +28,6 @@ data "aws_ami" "taskrunner_ami" {
   owners = [var.perm_ami_owner]
 }
 
-data "aws_security_group" "perm_sg" {
+data "aws_security_group" "default" {
   name = var.perm_env.sg
 }
-
