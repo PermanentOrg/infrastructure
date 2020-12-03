@@ -91,7 +91,7 @@ resource "aws_autoscaling_group" "backend_as" {
   launch_configuration = aws_launch_configuration.backend_lc.name
   min_size             = 1
   max_size             = 2
-  target_group_arns    = [data.aws_lb_target_group.webapp, data.aws_lb_target_group.uploader]
+  target_group_arns    = [data.aws_lb_target_group.webapp.arn, data.aws_lb_target_group.uploader.arn]
 
   lifecycle {
     create_before_destroy = true
