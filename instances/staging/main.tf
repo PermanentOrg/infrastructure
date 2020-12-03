@@ -70,6 +70,7 @@ resource "aws_launch_configuration" "backend_lc" {
 
   ebs_block_device {
     delete_on_termination = true
+    device_name = "/dev/sdb"
   }
 }
 
@@ -90,6 +91,7 @@ resource "aws_launch_configuration" "taskrunner_lc" {
 
   ebs_block_device {
     delete_on_termination = true
+    device_name = "/dev/sdb"
   }
 }
 
