@@ -5,7 +5,7 @@ terraform {
       version = "~> 3.0"
     }
   }
-  backend remote {
+  backend "remote" {
     hostname     = "app.terraform.io"
     organization = "PermanentOrg"
   }
@@ -30,7 +30,7 @@ variable "perm_env" {
 
 variable "subnet_ids" {
   description = "The subnet to bring up all of the instances in."
-  type        = list
+  type        = list(any)
   default     = ["subnet-a3f202fa", "subnet-0fc91a78"]
 }
 
@@ -59,8 +59,17 @@ resource "aws_launch_configuration" "backend_lc" {
   instance_type     = "m4.large"
   security_groups   = [module.amis.perm_env_sg_id]
   enable_monitoring = true
+
   lifecycle {
     create_before_destroy = true
+  }
+
+  root_block_device {
+    delete_on_termination = true
+  }
+
+  ebs_block_device {
+    delete_on_termination = true
   }
 }
 
@@ -70,8 +79,17 @@ resource "aws_launch_configuration" "taskrunner_lc" {
   instance_type     = "c4.xlarge"
   security_groups   = [module.amis.perm_env_sg_id]
   enable_monitoring = true
+
   lifecycle {
     create_before_destroy = true
+  }
+
+  root_block_device {
+    delete_on_termination = true
+  }
+
+  ebs_block_device {
+    delete_on_termination = true
   }
 }
 
@@ -80,6 +98,7 @@ resource "aws_autoscaling_group" "taskrunner_as" {
   launch_configuration = aws_launch_configuration.taskrunner_lc.name
   min_size             = 1
   max_size             = 2
+  vpc_zone_identifier  = var.subnet_ids
 
   lifecycle {
     create_before_destroy = true
@@ -92,6 +111,7 @@ resource "aws_autoscaling_group" "backend_as" {
   min_size             = 1
   max_size             = 2
   target_group_arns    = [data.aws_lb_target_group.webapp.arn, data.aws_lb_target_group.uploader.arn]
+  vpc_zone_identifier  = var.subnet_ids
 
   lifecycle {
     create_before_destroy = true
