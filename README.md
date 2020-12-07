@@ -58,9 +58,15 @@ To offboard a user, remove their ssh file.
 
 In both cases, the AMIs needs to be rebuilt and deployed. See [Workflow](#Workflow) for more details.
 
-## Debian notes
+## Debian Version
 
 We use the latest Debian base image published [here](https://wiki.debian.org/Cloud/AmazonEC2Image/Buster) for our builds.
+
+## Autoscaling
+
+There was an initial attempt to configure autoscaling for the staging and production deployments. That attempt can be found in the [staging Terraform configuration in the "autoscaling" branch](https://github.com/PermanentOrg/infrastructure/blob/autoscaling/instances/staging/main.tf#L58). There are [several open issues](https://github.com/PermanentOrg/infrastructure/projects/1) that are prerequisites for the rollout of autoscaling.
+
+The current configuration simply bring up regular EC2 instances directly.
 
 ## Quirks
 
