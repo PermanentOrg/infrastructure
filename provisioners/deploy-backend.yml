@@ -78,11 +78,21 @@
         group: deployer
         mode: "0644"
         remote_src: yes
-    - name: Enable and start all services
+    - name: Enable and stop all services
       service:
-        name: "{{ item }}" 
+        name: "{{ item }}"
         enabled: yes
-        state: restarted
+        state: stopped
+      loop:
+        - process-daemon.service
+        - sqs-daemon.service
+        - uploader.service
+        - node-upload.service
+    - name: Start all services
+      service:
+        name: "{{ item }}"
+        enabled: yes
+        state: started
       loop:
         - process-daemon.service
         - sqs-daemon.service

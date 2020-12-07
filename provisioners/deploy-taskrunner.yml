@@ -63,11 +63,21 @@
         - process-daemon.service
         - sqs-daemon.service
         - video-daemon.service
-    - name: Enable and start all services
+    - name: Enable and stop all services
       service:
-        name: "{{ item }}" 
+        name: "{{ item }}"
         enabled: yes
-        state: restarted
+        state: stopped
+      loop:
+        - queue-daemon.service
+        - process-daemon.service
+        - sqs-daemon.service
+        - video-daemon.service
+    - name: Start all services
+      service:
+        name: "{{ item }}"
+        enabled: yes
+        state: started
       loop:
         - queue-daemon.service
         - process-daemon.service
