@@ -1,4 +1,4 @@
-name: Deploy code to dev
+name: Dev code deploy
 
 on:
     workflow_dispatch:
@@ -10,24 +10,7 @@ jobs:
             machine: [backend, cron, taskrunner]
         runs-on: ubuntu-latest
         steps:
-        - uses: actions/checkout@v1
-        - name: Configure AWS Credentials
-          uses: aws-actions/configure-aws-credentials@v1
+        - uses: PermanentOrg/infrastructure@v1
           with:
-            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-        - name: Save ssh deploy key to a file
-          run: | 
-            echo "$SSH_KEY" > key
-            chmod 400 key
-          env:
-            SSH_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
-        - name: Generate Inventory
-          run: ./scripts/generate_inventory.sh dev ${{ matrix.machine }}
-        - name: Run deploy
-          run: ansible-playbook provisioners/deploy-${{ matrix.machine }}.yml -vv -e "perm_env=dev" -i inventory.ini
-          env:
-            ANSIBLE_PIPELINING: True
-            ANSIBLE_HOST_KEY_CHECKING: False
-            
+            perm_env: dev
+            machine: ${{ matrix.machine }}

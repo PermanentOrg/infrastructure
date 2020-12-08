@@ -25,98 +25,46 @@ variable "perm_env" {
   default = {
     name = "staging"
     sg   = "Staging"
+    zone = "${aws.region}a"
   }
 }
 
-variable "subnet_ids" {
-  description = "The subnet to bring up all of the instances in."
-  type        = list(any)
-  default     = ["subnet-a3f202fa", "subnet-0fc91a78"]
+
+resource "aws_instance" "api" {
+  ami                    = module.perm_env_data.backend_ami
+  instance_type          = "m4.large"
+  vpc_security_group_ids = [module.perm_env_data.security_group]
+  monitoring             = true
+  subnet_id              = module.perm_env_data.subnet
+  private_ip             = "172.31.21.191"
+  tags = {
+    Name = "${var.perm_env.name} backend"
+  }
 }
 
-data "aws_lb_target_group" "webapp" {
-  name = var.perm_env.name
-}
-
-data "aws_lb_target_group" "uploader" {
-  name = "${var.perm_env.name}-uploader"
+resource "aws_instance" "taskrunner" {
+  ami                    = module.perm_env_data.taskrunner_ami
+  instance_type          = "c4.xlarge"
+  vpc_security_group_ids = [module.perm_env_data.security_group]
+  monitoring             = true
+  subnet_id              = module.perm_env_data.subnet
+  tags = {
+    Name = "${var.perm_env.name} taskrunner"
+  }
 }
 
 resource "aws_instance" "cron" {
-  ami                    = module.amis.cron_ami_id
+  ami                    = module.perm_env_data.cron_ami
   instance_type          = "t2.micro"
-  vpc_security_group_ids = [module.amis.perm_env_sg_id]
+  vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
-  subnet_id              = var.subnet_ids[0]
-
+  subnet_id              = module.perm_env_data.subnet
   tags = {
     Name = "${var.perm_env.name} cron"
   }
-
 }
 
-resource "aws_launch_configuration" "backend_lc" {
-  name_prefix       = "${var.perm_env.name}-backend-"
-  image_id          = module.amis.backend_ami_id
-  instance_type     = "m4.large"
-  security_groups   = [module.amis.perm_env_sg_id]
-  enable_monitoring = true
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_launch_configuration" "taskrunner_lc" {
-  name_prefix       = "${var.perm_env.name}-taskrunner-"
-  image_id          = module.amis.taskrunner_ami_id
-  instance_type     = "c4.xlarge"
-  security_groups   = [module.amis.perm_env_sg_id]
-  enable_monitoring = true
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_autoscaling_group" "taskrunner_as" {
-  name                 = "${var.perm_env.name}-taskrunner-2.0"
-  launch_configuration = aws_launch_configuration.taskrunner_lc.name
-  min_size             = 1
-  max_size             = 2
-  vpc_zone_identifier  = var.subnet_ids
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  tag {
-    key                 = "Name"
-    value               = "${var.perm_env.name} taskrunner"
-    propagate_at_launch = true
-  }
-}
-
-resource "aws_autoscaling_group" "backend_as" {
-  name                 = "${var.perm_env.name}-backend-2.0"
-  launch_configuration = aws_launch_configuration.backend_lc.name
-  min_size             = 1
-  max_size             = 2
-  target_group_arns    = [data.aws_lb_target_group.webapp.arn, data.aws_lb_target_group.uploader.arn]
-  vpc_zone_identifier  = var.subnet_ids
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  tag {
-    key                 = "Name"
-    value               = "${var.perm_env.name} backend"
-    propagate_at_launch = true
-  }
-}
-
-module "amis" {
-  source   = "../modules/get-amis"
+module "perm_env_data" {
+  source = "../modules/get-data"
   perm_env = var.perm_env
 }

@@ -31,3 +31,7 @@ data "aws_ami" "taskrunner" {
 data "aws_security_group" "default" {
   name = var.perm_env.sg
 }
+
+data "aws_subnet" "default" {
+  availability_zone = var.perm_env.zone
+}

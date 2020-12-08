@@ -1,4 +1,4 @@
-name: Staging code deploy
+name: Prod code deploy
 
 on:
     workflow_dispatch:
@@ -12,5 +12,5 @@ jobs:
         steps:
         - uses: PermanentOrg/infrastructure@v1
           with:
-            perm_env: staging
+            perm_env: prod
             machine: ${{ matrix.machine }}

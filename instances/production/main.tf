@@ -23,20 +23,19 @@ variable "perm_env" {
     sg   = string
   })
   default = {
-    name = "dev"
-    sg   = "Development"
-    zone = "${aws.region}c"
+    name = "prod"
+    sg   = "Production"
+    zone = "${aws.region}b"
   }
 }
-
 
 resource "aws_instance" "api" {
   ami                    = module.perm_env_data.backend_ami
   instance_type          = "m4.large"
   vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
-  private_ip             = "172.31.0.80"
   subnet_id              = module.perm_env_data.subnet
+  private_ip             = "172.31.32.32"
   tags = {
     Name = "${var.perm_env.name} backend"
   }

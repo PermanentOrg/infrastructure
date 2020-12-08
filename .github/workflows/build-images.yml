@@ -28,6 +28,9 @@ jobs:
           - perm_env: staging
             aws_deploy_key: STAGING_AWS_ACCESS_KEY_ID
             aws_deploy_secret: STAGING_AWS_SECRET_ACCESS_KEY
+          - perm_env: prod
+            aws_deploy_key: PROD_AWS_ACCESS_KEY_ID
+            aws_deploy_secret: PROD_AWS_SECRET_ACCESS_KEY
     steps:
       - uses: actions/checkout@v1
       - name: Build image
