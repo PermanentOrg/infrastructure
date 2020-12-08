@@ -21,6 +21,7 @@ variable "perm_env" {
   type = object({
     name = string
     sg   = string
+    zone = string
   })
   default = {
     name = "prod"
