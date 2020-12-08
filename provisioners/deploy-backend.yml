@@ -98,3 +98,8 @@
         - sqs-daemon.service
         - uploader.service
         - node-upload.service
+    - name: Restart apache2
+      service:
+        name: apache2
+        enabled: yes
+        state: restarted
