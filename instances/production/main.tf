@@ -25,7 +25,7 @@ variable "perm_env" {
   default = {
     name = "prod"
     sg   = "Production"
-    zone = "${aws.region}b"
+    zone = "us-west-2b"
   }
 }
 
@@ -64,6 +64,6 @@ resource "aws_instance" "cron" {
 }
 
 module "perm_env_data" {
-  source = "../modules/get-data"
+  source   = "../modules/get-data"
   perm_env = var.perm_env
 }
