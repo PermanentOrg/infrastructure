@@ -24,7 +24,7 @@ jobs:
       env:
         SSH_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
     - name: Generate Inventory
-      run: ./scripts/generate_inventory.sh dev ${{ matrix.machine }}
+      run: ./scripts/generate_inventory.sh prod ${{ matrix.machine }}
     - name: Run deploy
       run: ansible-playbook provisioners/deploy-${{ matrix.machine }}.yml -vv -e "perm_env=prod" -i inventory.ini
       env:
