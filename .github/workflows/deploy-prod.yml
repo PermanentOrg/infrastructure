@@ -28,11 +28,11 @@ jobs:
     - name: Generate Inventory
       run: ./scripts/generate_inventory.sh ${{ env.perm_env }} ${{ matrix.machine }}
     - name: Send start Slack notification
-      run: curl -X POST -H 'Content-type:application/json' --data '{"text":"${{ env.perm_env }} deploy started"}' https://hooks.slack.com/services/TBBFM3TEY/BJKUMT4CC/${{ secrets.SLACK_KEY }}
+      run: curl -X POST -H 'Content-type:application/json' --data '{"text":"${{ env.perm_env }} ${{ matrix.machine }} deploy started"}' https://hooks.slack.com/services/TBBFM3TEY/BJKUMT4CC/${{ secrets.SLACK_KEY }}
     - name: Run deploy
       run: ansible-playbook provisioners/deploy-${{ matrix.machine }}.yml -vv -e "perm_env=${{ env.perm_env }}" -i inventory.ini
       env:
         ANSIBLE_PIPELINING: True
         ANSIBLE_HOST_KEY_CHECKING: False
     - name: Send end Slack notification
-      run: curl -X POST -H 'Content-type:application/json' --data '{"text":"${{ env.perm_env }} deploy complete"}' https://hooks.slack.com/services/TBBFM3TEY/BJKUMT4CC/${{ secrets.SLACK_KEY }}
+      run: curl -X POST -H 'Content-type:application/json' --data '{"text":"${{ env.perm_env }} ${{ matrix.machine }} deploy complete"}' https://hooks.slack.com/services/TBBFM3TEY/BJKUMT4CC/${{ secrets.SLACK_KEY }}
