@@ -10,7 +10,7 @@ jobs:
             machine: [backend, cron, taskrunner]
         runs-on: ubuntu-latest
         steps:
-        - uses: PermanentOrg/infrastructure@v1
+        - uses: PermanentOrg/infrastructure@v2
           with:
             perm_env: dev
             machine: ${{ matrix.machine }}
