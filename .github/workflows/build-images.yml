@@ -45,3 +45,9 @@ jobs:
           DEPLOY_AWS_SECRET_ACCESS_KEY: ${{ secrets[matrix.environment.aws_deploy_secret] }}
           AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           PERM_ENV: ${{ matrix.environment.perm_env }}
+  notify:
+    runs-on: ubuntu-latest
+    needs: ["build"]
+    steps:
+      - name: Send Slack notification
+        run: curl -X POST -H 'Content-type:application/json' --data '{"text":"Done building new images"}' https://hooks.slack.com/services/TBBFM3TEY/BJKUMT4CC/${{ secrets.SLACK_KEY }}
