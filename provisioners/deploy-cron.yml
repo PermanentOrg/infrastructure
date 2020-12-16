@@ -56,4 +56,5 @@
         - daily/system_exception_report
         - daily/zip_cleanup
         - daily/zoho_integration
+        - weekly/file_upload_summary
         - monthly/validate-md5
