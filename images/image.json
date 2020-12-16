@@ -13,7 +13,7 @@
           "source_ami_filter": {
               "filters": {
                   "virtualization-type": "hvm",
-                  "name": "debian-10-amd64-20201020-429",
+                  "name": "debian-10-amd64-20201214-484",
                   "root-device-type": "ebs"
               },
               "owners": [
