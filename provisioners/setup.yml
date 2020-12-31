@@ -54,6 +54,15 @@
        state: mounted
        fstype: ext4
 
+- name: Install required packages
+  hosts: default
+  become: true
+  tasks:
+    - name: Install rsync
+      apt:
+        name: rsync
+        update_cache: yes
+
 - name: Perform system configuration 
   hosts: default
   become: true
