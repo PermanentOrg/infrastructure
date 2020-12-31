@@ -2,6 +2,14 @@
 - name: Perform taskrunner deployment steps
   hosts: default
   become: true
+  vars:
+    repos:
+        - api
+        - daemon
+        - library
+        - task-runner
+    temp_dir: /data/tmp/www
+    deploy_dir: /data/www
   tasks:
     - name: Create minute cron dir
       file:
@@ -16,32 +24,43 @@
         job: "cd / && run-parts --report /etc/cron.minute"
     - name: Copy packages from S3
       become_user: deployer
-      command: "aws s3 cp s3://permanent-repos/{{ perm_env }}/{{ item }}.tar.gz /data/tmp/{{ item }}.tar.gz"
-      loop:
-        - api
-        - daemon
-        - library
-        - task-runner
+      command: "aws s3 cp s3://permanent-repos/{{ perm_env }}/{{ item }}.tar.gz {{ temp_dir }}/{{ item }}.tar.gz"
+      loop: "{{ repos }}"
+    - name: Create temp untar dir
+      become_user: deployer
+      file:
+        path: "{{ temp_dir }}"
+        state: directory
     - name: Untar packages
       unarchive:
-         src: "/data/tmp/{{ item }}.tar.gz"
-         dest: /data/www/
+         src: "{{ temp_dir }}/{{ item }}.tar.gz"
+         dest: "{{ temp_dir }}"
          remote_src: yes
-      loop:
-        - api
-        - daemon
-        - library
-        - task-runner
+      loop: "{{ repos }}"
+    - name: Rsync temprorary directory to deployment directory
+      become_user: deployer
+      synchronize:
+        src: "{{ temp_dir }}/{{ item }}"
+        dest: "{{ deploy_dir }}/{{ item }}"
+        recursive: yes
+        delete: yes
+      delegate_to: "{{ inventory_hostname }}"
+      loop: "{{ repos }}"
+    - name: Remove temporary directory
+      become_user: deployer
+      file:
+        path: "{{ temp_dir }}"
+        state: absent
     - name: Change file permissions
       file:
-        path: /data/www
+        path: "{{ deploy_dir }}"
         state: directory
         recurse: yes
         owner: www-data
         group: deployer
     - name: Create cronjobs
       copy:
-        src: "/data/www/task-runner/scripts/{{ item }}"
+        src: "{{ deploy_dir }}/task-runner/scripts/{{ item }}"
         dest: "/etc/cron.{{ item }}"
         owner: www-data
         group: deployer
@@ -52,7 +71,7 @@
         - hourly/system-check
     - name: Create daemon service files
       copy:
-        src: "/data/www/daemon/scripts/{{ item }}"
+        src: "{{ deploy_dir }}/daemon/scripts/{{ item }}"
         dest: "/etc/systemd/system/{{ item }}"
         owner: www-data 
         group: deployer
