@@ -30,11 +30,6 @@
       become_user: deployer
       command: "aws s3 cp s3://permanent-repos/{{ perm_env }}/{{ item }}.tar.gz {{ temp_dir }}/{{ item }}.tar.gz"
       loop: "{{ repos }}"
-    - name: Create temp untar dir
-      become_user: deployer
-      file:
-        path: "{{ temp_dir }}"
-        state: directory
     - name: Untar packages
       unarchive:
          src: "{{ temp_dir }}/{{ item }}.tar.gz"
