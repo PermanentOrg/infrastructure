@@ -37,7 +37,7 @@
          remote_src: yes
       loop: "{{ repos }}"
     - name: Rsync temprorary directory to deployment directory
-      command: "rsync -avzh {{ temp_dir }}/{{ item }} {{ deploy_dir }} --delete"
+      command: "rsync -azh {{ temp_dir }}/{{ item }} {{ deploy_dir }} --delete"
       loop: "{{ repos }}"
     - name: Remove temporary directory
       file:
