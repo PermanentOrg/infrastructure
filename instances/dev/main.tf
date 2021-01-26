@@ -44,7 +44,8 @@ resource "aws_autoscaling_group" "dev_api" {
   }
 
   tag {
-    Name                = "${var.perm_env.name} backend"
+    key                 = "Name"
+    value               = "${var.perm_env.name} backend"
     propagate_at_launch = true
   }
 
