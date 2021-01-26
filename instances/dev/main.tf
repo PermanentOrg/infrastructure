@@ -30,16 +30,30 @@ variable "perm_env" {
   }
 }
 
+resource "aws_autoscaling_group" "dev_api" {
+  name                      = "backend-dev"
+  max_size                  = 5 # does this seem appropriate?
+  min_size                  = 1
+  health_check_type         = "ELB"
+  capacity_rebalance        = true
+  force_delete              = false
+  vpc_zone_identifier       = [module.perm_env_data.subnet]
 
-resource "aws_instance" "api" {
-  ami                    = module.perm_env_data.backend_ami
-  instance_type          = "m4.large"
-  vpc_security_group_ids = [module.perm_env_data.security_group]
-  monitoring             = true
-  private_ip             = "172.31.0.80"
-  subnet_id              = module.perm_env_data.subnet
-  tags = {
-    Name = "${var.perm_env.name} backend"
+  timeouts {
+    delete = "15m"
+  }
+
+  tag {
+    Name                = "${var.perm_env.name} backend"
+    propagate_at_launch = true
+  }
+
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      # note that the default is 90 but the example uses 50
+      min_healthy_percentage = 50
+    }
   }
 }
 
