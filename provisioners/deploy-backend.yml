@@ -23,7 +23,6 @@
         - library
         - mdot
         - task-runner
-        - uploader
         - upload-service
         - website
     - name: Untar packages
@@ -37,7 +36,6 @@
         - library
         - mdot
         - task-runner
-        - uploader
         - upload-service
         - website
     - name: Change file permissions
@@ -70,14 +68,6 @@
       loop:
         - process-daemon.service
         - sqs-daemon.service
-    - name: Create uploader service
-      copy:
-        src: /data/www/uploader/scripts/uploader.service
-        dest: /etc/systemd/system/uploader.service
-        owner: www-data 
-        group: deployer
-        mode: "0644"
-        remote_src: yes
     - name: Enable and stop all services
       service:
         name: "{{ item }}"
@@ -86,7 +76,6 @@
       loop:
         - process-daemon.service
         - sqs-daemon.service
-        - uploader.service
         - node-upload.service
     - name: Start all services
       service:
@@ -96,7 +85,6 @@
       loop:
         - process-daemon.service
         - sqs-daemon.service
-        - uploader.service
         - node-upload.service
     - name: Restart apache2
       service:

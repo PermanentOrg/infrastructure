@@ -4,7 +4,8 @@
       "templates_path": "/tmp/templates",
       "aws_region": "{{env `AWS_REGION`}}",
       "aws_key": "{{env `DEPLOY_AWS_ACCESS_KEY_ID`}}",
-      "aws_secret": "{{env `DEPLOY_AWS_SECRET_ACCESS_KEY`}}"
+      "aws_secret": "{{env `DEPLOY_AWS_SECRET_ACCESS_KEY`}}",
+      "sentry_dsn": "{{env `SENTRY_DSN`}}"
     },
     "builders": [
       {
@@ -57,7 +58,7 @@
         "type": "ansible",
         "playbook_file": "../provisioners/setup.yml",
         "extra_arguments": [ "-vv", "--extra-vars",
-            "script={{user `configure_script` }} perm_env={{user `environment`}} perm_hostname={{user `hostname`}} perm_subdomain={{user `environment`}} aws_region={{user `aws_region`}} aws_access_key_id={{user `aws_key`}} aws_secret_access_key={{user `aws_secret`}} templates_path={{user `templates_path`}}"
+            "script={{user `configure_script` }} perm_env={{user `environment`}} perm_hostname={{user `hostname`}} perm_subdomain={{user `environment`}} aws_region={{user `aws_region`}} aws_access_key_id={{user `aws_key`}} aws_secret_access_key={{user `aws_secret`}} templates_path={{user `templates_path`}} sentry_dsn={{user `sentry_dsn`}}"
         ]
     },
     {

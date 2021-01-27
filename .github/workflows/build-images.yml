@@ -44,6 +44,7 @@ jobs:
           DEPLOY_AWS_ACCESS_KEY_ID: ${{ secrets[matrix.environment.aws_deploy_key] }}
           DEPLOY_AWS_SECRET_ACCESS_KEY: ${{ secrets[matrix.environment.aws_deploy_secret] }}
           AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          SENTRY_DSN: ${{ secrets.SENTRY_TOKEN }}
           PERM_ENV: ${{ matrix.environment.perm_env }}
   notify:
     runs-on: ubuntu-latest
