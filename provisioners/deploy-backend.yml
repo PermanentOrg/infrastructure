@@ -38,6 +38,10 @@
         - task-runner
         - upload-service
         - website
+    - name: Install upload-service dependencies
+      community.general.npm:
+        path: /data/www/upload-service
+        production: yes
     - name: Change file permissions
       file:
         path: /data/www
