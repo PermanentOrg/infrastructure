@@ -25,6 +25,8 @@ jobs:
         chmod 400 key
       env:
         SSH_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+    - name: Install ansible dependencies
+      run: ansible-galaxy collection install community.general
     - name: Generate Inventory
       run: ./scripts/generate_inventory.sh ${{ env.perm_env }} ${{ matrix.machine }}
     - name: Send start Slack notification
