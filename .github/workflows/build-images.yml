@@ -36,7 +36,7 @@ jobs:
       - name: Build image
         run: |
           ansible-galaxy install willshersystems.sshd 
-          ansible-galaxy install community.general.npm
+          ansible-galaxy collection install community.general
           cd images
           packer build -var-file=${{ matrix.machine }}.json image.json
         env:
