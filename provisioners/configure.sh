@@ -74,7 +74,8 @@ npm install -g forever
 npm install -g @angular/cli@7.3.6
 
 mkdir /data/tmp
-chmod 774 /data/tmp
+mkdir /data/tmp/uploader
+chmod -R 774 /data/tmp
 chown -R www-data /data/tmp
 chgrp -R $APP_USER /data/tmp
 
