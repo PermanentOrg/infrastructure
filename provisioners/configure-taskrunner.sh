@@ -44,7 +44,8 @@ envsubst < $TEMPLATES_PATH/var/www/.aws/config > /var/www/.aws/config
 chown -R www-data /var/www/
 
 mkdir /data/tmp
-chmod 774 /data/tmp
+mkdir /data/tmp/uploader
+chmod -R 774 /data/tmp
 chown -R www-data /data/tmp
 chgrp -R $APP_USER /data/tmp
 
