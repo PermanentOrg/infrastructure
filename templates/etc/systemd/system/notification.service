@@ -1,0 +1,16 @@
+[Unit]
+Description=Permanent.org Notification Service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/data/www/notification-service
+ExecStart=/usr/bin/nodejs /data/www/notification-service/lib/index.js
+KillMode=process
+Restart=always
+User=www-data
+Group=www-data
+Environment="PORT=3001"
+
+[Install]
+WantedBy=multi-user.target
