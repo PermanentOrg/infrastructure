@@ -25,6 +25,7 @@
         - task-runner
         - upload-service
         - website
+        - notification-service
     - name: Untar packages
       unarchive:
          src: "/data/tmp/{{ item }}.tar.gz"
@@ -38,9 +39,14 @@
         - task-runner
         - upload-service
         - website
+        - notification-service
     - name: Install upload-service dependencies
       community.general.npm:
         path: /data/www/upload-service
+        production: yes
+    - name: Install notification-service dependencies
+      community.general.npm:
+        path: /data/www/notification-service
         production: yes
     - name: Change file permissions
       file:
@@ -81,6 +87,7 @@
         - process-daemon.service
         - sqs-daemon.service
         - node-upload.service
+        - notification.service
     - name: Start all services
       service:
         name: "{{ item }}"
@@ -90,6 +97,7 @@
         - process-daemon.service
         - sqs-daemon.service
         - node-upload.service
+        - notification.service
     - name: Restart apache2
       service:
         name: apache2

@@ -66,6 +66,10 @@ echo "Configure Upload Service"
 envsubst < $TEMPLATES_PATH/etc/systemd/system/node-upload.service > /etc/systemd/system/node-upload.service
 systemctl enable node-upload.service
 
+echo "Configure Notification Service"
+envsubst < $TEMPLATES_PATH/etc/systemd/system/notification.service > /etc/systemd/system/notification.service
+systemctl enable notification.service
+
 echo "Install node global packages"
 npm install npm --global
 npm install -g gulp
