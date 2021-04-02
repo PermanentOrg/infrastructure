@@ -1,7 +1,7 @@
 {
+  "configure_script": "configure-taskrunner.sh",
+  "deploy_script": "deploy-taskrunner.yml",
   "hostname": "taskrunner-{{env `PERM_ENV`}}",
   "instance_type": "c4.xlarge",
-  "volume_size": "1000",
-  "configure_script": "configure-taskrunner.sh",
-  "deploy_script": "deploy-taskrunner.yml"
+  "volume_size": "1000"
 }
