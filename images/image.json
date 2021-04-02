@@ -50,7 +50,23 @@
       "extra_arguments": [
         "-vv",
         "--extra-vars",
-        "script={{user `configure_script` }} perm_env={{user `environment`}} perm_hostname={{user `hostname`}} perm_subdomain={{user `environment`}} aws_region={{user `aws_region`}} aws_access_key_id={{user `aws_key`}} aws_secret_access_key={{user `aws_secret`}} templates_path={{user `templates_path`}} sentry_dsn={{user `sentry_dsn`}}"
+        "aws_access_key_id={{user `aws_key`}}",
+        "--extra-vars",
+        "aws_region={{user `aws_region`}}",
+        "--extra-vars",
+        "aws_secret_access_key={{user `aws_secret`}}",
+        "--extra-vars",
+        "perm_env={{user `environment`}}",
+        "--extra-vars",
+        "perm_hostname={{user `hostname`}}",
+        "--extra-vars",
+        "perm_subdomain={{user `environment`}}",
+        "--extra-vars",
+        "script={{user `configure_script` }}",
+        "--extra-vars",
+        "sentry_dsn={{user `sentry_dsn`}}",
+        "--extra-vars",
+        "templates_path={{user `templates_path`}}"
       ],
       "playbook_file": "../provisioners/setup.yml",
       "type": "ansible"
