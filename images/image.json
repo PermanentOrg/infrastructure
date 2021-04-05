@@ -1,70 +1,95 @@
 {
-    "variables": {
-      "environment": "{{ env `PERM_ENV` }}",
-      "templates_path": "/tmp/templates",
-      "aws_region": "{{env `AWS_REGION`}}",
-      "aws_key": "{{env `DEPLOY_AWS_ACCESS_KEY_ID`}}",
-      "aws_secret": "{{env `DEPLOY_AWS_SECRET_ACCESS_KEY`}}",
-      "sentry_dsn": "{{env `SENTRY_DSN`}}"
-    },
-    "builders": [
-      {
-          "type": "amazon-ebs",
-          "region": "{{user `aws_region`}}",
-          "source_ami_filter": {
-              "filters": {
-                  "virtualization-type": "hvm",
-                  "name": "debian-10-amd64-20201214-484",
-                  "root-device-type": "ebs"
-              },
-              "owners": [
-                  "136693071363"
-              ],
-              "most_recent": true
-          },
-          "instance_type": "{{user `instance_type`}}",
-          "ssh_username": "admin",
-          "ami_name": "{{user `hostname`}}-{{timestamp}}",
-          "ami_description": "Packer-built AMI for {{user `hostname`}} API on {{isotime}}",
-          "tags": {
-            "Name" : "{{user `hostname`}}",
-            "built_by": "packer",
-            "environment": "{{user `environment`}}"
-          },
-          "launch_block_device_mappings" : [
-            {
-               "device_name" : "/dev/sdb",
-               "delete_on_termination" : true,
-               "volume_size" : "{{user `volume_size` }}",
-               "volume_type" : "gp2"
-            }
-         ],
-         "ami_block_device_mappings" : [
-            {
-               "device_name" : "/dev/sdb",
-               "delete_on_termination" : true,
-               "volume_type" : "gp2"
-            }
-         ]
-      }
-    ],
-    "provisioners": [
+  "builders": [
     {
-        "type": "file",
-        "source": "../templates",
-        "destination": "{{user `templates_path`}}"
-    },
-    {
-        "type": "ansible",
-        "playbook_file": "../provisioners/setup.yml",
-        "extra_arguments": [ "-vv", "--extra-vars",
-            "script={{user `configure_script` }} perm_env={{user `environment`}} perm_hostname={{user `hostname`}} perm_subdomain={{user `environment`}} aws_region={{user `aws_region`}} aws_access_key_id={{user `aws_key`}} aws_secret_access_key={{user `aws_secret`}} templates_path={{user `templates_path`}} sentry_dsn={{user `sentry_dsn`}}"
+      "ami_block_device_mappings": [
+        {
+          "delete_on_termination": true,
+          "device_name": "/dev/sdb",
+          "volume_type": "gp2"
+        }
+      ],
+      "ami_description": "Packer-built AMI for {{user `hostname`}} API on {{isotime}}",
+      "ami_name": "{{user `hostname`}}-{{timestamp}}",
+      "instance_type": "{{user `instance_type`}}",
+      "launch_block_device_mappings": [
+        {
+          "delete_on_termination": true,
+          "device_name": "/dev/sdb",
+          "volume_size": "{{user `volume_size` }}",
+          "volume_type": "gp2"
+        }
+      ],
+      "region": "{{user `aws_region`}}",
+      "source_ami_filter": {
+        "filters": {
+          "name": "debian-10-amd64-20201214-484",
+          "root-device-type": "ebs",
+          "virtualization-type": "hvm"
+        },
+        "most_recent": true,
+        "owners": [
+          "136693071363"
         ]
+      },
+      "ssh_username": "admin",
+      "tags": {
+        "Name": "{{user `hostname`}}",
+        "built_by": "packer",
+        "environment": "{{user `environment`}}"
+      },
+      "type": "amazon-ebs"
+    }
+  ],
+  "provisioners": [
+    {
+      "destination": "{{user `templates_path`}}",
+      "source": "../templates",
+      "type": "file"
     },
     {
-        "type": "ansible",
-        "playbook_file": "../provisioners/{{user `deploy_script`}}",
-        "extra_arguments": [ "-vv", "--extra-vars", "perm_env={{user `environment`}}" ],
-        "ansible_env_vars": ["ANSIBLE_PIPELINING=True"]
-    }]
+      "extra_arguments": [
+        "-vv",
+        "--extra-vars",
+        "aws_access_key_id={{user `aws_key`}}",
+        "--extra-vars",
+        "aws_region={{user `aws_region`}}",
+        "--extra-vars",
+        "aws_secret_access_key={{user `aws_secret`}}",
+        "--extra-vars",
+        "perm_env={{user `environment`}}",
+        "--extra-vars",
+        "perm_hostname={{user `hostname`}}",
+        "--extra-vars",
+        "perm_subdomain={{user `environment`}}",
+        "--extra-vars",
+        "script={{user `configure_script` }}",
+        "--extra-vars",
+        "sentry_dsn={{user `sentry_dsn`}}",
+        "--extra-vars",
+        "templates_path={{user `templates_path`}}"
+      ],
+      "playbook_file": "../provisioners/setup.yml",
+      "type": "ansible"
+    },
+    {
+      "ansible_env_vars": [
+        "ANSIBLE_PIPELINING=True"
+      ],
+      "extra_arguments": [
+        "-vv",
+        "--extra-vars",
+        "perm_env={{user `environment`}}"
+      ],
+      "playbook_file": "../provisioners/{{user `deploy_script`}}",
+      "type": "ansible"
+    }
+  ],
+  "variables": {
+    "aws_key": "{{env `DEPLOY_AWS_ACCESS_KEY_ID`}}",
+    "aws_region": "{{env `AWS_REGION`}}",
+    "aws_secret": "{{env `DEPLOY_AWS_SECRET_ACCESS_KEY`}}",
+    "environment": "{{ env `PERM_ENV` }}",
+    "sentry_dsn": "{{env `SENTRY_DSN`}}",
+    "templates_path": "/tmp/templates"
+  }
 }
