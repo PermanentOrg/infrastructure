@@ -64,6 +64,8 @@
         "--extra-vars",
         "script={{user `configure_script` }}",
         "--extra-vars",
+        "notification_database_url={{user `notification_database_url`}}",
+        "--extra-vars",
         "sentry_dsn={{user `sentry_dsn`}}",
         "--extra-vars",
         "templates_path={{user `templates_path`}}"
@@ -88,6 +90,7 @@
     "aws_key": "{{env `DEPLOY_AWS_ACCESS_KEY_ID`}}",
     "aws_region": "{{env `AWS_REGION`}}",
     "aws_secret": "{{env `DEPLOY_AWS_SECRET_ACCESS_KEY`}}",
+    "notification_database_url": "{{env `NOTIFICATION_DATABASE_URL`}}",
     "environment": "{{ env `PERM_ENV` }}",
     "sentry_dsn": "{{env `SENTRY_DSN`}}",
     "templates_path": "/tmp/templates"
