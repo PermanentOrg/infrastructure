@@ -11,6 +11,7 @@ Restart=always
 User=www-data
 Group=www-data
 Environment="PORT=3001"
+Environment="DATABASE_URL=${NOTIFICATION_DATABASE_URL}"
 
 [Install]
 WantedBy=multi-user.target
