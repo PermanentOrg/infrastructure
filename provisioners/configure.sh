@@ -67,7 +67,10 @@ envsubst < $TEMPLATES_PATH/etc/systemd/system/node-upload.service > /etc/systemd
 systemctl enable node-upload.service
 
 echo "Configure Notification Service"
-envsubst < $TEMPLATES_PATH/etc/systemd/system/notification.service > /etc/systemd/system/notification.service
+cp $TEMPLATES_PATH/etc/systemd/system/notification.service /etc/systemd/system/notification.service
+mkdir /etc/permanent/
+envsubst < $TEMPLATES_PATH/etc/permanent/notification-service.env > /etc/permanent/notification-service.env
+
 systemctl enable notification.service
 
 echo "Install node global packages"

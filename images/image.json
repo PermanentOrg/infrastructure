@@ -66,6 +66,8 @@
         "--extra-vars",
         "notification_database_url={{user `notification_database_url`}}",
         "--extra-vars",
+        "notification_firebase_credentials={{user `notification_firebase_credentials`}}",
+        "--extra-vars",
         "sentry_dsn={{user `sentry_dsn`}}",
         "--extra-vars",
         "templates_path={{user `templates_path`}}"
@@ -91,6 +93,7 @@
     "aws_region": "{{env `AWS_REGION`}}",
     "aws_secret": "{{env `DEPLOY_AWS_SECRET_ACCESS_KEY`}}",
     "notification_database_url": "{{env `NOTIFICATION_DATABASE_URL`}}",
+    "notification_firebase_credentials": "{{env `NOTIFICATION_FIREBASE_CREDENTIALS`}}",
     "environment": "{{ env `PERM_ENV` }}",
     "sentry_dsn": "{{env `SENTRY_DSN`}}",
     "templates_path": "/tmp/templates"

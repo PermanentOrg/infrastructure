@@ -26,14 +26,17 @@ jobs:
             aws_deploy_key: DEV_AWS_ACCESS_KEY_ID
             aws_deploy_secret: DEV_AWS_SECRET_ACCESS_KEY
             notification_database_url: DEV_NOTIFICATION_DATABASE_URL
+            notification_firebase_credentials: DEV_NOTIFICATION_FIREBASE_CREDENTIALS
           - perm_env: staging
             aws_deploy_key: STAGING_AWS_ACCESS_KEY_ID
             aws_deploy_secret: STAGING_AWS_SECRET_ACCESS_KEY
             notification_database_url: STAGING_NOTIFICATION_DATABASE_URL
+            notification_firebase_credentials: STAGING_NOTIFICATION_FIREBASE_CREDENTIALS
           - perm_env: prod
             aws_deploy_key: PROD_AWS_ACCESS_KEY_ID
             aws_deploy_secret: PROD_AWS_SECRET_ACCESS_KEY
             notification_database_url: PROD_NOTIFICATION_DATABASE_URL
+            notification_firebase_credentials: PROD_NOTIFICATION_FIREBASE_CREDENTIALS
     steps:
       - uses: actions/checkout@v1
       - name: Build image
@@ -51,6 +54,7 @@ jobs:
           SENTRY_DSN: ${{ secrets.SENTRY_TOKEN }}
           PERM_ENV: ${{ matrix.environment.perm_env }}
           NOTIFICATION_DATABASE_URL: ${{ secrets[matrix.environment.notification_database_url] }}
+          NOTIFICATION_FIREBASE_CREDENTIALS: ${{ secrets[matrix.environment.notification_firebase_credentials] }}
   notify:
     runs-on: ubuntu-18.04
     needs: ["build"]
