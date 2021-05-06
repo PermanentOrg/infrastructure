@@ -11,6 +11,7 @@ Restart=always
 User=www-data
 Group=www-data
 Environment="AWS_SDK_LOAD_CONFIG=true"
+Environment="NODE_ENV=production"
 Environment="PORT=3000"
 Environment="SENTRY_DSN=${UPLOAD_SERVICE_SENTRY_DSN}"
 Environment="SENTRY_ENVIRONMENT=${PERM_ENV}"
