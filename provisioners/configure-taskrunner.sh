@@ -20,7 +20,7 @@ echo $PERM_ENV  > /data/www/host.txt
 echo "Add custom sources"
 # Add mysql key
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 5072E1F5
-# Add mysql source 
+# Add mysql source
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/mysql.list /etc/apt/sources.list.d/mysql.list
 
 apt-get -qq update

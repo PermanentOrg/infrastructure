@@ -41,7 +41,7 @@
       copy:
         src: "/data/www/task-runner/scripts/{{ item }}"
         dest: "/etc/cron.{{ item }}"
-        owner: www-data 
+        owner: www-data
         group: deployer
         mode: "0744"
         remote_src: yes
