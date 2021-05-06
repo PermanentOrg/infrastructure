@@ -1,5 +1,5 @@
 [Unit]
-Description=Node Upload Service
+Description=Permanent.org Upload Service
 After=network.target
 
 [Service]

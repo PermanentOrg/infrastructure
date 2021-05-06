@@ -63,8 +63,8 @@ a2enconf charset
 a2enconf other-vhosts-access-log
 
 echo "Configure Upload Service"
-envsubst < $TEMPLATES_PATH/etc/systemd/system/node-upload.service > /etc/systemd/system/node-upload.service
-systemctl enable node-upload.service
+envsubst < $TEMPLATES_PATH/etc/systemd/system/upload.service > /etc/systemd/system/upload.service
+systemctl enable upload.service
 
 echo "Configure Notification Service"
 cp $TEMPLATES_PATH/etc/systemd/system/notification.service /etc/systemd/system/notification.service

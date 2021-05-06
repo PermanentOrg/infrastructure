@@ -86,7 +86,7 @@
       loop:
         - process-daemon.service
         - sqs-daemon.service
-        - node-upload.service
+        - upload.service
         - notification.service
     - name: Start all services
       service:
@@ -96,7 +96,7 @@
       loop:
         - process-daemon.service
         - sqs-daemon.service
-        - node-upload.service
+        - upload.service
         - notification.service
     - name: Restart apache2
       service:
