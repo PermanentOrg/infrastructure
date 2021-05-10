@@ -1,5 +1,5 @@
 [Unit]
-Description=Node Upload Service
+Description=Permanent.org Upload Service
 After=network.target
 
 [Service]
@@ -10,10 +10,11 @@ KillMode=process
 Restart=always
 User=www-data
 Group=www-data
-Environment="SENTRY_ENVIRONMENT=${PERM_ENV}"
+Environment="AWS_SDK_LOAD_CONFIG=true"
+Environment="NODE_ENV=production"
 Environment="PORT=3000"
 Environment="SENTRY_DSN=${UPLOAD_SERVICE_SENTRY_DSN}"
-Environment="AWS_SDK_LOAD_CONFIG=true"
+Environment="SENTRY_ENVIRONMENT=${PERM_ENV}"
 
 [Install]
 WantedBy=multi-user.target
