@@ -1,0 +1,19 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "${APP_ID}",
+        "paths": [
+          "*"
+        ],
+        "components": [
+          {
+            "/": "*",
+            "comment": "Matches any URL"
+          }
+        ]
+      }
+    ]
+  }
+}

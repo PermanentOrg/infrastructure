@@ -50,6 +50,8 @@
       "extra_arguments": [
         "-vv",
         "--extra-vars",
+        "app_id={{user `app_id`}}",
+        "--extra-vars",
         "aws_access_key_id={{user `aws_key`}}",
         "--extra-vars",
         "aws_region={{user `aws_region`}}",
@@ -89,6 +91,7 @@
     }
   ],
   "variables": {
+    "app_id": "{{env `APP_ID`}}",
     "aws_key": "{{env `DEPLOY_AWS_ACCESS_KEY_ID`}}",
     "aws_region": "{{env `AWS_REGION`}}",
     "aws_secret": "{{env `DEPLOY_AWS_SECRET_ACCESS_KEY`}}",

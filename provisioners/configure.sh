@@ -46,6 +46,13 @@ mkdir /var/www/.cache
 envsubst < $TEMPLATES_PATH/var/www/.aws/credentials > /var/www/.aws/credentials
 envsubst < $TEMPLATES_PATH/var/www/.aws/config > /var/www/.aws/config
 
+# This is needed for our iOS app to open links to Permanent in the app
+# https://developer.apple.com/library/archive/documentation/General/Conceptual/AppSearch/UniversalLinks.html
+mkdir /var/www/html/.well-known
+envsubst \
+  < $TEMPLATES_PATH/var/www/html/.well-known/apple-app-site-association \
+  > /var/www/html/.well-known/apple-app-site-association
+
 # Make www-data the owner of /var/www/ because writing to this dir is required for file conversions
 chown -R www-data /var/www/
 
