@@ -23,16 +23,19 @@ jobs:
         machine: [backend, taskrunner, cron]
         environment:
           - perm_env: dev
+            app_id: "TEST.org.permanent.permanent.dev"
             aws_deploy_key: DEV_AWS_ACCESS_KEY_ID
             aws_deploy_secret: DEV_AWS_SECRET_ACCESS_KEY
             notification_database_url: DEV_NOTIFICATION_DATABASE_URL
             notification_firebase_credentials: DEV_NOTIFICATION_FIREBASE_CREDENTIALS
           - perm_env: staging
+            app_id: "C8YKZNBVWT.org.permanent.permanent.staging"
             aws_deploy_key: STAGING_AWS_ACCESS_KEY_ID
             aws_deploy_secret: STAGING_AWS_SECRET_ACCESS_KEY
             notification_database_url: STAGING_NOTIFICATION_DATABASE_URL
             notification_firebase_credentials: STAGING_NOTIFICATION_FIREBASE_CREDENTIALS
           - perm_env: prod
+            app_id: ""
             aws_deploy_key: PROD_AWS_ACCESS_KEY_ID
             aws_deploy_secret: PROD_AWS_SECRET_ACCESS_KEY
             notification_database_url: PROD_NOTIFICATION_DATABASE_URL
@@ -46,6 +49,7 @@ jobs:
           cd images
           packer build -var-file=${{ matrix.machine }}.json image.json
         env:
+          APP_ID: ${{ matrix.environment.app_id }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DEPLOY_AWS_ACCESS_KEY_ID: ${{ secrets[matrix.environment.aws_deploy_key] }}
