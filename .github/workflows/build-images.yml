@@ -35,7 +35,7 @@ jobs:
             notification_database_url: STAGING_NOTIFICATION_DATABASE_URL
             notification_firebase_credentials: STAGING_NOTIFICATION_FIREBASE_CREDENTIALS
           - perm_env: prod
-            app_id: ""
+            app_id: "C8YKZNBVWT.org.permanent.PermanentArchive"
             aws_deploy_key: PROD_AWS_ACCESS_KEY_ID
             aws_deploy_secret: PROD_AWS_SECRET_ACCESS_KEY
             notification_database_url: PROD_NOTIFICATION_DATABASE_URL
