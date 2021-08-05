@@ -17,9 +17,15 @@ apt-get -qq install -y curl htop wget build-essential zip software-properties-co
 
 echo $PERM_ENV  > /data/www/host.txt
 
+# Preseed responses to New Relic installation questions
+echo newrelic-php5 newrelic-php5/application-name string $NEW_RELIC_APPLICATION_NAME | debconf-set-selections
+echo newrelic-php5 newrelic-php5/license-key string $NEW_RELIC_LICENSE_KEY | debconf-set-selections
+
 echo "Add custom sources"
 # Add mysql key
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 5072E1F5
+# Add New Relic key
+curl -s https://download.newrelic.com/548C16BF.gpg | apt-key add -
 # Add node key
 curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 # Add custom sources
@@ -34,7 +40,8 @@ echo "Install conversion tools"
 apt-get -qq install -y libreoffice ffmpeg mediainfo libde265-dev libheif-dev libimage-exiftool-perl
 apt-get -qq install -y imagemagick wkhtmltopdf
 apt-get -qq install -y apache2 php7.3 libapache2-mod-php php-mysql php-memcache php-curl php-cli php-imagick php-gd php-xml php-mbstring php-zip php-igbinary php-msgpack
-
+echo "Install New Relic"
+apt-get install -y newrelic-php5
 echo "Configure ImageMagick"
 cp $TEMPLATES_PATH/etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml
 

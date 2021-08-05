@@ -66,6 +66,10 @@
         "--extra-vars",
         "script={{user `configure_script` }}",
         "--extra-vars",
+        "new_relic_application_name={{user `new_relic_application_name`}}",
+        "--extra-vars",
+        "new_relic_license_key={{user `new_relic_license_key`}}",
+        "--extra-vars",
         "notification_database_url={{user `notification_database_url`}}",
         "--extra-vars",
         "notification_firebase_credentials={{user `notification_firebase_credentials`}}",
@@ -99,6 +103,8 @@
     "notification_firebase_credentials": "{{env `NOTIFICATION_FIREBASE_CREDENTIALS`}}",
     "environment": "{{ env `PERM_ENV` }}",
     "sentry_dsn": "{{env `SENTRY_DSN`}}",
+    "new_relic_application_name": "{{env `NEW_RELIC_APPLICATION_NAME`}}",
+    "new_relic_license_key": "{{env `NEW_RELIC_LICENSE_KEY`}}",
     "templates_path": "/tmp/templates"
   }
 }

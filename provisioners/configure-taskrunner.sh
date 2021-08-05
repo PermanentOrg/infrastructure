@@ -17,11 +17,19 @@ apt-get -qq install -y curl htop wget build-essential zip software-properties-co
 
 echo $PERM_ENV  > /data/www/host.txt
 
+# Preseed responses to New Relic installation questions
+echo newrelic-php5 newrelic-php5/application-name string $NEW_RELIC_APPLICATION_NAME | debconf-set-selections
+echo newrelic-php5 newrelic-php5/license-key string $NEW_RELIC_LICENSE_KEY | debconf-set-selections
+
 echo "Add custom sources"
 # Add mysql key
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 5072E1F5
 # Add mysql source
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/mysql.list /etc/apt/sources.list.d/mysql.list
+
+# Add New Relic
+curl -s https://download.newrelic.com/548C16BF.gpg | apt-key add -
+cp $TEMPLATES_PATH/etc/apt/sources.list.d/newrelic.list /etc/apt/sources.list.d/
 
 apt-get -qq update
 echo "Install mysql"
@@ -31,6 +39,9 @@ apt-get -qq install -y libreoffice ffmpeg mediainfo libde265-dev libheif-dev lib
 apt-get -qq install -y imagemagick wkhtmltopdf
 # Only install apache2 to create www-data user, which daemons run as
 apt-get -qq install -y apache2 php7.3 php-mysql php-memcache php-curl php-cli php-imagick php-gd php-xml php-mbstring php-zip php-igbinary php-msgpack
+echo "Install New Relic"
+apt-get install -y newrelic-php5
+
 service apache2 stop
 update-rc.d apache2 disable
 
