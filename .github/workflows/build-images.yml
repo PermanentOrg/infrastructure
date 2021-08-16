@@ -26,18 +26,24 @@ jobs:
             app_id: "TEST.org.permanent.permanent.dev"
             aws_deploy_key: DEV_AWS_ACCESS_KEY_ID
             aws_deploy_secret: DEV_AWS_SECRET_ACCESS_KEY
+            new_relic_application_name: Backend-dev
+            new_relic_license_key: DEV_NEW_RELIC_LICENSE_KEY
             notification_database_url: DEV_NOTIFICATION_DATABASE_URL
             notification_firebase_credentials: DEV_NOTIFICATION_FIREBASE_CREDENTIALS
           - perm_env: staging
             app_id: "C8YKZNBVWT.org.permanent.permanent.staging"
             aws_deploy_key: STAGING_AWS_ACCESS_KEY_ID
             aws_deploy_secret: STAGING_AWS_SECRET_ACCESS_KEY
+            new_relic_license_key: STAGING_NEW_RELIC_LICENSE_KEY
+            new_relic_application_name: Backend-staging
             notification_database_url: STAGING_NOTIFICATION_DATABASE_URL
             notification_firebase_credentials: STAGING_NOTIFICATION_FIREBASE_CREDENTIALS
           - perm_env: prod
             app_id: "C8YKZNBVWT.org.permanent.PermanentArchive"
             aws_deploy_key: PROD_AWS_ACCESS_KEY_ID
             aws_deploy_secret: PROD_AWS_SECRET_ACCESS_KEY
+            new_relic_license_key: PROD_NEW_RELIC_LICENSE_KEY
+            new_relic_application_name: Backend-prod
             notification_database_url: PROD_NOTIFICATION_DATABASE_URL
             notification_firebase_credentials: PROD_NOTIFICATION_FIREBASE_CREDENTIALS
     steps:
@@ -51,14 +57,16 @@ jobs:
         env:
           APP_ID: ${{ matrix.environment.app_id }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DEPLOY_AWS_ACCESS_KEY_ID: ${{ secrets[matrix.environment.aws_deploy_key] }}
           DEPLOY_AWS_SECRET_ACCESS_KEY: ${{ secrets[matrix.environment.aws_deploy_secret] }}
-          AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-          SENTRY_DSN: ${{ secrets.SENTRY_TOKEN }}
-          PERM_ENV: ${{ matrix.environment.perm_env }}
+          NEW_RELIC_LICENSE_KEY: ${{ secrets[matrix.environment.new_relic_license_key] }}
+          NEW_RELIC_APPLICATION_NAME: ${{ matrix.environment.new_relic_application_name }}
           NOTIFICATION_DATABASE_URL: ${{ secrets[matrix.environment.notification_database_url] }}
           NOTIFICATION_FIREBASE_CREDENTIALS: ${{ secrets[matrix.environment.notification_firebase_credentials] }}
+          SENTRY_DSN: ${{ secrets.SENTRY_TOKEN }}
+          PERM_ENV: ${{ matrix.environment.perm_env }}
   notify:
     runs-on: ubuntu-18.04
     needs: ["build"]
