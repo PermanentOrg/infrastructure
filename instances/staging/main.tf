@@ -33,7 +33,7 @@ variable "perm_env" {
 
 resource "aws_instance" "api" {
   ami                    = module.perm_env_data.backend_ami
-  instance_type          = "m4.large"
+  instance_type          = "m5.large"
   vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
   subnet_id              = module.perm_env_data.subnet
