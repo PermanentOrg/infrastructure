@@ -59,6 +59,9 @@ resource "aws_instance" "cron" {
   vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
   subnet_id              = module.perm_env_data.subnet
+  credit_specification {
+    cpu_credits = "standard"
+  }
   tags = {
     Name = "${var.perm_env.name} cron"
   }
