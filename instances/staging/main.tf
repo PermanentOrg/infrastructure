@@ -45,7 +45,7 @@ resource "aws_instance" "api" {
 
 resource "aws_instance" "taskrunner" {
   ami                    = module.perm_env_data.taskrunner_ami
-  instance_type          = "c4.xlarge"
+  instance_type          = "c5.xlarge"
   vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
   subnet_id              = module.perm_env_data.subnet
