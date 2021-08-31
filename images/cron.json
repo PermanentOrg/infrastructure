@@ -2,6 +2,6 @@
   "configure_script": "configure-cron.sh",
   "deploy_script": "deploy-cron.yml",
   "hostname": "cron-{{env `PERM_ENV`}}",
-  "instance_type": "t2.micro",
+  "instance_type": "t3.micro",
   "volume_size": "100"
 }

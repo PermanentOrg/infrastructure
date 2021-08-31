@@ -55,7 +55,7 @@ resource "aws_instance" "taskrunner" {
 
 resource "aws_instance" "cron" {
   ami                    = module.perm_env_data.cron_ami
-  instance_type          = "t2.micro"
+  instance_type          = "t3.micro"
   vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
   subnet_id              = module.perm_env_data.subnet
