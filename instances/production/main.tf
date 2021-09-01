@@ -32,7 +32,7 @@ variable "perm_env" {
 
 resource "aws_instance" "api" {
   ami                    = module.perm_env_data.backend_ami
-  instance_type          = "m4.large"
+  instance_type          = "m5.large"
   vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
   subnet_id              = module.perm_env_data.subnet
@@ -44,7 +44,7 @@ resource "aws_instance" "api" {
 
 resource "aws_instance" "taskrunner" {
   ami                    = module.perm_env_data.taskrunner_ami
-  instance_type          = "c4.xlarge"
+  instance_type          = "c5.xlarge"
   vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
   subnet_id              = module.perm_env_data.subnet
@@ -55,10 +55,13 @@ resource "aws_instance" "taskrunner" {
 
 resource "aws_instance" "cron" {
   ami                    = module.perm_env_data.cron_ami
-  instance_type          = "t2.micro"
+  instance_type          = "t3.micro"
   vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
   subnet_id              = module.perm_env_data.subnet
+  credit_specification {
+    cpu_credits = "standard"
+  }
   tags = {
     Name = "${var.perm_env.name} cron"
   }
