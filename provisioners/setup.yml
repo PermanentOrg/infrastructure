@@ -46,11 +46,11 @@
     - name: Format filesystem on block device
       filesystem:
         fstype: ext4
-        dev: /dev/xvdb
+        dev: /dev/sdb
     - name: Mount block device to /data
       mount:
        path: /data
-       src: /dev/xvdb
+       src: /dev/sdb
        state: mounted
        fstype: ext4
 
