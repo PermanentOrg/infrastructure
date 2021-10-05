@@ -5,15 +5,18 @@
       {
         "appID": "${APP_ID}",
         "paths": [
-          "*"
+          "/share/*"
         ],
         "components": [
           {
-            "/": "*",
-            "comment": "Matches any URL"
+            "/": "/share/*",
+            "comment": "Matches share URLs"
           }
         ]
       }
     ]
+  },
+  "webcredentials": {
+    "apps": [ "${APP_ID}" ]
   }
 }
