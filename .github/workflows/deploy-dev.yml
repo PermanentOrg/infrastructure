@@ -45,4 +45,4 @@ jobs:
     needs: deploy
     steps:
     - name: Trigger the functional test
-      run: curl -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/PermanentOrg/functional-test/dispatches -d '{"event_type":"dev_deployed"}'
+      run: curl -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: Bearer ${{ secrets.XMUNOZ_PAT }}" https://api.github.com/repos/PermanentOrg/functional-test/dispatches -d '{"event_type":"dev_deployed"}'
