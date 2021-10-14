@@ -45,6 +45,13 @@ apt-get install -y newrelic-php5
 echo "Configure ImageMagick"
 cp $TEMPLATES_PATH/etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml
 
+# Make sure nodejs exists
+if ! [[ -f /usr/bin/nodejs ]]
+then
+   # It does not exist, so create it
+   update-alternatives --quiet --install /usr/bin/nodejs nodejs /usr/bin/node 50 --slave /usr/share/man/man1/nodejs.1.gz nodejs.1.gz /usr/share/man/man1/node.1.gz
+fi
+
 echo "Configure apache"
 
 # This is the Apache DocumentRoot, and where the aws php sdk will look for credentials
