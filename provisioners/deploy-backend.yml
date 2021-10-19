@@ -24,7 +24,6 @@
         - mdot
         - task-runner
         - upload-service
-        - website
         - notification-service
     - name: Untar packages
       unarchive:
@@ -38,7 +37,6 @@
         - mdot
         - task-runner
         - upload-service
-        - website
         - notification-service
     - name: Install upload-service dependencies
       community.general.npm:
