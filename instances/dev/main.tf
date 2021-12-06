@@ -43,14 +43,27 @@ resource "aws_instance" "api" {
   }
 }
 
-resource "aws_instance" "taskrunner" {
-  ami                    = module.perm_env_data.taskrunner_ami
+resource "aws_launch_template" "taskrunner" {
+  name_prefix		 = "taskrunner"
+  image_id 		 = module.perm_env_data.taskrunner_ami
   instance_type          = "c4.xlarge"
   vpc_security_group_ids = [module.perm_env_data.security_group]
-  monitoring             = true
-  subnet_id              = module.perm_env_data.subnet
-  tags = {
-    Name = "${var.perm_env.name} taskrunner"
+  network_interfaces {
+    subnet_id = module.perm_env_data.subnet
+  }
+  monitoring {
+    enabled = true
+  }
+}
+
+resource "aws_autoscaling_group" "taskrunner" {
+  availability_zones = ["us-west-2a"]
+  max_size           = 4
+  min_size           = 1
+
+  launch_template {
+    id      = aws_launch_template.taskrunner.id
+    version = "$Latest"
   }
 }
 
