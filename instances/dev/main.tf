@@ -67,6 +67,32 @@ resource "aws_autoscaling_group" "taskrunner" {
   }
 }
 
+resource "aws_autoscaling_policy" "taskrunner" {
+  name                   = "taskrunner-policy"
+  scaling_adjustment     = 1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 120
+  autoscaling_group_name = aws_autoscaling_group.taskrunner.name
+}
+
+resource "aws_cloudwatch_metric_alarm" "taskrunner" {
+  alarm_name          = "terraform-dev-taskrunner-cpu"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = "80"
+
+  dimensions = {
+    AutoScalingGroupName = aws_autoscaling_group.taskrunner.name
+  }
+
+  alarm_description = "This metric monitors ec2 cpu utilization for dev taskrunners"
+  alarm_actions     = [aws_autoscaling_policy.taskrunner.arn]
+}
+
 resource "aws_instance" "cron" {
   ami                    = module.perm_env_data.cron_ami
   instance_type          = "t2.micro"
