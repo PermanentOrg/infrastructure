@@ -10,7 +10,7 @@
         mode: '0755'
     - name: Add minute crontab
       cron:
-        cron_file: /etc/crontab
+        cron_file: minutely
         user: root
         name: minute crontab
         job: "cd / && run-parts --report /etc/cron.minute"
