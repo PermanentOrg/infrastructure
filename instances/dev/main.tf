@@ -46,13 +46,13 @@ resource "aws_instance" "api" {
 
 resource "aws_instance" "taskrunner" {
   ami                    = module.perm_env_data.taskrunner_ami
-  count			 = 2
+  count                  = 2
   instance_type          = "c4.xlarge"
   vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
   subnet_id              = module.perm_env_data.subnet
   tags = {
-    Name = "${var.perm_env.name} taskrunner ${count.index}"
+    Name = "${var.perm_env.name} taskrunner"
     type = "${var.perm_env.name} taskrunner"
   }
 }
