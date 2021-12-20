@@ -39,17 +39,20 @@ resource "aws_instance" "api" {
   private_ip             = "172.31.32.32"
   tags = {
     Name = "${var.perm_env.name} backend"
+    type = "${var.perm_env.name} backend"
   }
 }
 
 resource "aws_instance" "taskrunner" {
   ami                    = module.perm_env_data.taskrunner_ami
   instance_type          = "c4.xlarge"
+  count                  = 2
   vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
   subnet_id              = module.perm_env_data.subnet
   tags = {
-    Name = "${var.perm_env.name} taskrunner"
+    Name = "${var.perm_env.name} taskrunner ${count.index}"
+    type = "${var.perm_env.name} taskrunner"
   }
 }
 
@@ -61,6 +64,7 @@ resource "aws_instance" "cron" {
   subnet_id              = module.perm_env_data.subnet
   tags = {
     Name = "${var.perm_env.name} cron"
+    type = "${var.perm_env.name} cron"
   }
 }
 
