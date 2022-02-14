@@ -53,6 +53,12 @@
         recurse: yes
         owner: www-data
         group: deployer
+    - name: Run database migrations
+      when: "run_migrations is defined and (run_migrations | bool)"
+      command: "php migrate.php"
+      become_user: deployer
+      args:
+        chdir: /data/www/library
     - name: Create cronjobs
       copy:
         src: "/data/www/task-runner/scripts/{{ item }}"

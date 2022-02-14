@@ -37,7 +37,9 @@ Image creation can also be done manually on your local machine. The following ex
 
 ```
 cp .env.template .env # add your AWS access credentials
-source .env && cd images && packer build -var-file=cron.json image.json
+source .env
+cd images
+packer build -var-file=cron.json image.json
 ```
 
 For Permanent employees: use the AWS access keys associated with the `build` IAM user, not the keys associated with your personal AWS account.
