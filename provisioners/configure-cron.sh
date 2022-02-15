@@ -22,13 +22,8 @@ echo newrelic-php5 newrelic-php5/application-name string $NEW_RELIC_APPLICATION_
 echo newrelic-php5 newrelic-php5/license-key string $NEW_RELIC_LICENSE_KEY | debconf-set-selections
 
 echo "Add custom sources"
-# Add mysql key
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 5072E1F5
-# Add mysql source
+cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/mysql.sources /etc/apt/sources.list.d/
-
-# Add New Relic
-curl -s https://download.newrelic.com/548C16BF.gpg | apt-key add -
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/newrelic.sources /etc/apt/sources.list.d/
 
 apt-get -qq update

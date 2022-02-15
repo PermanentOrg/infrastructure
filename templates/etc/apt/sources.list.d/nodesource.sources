@@ -2,3 +2,4 @@ Types: deb
 URIs: https://deb.nodesource.com/node_12.x
 Suites: buster
 Components: main
+Signed-By: /usr/share/keyrings/nodesource-archive-keyring.asc
