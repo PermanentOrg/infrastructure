@@ -1,0 +1,4 @@
+Types: deb
+URIs: http://repo.mysql.com/apt/debian/
+Suites: buster
+Components: mysql-5.7

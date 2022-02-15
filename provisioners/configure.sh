@@ -29,7 +29,7 @@ curl -s https://download.newrelic.com/548C16BF.gpg | apt-key add -
 # Add node key
 curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 # Add custom sources
-cp $TEMPLATES_PATH/etc/apt/sources.list.d/* /etc/apt/sources.list.d/
+cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
 
 apt-get -qq update
 echo "Install mysql"

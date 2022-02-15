@@ -25,11 +25,11 @@ echo "Add custom sources"
 # Add mysql key
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 5072E1F5
 # Add mysql source
-cp $TEMPLATES_PATH/etc/apt/sources.list.d/mysql.list /etc/apt/sources.list.d/mysql.list
+cp $TEMPLATES_PATH/etc/apt/sources.list.d/mysql.sources /etc/apt/sources.list.d/
 
 # Add New Relic
 curl -s https://download.newrelic.com/548C16BF.gpg | apt-key add -
-cp $TEMPLATES_PATH/etc/apt/sources.list.d/newrelic.list /etc/apt/sources.list.d/
+cp $TEMPLATES_PATH/etc/apt/sources.list.d/newrelic.sources /etc/apt/sources.list.d/
 
 apt-get -qq update
 echo "Install mysql"

@@ -1,0 +1,4 @@
+Types: deb
+URIs: http://apt.newrelic.com/debian/
+Suites: newrelic
+Components: non-free
