@@ -1,0 +1,5 @@
+Types: deb
+URIs: http://repo.mysql.com/apt/debian/
+Suites: buster
+Components: mysql-5.7
+Signed-By: /usr/share/keyrings/mysql-archive-keyring-2022.asc
