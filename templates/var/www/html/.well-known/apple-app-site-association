@@ -5,12 +5,17 @@
       {
         "appID": "${APP_ID}",
         "paths": [
-          "/share/*"
+          "/share/*",
+          "/p/*"
         ],
         "components": [
           {
             "/": "/share/*",
             "comment": "Matches share URLs"
+          },
+          {
+            "/": "/p/*",
+            "comment": "Matches public archive URLs"
           }
         ]
       }
