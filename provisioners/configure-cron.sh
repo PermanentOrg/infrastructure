@@ -42,6 +42,7 @@ apt-get -qq install -y \
   php-memcache \
   php-msgpack \
   php-mysql \
+  php-pgsql \
   php-xml \
   php-zip \
   php7.3 \
