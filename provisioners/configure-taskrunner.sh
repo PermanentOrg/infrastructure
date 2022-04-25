@@ -12,8 +12,6 @@ if [[ -z "$AWS_REGION" || -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_ACCESS_SECRET" ]]
 fi
 
 echo "Install essential software pacakges"
-apt-get -qq update
-apt-get -qq install -y curl htop wget build-essential zip software-properties-common gnupg awscli
 
 echo $PERM_ENV  > /data/www/host.txt
 
@@ -26,16 +24,41 @@ cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/mysql.sources /etc/apt/sources.list.d/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/newrelic.sources /etc/apt/sources.list.d/
 
+echo "Install packages"
 apt-get -qq update
-echo "Install mysql"
-apt-get -qq install -y mysql-client
-echo "Install conversion tools"
-apt-get -qq install -y libreoffice ffmpeg mediainfo libde265-dev libheif-dev libimage-exiftool-perl
-apt-get -qq install -y imagemagick wkhtmltopdf
 # Only install apache2 to create www-data user, which daemons run as
-apt-get -qq install -y apache2 php7.3 php-mysql php-memcache php-curl php-cli php-imagick php-gd php-xml php-mbstring php-zip php-igbinary php-msgpack
-echo "Install New Relic"
-apt-get install -y newrelic-php5
+apt-get -qq install -y \
+  apache2 \
+  awscli \
+  build-essential \
+  curl \
+  ffmpeg \
+  gnupg \
+  htop \
+  imagemagick \
+  libde265-dev \
+  libheif-dev \
+  libimage-exiftool-perl \
+  libreoffice \
+  mediainfo \
+  mysql-client \
+  newrelic-php5 \
+  php-cli \
+  php-curl \
+  php-gd \
+  php-igbinary \
+  php-imagick \
+  php-mbstring \
+  php-memcache \
+  php-msgpack \
+  php-mysql \
+  php-xml \
+  php-zip \
+  php7.3 \
+  software-properties-common \
+  wget \
+  wkhtmltopdf \
+  zip
 
 service apache2 stop
 update-rc.d apache2 disable
