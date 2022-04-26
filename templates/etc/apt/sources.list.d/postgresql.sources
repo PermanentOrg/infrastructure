@@ -1,0 +1,6 @@
+Types: deb deb-src
+URIs: http://apt.postgresql.org/pub/repos/apt
+Suites: buster-pgdg
+Components: main
+Signed-By: /usr/share/keyrings/postgresql-archive-keyring.asc
+Architectures: amd64

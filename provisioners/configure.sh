@@ -54,6 +54,7 @@ apt-get -qq install -y \
   php-xml \
   php-zip \
   php7.3 \
+  postgresql-client \
   software-properties-common \
   wget \
   wkhtmltopdf \

@@ -21,6 +21,7 @@ echo "Add custom sources"
 cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/mysql.sources /etc/apt/sources.list.d/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/newrelic.sources /etc/apt/sources.list.d/
+cp $TEMPLATES_PATH/etc/apt/sources.list.d/postgresql.sources /etc/apt/sources.list.d/
 
 echo "Install packages"
 apt-get -qq update
@@ -46,6 +47,7 @@ apt-get -qq install -y \
   php-xml \
   php-zip \
   php7.3 \
+  postgresql-client \
   software-properties-common \
   wget \
   zip
