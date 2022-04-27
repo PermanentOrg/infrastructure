@@ -11,10 +11,6 @@ if [[ -z "$AWS_REGION" || -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_ACCESS_SECRET" ]]
     exit 1
 fi
 
-echo "Install essential software pacakges"
-apt-get -qq update
-apt-get -qq install -y curl htop wget build-essential zip software-properties-common gnupg awscli
-
 echo $PERM_ENV  > /data/www/host.txt
 
 # Preseed responses to New Relic installation questions
@@ -25,17 +21,45 @@ echo "Add custom sources"
 cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
 
+echo "Install packages"
 apt-get -qq update
-echo "Install mysql"
-apt-get -qq install -y mysql-client
-echo "Install nodejs"
-apt-get -qq install -y nodejs
-echo "Install conversion tools"
-apt-get -qq install -y libreoffice ffmpeg mediainfo libde265-dev libheif-dev libimage-exiftool-perl
-apt-get -qq install -y imagemagick wkhtmltopdf
-apt-get -qq install -y apache2 php7.3 libapache2-mod-php php-mysql php-memcache php-curl php-cli php-imagick php-gd php-xml php-mbstring php-zip php-igbinary php-msgpack
-echo "Install New Relic"
-apt-get install -y newrelic-php5
+apt-get -qq install -y \
+  apache2 \
+  awscli \
+  build-essential \
+  curl \
+  ffmpeg \
+  gnupg \
+  htop \
+  imagemagick \
+  libapache2-mod-php \
+  libde265-dev \
+  libheif-dev \
+  libimage-exiftool-perl \
+  libreoffice \
+  mediainfo \
+  mysql-client \
+  newrelic-php5 \
+  nodejs \
+  php-cli \
+  php-curl \
+  php-gd \
+  php-igbinary \
+  php-imagick \
+  php-mbstring \
+  php-memcache \
+  php-msgpack \
+  php-mysql \
+  php-pgsql \
+  php-xml \
+  php-zip \
+  php7.3 \
+  postgresql-client \
+  software-properties-common \
+  wget \
+  wkhtmltopdf \
+  zip
+
 echo "Configure ImageMagick"
 cp $TEMPLATES_PATH/etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml
 
