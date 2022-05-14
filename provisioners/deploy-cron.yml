@@ -51,7 +51,6 @@
         - hourly/cleanup-bad-uploads
         - hourly/system-check
         - daily/account-engagement
-        - daily/facebook-retrieve
         - daily/remove_deleted_records
         - daily/zip_cleanup
         - daily/zoho_integration
