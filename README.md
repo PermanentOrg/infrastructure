@@ -8,10 +8,11 @@ This is the general workflow for provisioning and deploying a new images. Reason
 
 1. Create a branch with your changes to the provisioners or image builders.
 2. Push your changes up to Github, and open a pull request.
-3. Navigate to ["Build Images" Github Action](https://github.com/PermanentOrg/infrastructure/actions?query=workflow%3A%22Build+Images%22) and click "Run workflow", specifying your branch in the dropdown. Once you've verified that all of the images were built without issue, add a reviewer to your PR and get approval.
-4. When your change is merged, head over to our [Terraform Workspaces](https://app.terraform.io/app/PermanentOrg/workspaces) and select the workspace where you would like to deploy the newly built AMIs.
-5. Click "Queue plan" in the top right corner, and confirm once the workflow reaches the "Plan Finished" state.
-6. Repeat steps 4-5 for each workspace once the new configuration has been rolled out across the entire fleet.
+3. Navigate to ["Build Images" Github Action](https://github.com/PermanentOrg/infrastructure/actions?query=workflow%3A%22Build+Images%22) and click "Run workflow", specifying your branch in the dropdown. Once you've verified that all of the images were built without issue, add a reviewer to your PR and get approval. If the change you've made is solely adding a new user's SSH key, you can skip building the images.
+4. Once your PR is approved, merge it.
+5. (complete steps 5-7 during a deployment window) Head over to our [Terraform Workspaces](https://app.terraform.io/app/PermanentOrg/workspaces) and select the workspace where you would like to deploy the newly built AMIs.
+6. Click "Queue plan" in the top right corner, and confirm once the workflow reaches the "Plan Finished" state.
+7. Repeat steps 5-6 for each workspace once the new configuration has been rolled out across the entire fleet.
 
 ## Infrastructure Modification Worflow
 
