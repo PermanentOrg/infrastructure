@@ -41,6 +41,7 @@ apt-get -qq install -y \
   mysql-client \
   newrelic-php5 \
   nodejs \
+  php-bcmath \
   php-cli \
   php-curl \
   php-gd \
