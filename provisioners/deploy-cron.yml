@@ -48,7 +48,6 @@
       loop:
         - minute/disk-check
         - minute/notification-runner
-        - hourly/cleanup-bad-uploads
         - hourly/system-check
         - daily/account-engagement
         - daily/remove_deleted_records
