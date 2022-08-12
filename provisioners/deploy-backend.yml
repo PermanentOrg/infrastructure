@@ -53,9 +53,9 @@
         recurse: yes
         owner: www-data
         group: deployer
-    - name: Run database migrations
+    - name: Run MySQL database migrations
       when: "run_migrations is defined and (run_migrations | bool)"
-      command: "php migrate.php"
+      command: "php mysql-migrate.php"
       become_user: deployer
       args:
         chdir: /data/www/library
