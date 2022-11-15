@@ -64,7 +64,7 @@ In both cases, the AMIs needs to be rebuilt and deployed. See [Workflow](#Workfl
 
 ## Debian Version
 
-We use the latest Debian base image published [here](https://wiki.debian.org/Cloud/AmazonEC2Image/Buster) for our builds.
+We use the latest Debian base image perscribed in [our debian verison policy](docs/POLICIES.md).
 
 ## Autoscaling
 

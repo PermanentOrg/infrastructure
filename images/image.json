@@ -22,7 +22,7 @@
       "region": "{{user `aws_region`}}",
       "source_ami_filter": {
         "filters": {
-          "name": "debian-10-amd64-20201214-484",
+          "name": "{{user `image_name`}}",
           "root-device-type": "ebs",
           "virtualization-type": "hvm"
         },
