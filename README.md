@@ -46,6 +46,8 @@ packer build -var-file=cron.json image.json
 
 For Permanent employees: use the AWS access keys associated with the `build` IAM user, not the keys associated with your personal AWS account.
 
+If a new category of image is being established by a Pull Request then it is possible that automated checks will fail without first manually invoking the `Build Images` Github Action.  This is because Terraform expects the images to exist in the AMI registry in order to succeed.
+
 ### Deploy Images
 
 Images should generally only be deployed using [Terraform Cloud](https://app.terraform.io/app/PermanentOrg/workspaces). If you'd like to bring up a single image for a small test, do so using the AWS console.
@@ -64,7 +66,7 @@ In both cases, the AMIs needs to be rebuilt and deployed. See [Workflow](#Workfl
 
 ## Debian Version
 
-We use the latest Debian base image perscribed in [our debian verison policy](docs/POLICIES.md).
+We use the latest Debian base image prescribed in [our Debian verison policy](docs/POLICIES.md).
 
 ## Autoscaling
 

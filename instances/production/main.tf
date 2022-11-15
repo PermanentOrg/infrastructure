@@ -68,6 +68,18 @@ resource "aws_instance" "cron" {
   }
 }
 
+resource "aws_instance" "sftp" {
+  ami                    = module.perm_env_data.sftp_ami
+  instance_type          = "m4.large"
+  vpc_security_group_ids = [module.perm_env_data.security_group]
+  monitoring             = true
+  subnet_id              = module.perm_env_data.subnet
+  tags = {
+    Name = "${var.perm_env.name} sftp"
+    type = "${var.perm_env.name} sftp"
+  }
+}
+
 module "perm_env_data" {
   source   = "../modules/get-data"
   perm_env = var.perm_env

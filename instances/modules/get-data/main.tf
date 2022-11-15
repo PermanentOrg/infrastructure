@@ -28,6 +28,16 @@ data "aws_ami" "taskrunner" {
   owners = [var.perm_ami_owner]
 }
 
+data "aws_ami" "sftp" {
+  most_recent = true
+
+  filter {
+    name   = "tag:Name"
+    values = ["sftp-${var.perm_env.name}"]
+  }
+  owners = [var.perm_ami_owner]
+}
+
 data "aws_security_group" "default" {
   name = var.perm_env.sg
 }
