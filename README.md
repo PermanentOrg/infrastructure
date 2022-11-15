@@ -29,6 +29,7 @@ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(l
 sudo apt update
 sudo apt install terraform packer
 sudo pip3 install ansible
+ansible-galaxy install willshersystems.sshd
 ```
 Ansible can also be installed with your preferred local package manager (e.g. apt).
 
