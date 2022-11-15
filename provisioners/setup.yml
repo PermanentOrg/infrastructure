@@ -36,6 +36,7 @@
       AllowAgentForwarding: no
       AllowTcpForwarding: no
       PasswordAuthentication: no
+      Port: 22222
   roles:
     - role: willshersystems.sshd
 
