@@ -114,7 +114,7 @@ envsubst < $TEMPLATES_PATH/etc/permanent/notification-service.env > /etc/permane
 systemctl enable notification.service
 
 echo "Install node global packages"
-npm install npm --global
+npm install npm@8.17.0 --global
 npm install -g gulp
 npm install -g bower
 npm install -g forever
