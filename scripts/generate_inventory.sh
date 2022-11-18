@@ -3,7 +3,7 @@ public_domains=`aws ec2 describe-instances --filters 'Name=tag:type,Values='"$1 
 if [ -n "$public_domains" ]; then
   for domain in $public_domains
   do
-    echo -e "$domain\tansible_user=deployer\tansible_ssh_private_key_file=key" >> inventory.ini
+    echo -e "$domain:22222\tansible_user=deployer\tansible_ssh_private_key_file=key" >> inventory.ini
   done
 else
     echo "Something went wrong, no instances found :("
