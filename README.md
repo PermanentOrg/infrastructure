@@ -29,6 +29,7 @@ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(l
 sudo apt update
 sudo apt install terraform packer
 sudo pip3 install ansible
+ansible-galaxy install willshersystems.sshd
 ```
 Ansible can also be installed with your preferred local package manager (e.g. apt).
 
@@ -44,6 +45,8 @@ packer build -var-file=cron.json image.json
 ```
 
 For Permanent employees: use the AWS access keys associated with the `build` IAM user, not the keys associated with your personal AWS account.
+
+If a new category of image is being established by a Pull Request then it is possible that automated checks will fail without first manually invoking the `Build Images` Github Action.  This is because Terraform expects the images to exist in the AMI registry in order to succeed.
 
 ### Deploy Images
 
@@ -63,7 +66,7 @@ In both cases, the AMIs needs to be rebuilt and deployed. See [Workflow](#Workfl
 
 ## Debian Version
 
-We use the latest Debian base image published [here](https://wiki.debian.org/Cloud/AmazonEC2Image/Buster) for our builds.
+We use the latest Debian base image prescribed in [our Debian verison policy](docs/POLICIES.md).
 
 ## Autoscaling
 

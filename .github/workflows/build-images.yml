@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        machine: [backend, cron, taskrunner]
+        machine: [backend, cron, taskrunner, sftp]
     steps:
       - uses: actions/checkout@v1
       - name: Validate json
@@ -20,9 +20,10 @@ jobs:
     needs: ["validate"]
     strategy:
       matrix:
-        machine: [backend, taskrunner, cron]
+        machine: [backend, taskrunner, cron, sftp]
         environment:
           - perm_env: dev
+            server_domain: "dev.permanent.org"
             app_id: "TEST.org.permanent.permanent.dev"
             aws_deploy_key: DEV_AWS_ACCESS_KEY_ID
             aws_deploy_secret: DEV_AWS_SECRET_ACCESS_KEY
@@ -30,7 +31,10 @@ jobs:
             new_relic_license_key: DEV_NEW_RELIC_LICENSE_KEY
             notification_database_url: DEV_NOTIFICATION_DATABASE_URL
             notification_firebase_credentials: DEV_NOTIFICATION_FIREBASE_CREDENTIALS
+            fusion_auth_host_secret_key: DEV_FUSION_AUTH_HOST
+            fusion_auth_key_sftp_secret_key: DEV_FUSION_AUTH_KEY_SFTP
           - perm_env: staging
+            server_domain: "staging.permanent.org"
             app_id: "C8YKZNBVWT.org.permanent.permanent.staging"
             aws_deploy_key: STAGING_AWS_ACCESS_KEY_ID
             aws_deploy_secret: STAGING_AWS_SECRET_ACCESS_KEY
@@ -38,7 +42,10 @@ jobs:
             new_relic_application_name: Backend-staging
             notification_database_url: STAGING_NOTIFICATION_DATABASE_URL
             notification_firebase_credentials: STAGING_NOTIFICATION_FIREBASE_CREDENTIALS
+            fusion_auth_host_secret_key: STAGING_FUSION_AUTH_HOST
+            fusion_auth_key_sftp_secret_key: STAGING_FUSION_AUTH_KEY_SFTP
           - perm_env: prod
+            server_domain: "www.permanent.org"
             app_id: "C8YKZNBVWT.org.permanent.PermanentArchive"
             aws_deploy_key: PROD_AWS_ACCESS_KEY_ID
             aws_deploy_secret: PROD_AWS_SECRET_ACCESS_KEY
@@ -46,6 +53,8 @@ jobs:
             new_relic_application_name: Backend-prod
             notification_database_url: PROD_NOTIFICATION_DATABASE_URL
             notification_firebase_credentials: PROD_NOTIFICATION_FIREBASE_CREDENTIALS
+            fusion_auth_host_secret_key: PROD_FUSION_AUTH_HOST
+            fusion_auth_key_sftp_secret_key: PROD_FUSION_AUTH_KEY_SFTP
     steps:
       - uses: actions/checkout@v1
       - name: Build image
@@ -67,6 +76,9 @@ jobs:
           NOTIFICATION_FIREBASE_CREDENTIALS: ${{ secrets[matrix.environment.notification_firebase_credentials] }}
           SENTRY_DSN: ${{ secrets.SENTRY_TOKEN }}
           PERM_ENV: ${{ matrix.environment.perm_env }}
+          SERVER_DOMAIN: ${{ matrix.environment.server_domain }}
+          FUSION_AUTH_HOST: ${{ secrets[matrix.environment.fusion_auth_host_secret_key] }}
+          FUSION_AUTH_KEY_SFTP: ${{ secrets[matrix.environment.fusion_auth_key_sftp_secret_key] }}
   notify:
     runs-on: ubuntu-20.04
     needs: ["build"]

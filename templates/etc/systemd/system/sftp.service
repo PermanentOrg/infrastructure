@@ -1,0 +1,16 @@
+[Unit]
+Description=Permanent.org SFTP Service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/data/www/sftp-service
+ExecStart=node /data/www/sftp-service/build/index.js
+KillMode=process
+Restart=always
+User=www-data
+Group=www-data
+EnvironmentFile=/etc/permanent/sftp-service.env
+
+[Install]
+WantedBy=multi-user.target

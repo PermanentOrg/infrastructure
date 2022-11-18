@@ -22,7 +22,7 @@
       "region": "{{user `aws_region`}}",
       "source_ami_filter": {
         "filters": {
-          "name": "debian-10-amd64-20201214-484",
+          "name": "{{user `image_name`}}",
           "root-device-type": "ebs",
           "virtualization-type": "hvm"
         },
@@ -76,7 +76,13 @@
         "--extra-vars",
         "sentry_dsn={{user `sentry_dsn`}}",
         "--extra-vars",
-        "templates_path={{user `templates_path`}}"
+        "templates_path={{user `templates_path`}}",
+        "--extra-vars",
+        "fusion_auth_host={{user `fusion_auth_host`}}",
+        "--extra-vars",
+        "fusion_auth_key_sftp={{user `fusion_auth_key_sftp`}}",
+        "--extra-vars",
+        "server_domain={{user `server_domain`}}"
       ],
       "playbook_file": "../provisioners/setup.yml",
       "type": "ansible"
@@ -105,6 +111,9 @@
     "sentry_dsn": "{{env `SENTRY_DSN`}}",
     "new_relic_application_name": "{{env `NEW_RELIC_APPLICATION_NAME`}}",
     "new_relic_license_key": "{{env `NEW_RELIC_LICENSE_KEY`}}",
-    "templates_path": "/tmp/templates"
+    "templates_path": "/tmp/templates",
+    "fusion_auth_host": "{{env `FUSION_AUTH_HOST`}}",
+    "fusion_auth_key_sftp": "{{env `FUSION_AUTH_KEY_SFTP`}}",
+    "server_domain": "{{env `SERVER_DOMAIN`}}"
   }
 }

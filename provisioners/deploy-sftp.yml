@@ -1,0 +1,55 @@
+---
+- name: Deploy code on machine and configure the Permanent sftp service
+  hosts: default
+  become: true
+  tasks:
+    - name: Copy packages from S3
+      become_user: deployer
+      command: "aws s3 cp s3://permanent-repos/{{ perm_env }}/{{ item }}.tar.gz /data/tmp/{{ item }}.tar.gz"
+      loop:
+        - sftp-service
+    - name: Untar packages
+      unarchive:
+         src: "/data/tmp/{{ item }}.tar.gz"
+         dest: /data/www/
+         remote_src: yes
+      loop:
+        - sftp-service
+    - name: Copy private ssh key from ESM
+      become_user: deployer
+      shell: \
+        aws secretsmanager get-secret-value --secret-id SFTP-Host-Private-Key --region us-west-2 --query "SecretString" --output text > /data/tmp/host.key
+    - name: Move private key to its destination
+      shell: |
+        mkdir /data/www/sftp-service/keys
+        mv /data/tmp/host.key /data/www/sftp-service/keys/host.key
+    - name: Change file permissions
+      file:
+        path: /data/www
+        state: directory
+        recurse: yes
+        owner: www-data
+        group: deployer
+    - name: Install sftp-service dependencies
+      community.general.npm:
+        path: /data/www/sftp-service
+        production: yes
+    - name: Enable and stop all services
+      service:
+        name: "{{ item }}"
+        enabled: yes
+        state: stopped
+      loop:
+        - sftp.service
+    - name: Start all services
+      service:
+        name: "{{ item }}"
+        enabled: yes
+        state: started
+      loop:
+        - sftp.service
+    - name: Restart nginx
+      service:
+        name: nginx
+        enabled: yes
+        state: restarted
