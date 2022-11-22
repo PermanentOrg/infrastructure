@@ -74,6 +74,7 @@ resource "aws_instance" "sftp" {
   vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
   subnet_id              = module.perm_env_data.subnet
+  private_ip             = "172.31.31.248"
   tags = {
     Name = "${var.perm_env.name} sftp"
     type = "${var.perm_env.name} sftp"
