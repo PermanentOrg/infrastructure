@@ -55,7 +55,7 @@
         group: deployer
     - name: Run database migrations
       when: "run_migrations is defined and (run_migrations | bool)"
-      command: "php migrate.php"
+      command: "dbmate up"
       become_user: deployer
       args:
         chdir: /data/www/library
