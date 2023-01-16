@@ -40,7 +40,6 @@ apt-get -qq install -y \
   mediainfo \
   mysql-client \
   newrelic-php5 \
-  nodejs \
   php-bcmath \
   php-cli \
   php-curl \
@@ -61,15 +60,15 @@ apt-get -qq install -y \
   wkhtmltopdf \
   zip
 
+echo "Install NodeJs"
+# The way to pin to a specific version of node is to load directly
+# See https://github.com/nodesource/distributions/issues/33#issuecomment-169345680
+curl -o nodejs.deb https://deb.nodesource.com/node_16.x/pool/main/n/nodejs/nodejs_16.17.1-deb-1nodesource1_amd64.deb
+apt -y install ./nodejs.deb
+rm ./nodejs.deb
+
 echo "Configure ImageMagick"
 cp $TEMPLATES_PATH/etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml
-
-# Make sure nodejs exists
-if ! [[ -f /usr/bin/nodejs ]]
-then
-   # It does not exist, so create it
-   update-alternatives --quiet --install /usr/bin/nodejs nodejs /usr/bin/node 50 --slave /usr/share/man/man1/nodejs.1.gz nodejs.1.gz /usr/share/man/man1/node.1.gz
-fi
 
 echo "Configure apache"
 
