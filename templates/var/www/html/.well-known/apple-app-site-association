@@ -6,7 +6,8 @@
         "appID": "${APP_ID}",
         "paths": [
           "/share/*",
-          "/p/*"
+          "/p/*",
+          "/app/pr/manage"
         ],
         "components": [
           {
@@ -16,6 +17,10 @@
           {
             "/": "/p/*",
             "comment": "Matches public archive URLs"
+          },
+          {
+            "/": "/app/pr/manage",
+            "comment": "Matches archive invite URLs"
           }
         ]
       }
