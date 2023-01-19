@@ -55,7 +55,7 @@
         group: deployer
     - name: Run database migrations
       when: "run_migrations is defined and (run_migrations | bool)"
-      command: "dbmate up"
+      command: "dbmate --url {{ database_url }} up"
       become_user: deployer
       args:
         chdir: /data/www/library
