@@ -7,7 +7,7 @@
       file:
         path: /etc/cron.minute
         state: directory
-        mode: '0755'
+        mode: "0755"
     - name: Add minute crontab
       cron:
         cron_file: minutely
@@ -27,9 +27,9 @@
         - notification-service
     - name: Untar packages
       unarchive:
-         src: "/data/tmp/{{ item }}.tar.gz"
-         dest: /data/www/
-         remote_src: yes
+        src: "/data/tmp/{{ item }}.tar.gz"
+        dest: /data/www/
+        remote_src: yes
       loop:
         - api
         - daemon
