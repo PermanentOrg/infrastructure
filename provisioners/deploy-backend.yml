@@ -53,6 +53,12 @@
         recurse: yes
         owner: www-data
         group: deployer
+    - name: Install dbmate
+      when: "run_migrations is defined and (run_migrations | bool)"
+      command: "curl -L -o /usr/local/bin/dbmate https://github.com/amacneil/dbmate/releases/download/v1.16.0/dbmate-linux-amd64"
+    - name: Make dbmate executable
+      when: "run_migrations is defined and (run_migrations | bool)"
+      command: "sudo chmod +x /usr/local/bin/dbmate"
     - name: Run database migrations
       when: "run_migrations is defined and (run_migrations | bool)"
       command: "dbmate --url {{ database_url }} up"
