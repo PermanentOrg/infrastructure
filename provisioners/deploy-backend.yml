@@ -7,7 +7,7 @@
       file:
         path: /etc/cron.minute
         state: directory
-        mode: '0755'
+        mode: "0755"
     - name: Add minute crontab
       cron:
         cron_file: minutely
@@ -27,9 +27,9 @@
         - notification-service
     - name: Untar packages
       unarchive:
-         src: "/data/tmp/{{ item }}.tar.gz"
-         dest: /data/www/
-         remote_src: yes
+        src: "/data/tmp/{{ item }}.tar.gz"
+        dest: /data/www/
+        remote_src: yes
       loop:
         - api
         - daemon
@@ -53,9 +53,15 @@
         recurse: yes
         owner: www-data
         group: deployer
+    - name: Install dbmate
+      when: "run_migrations is defined and (run_migrations | bool)"
+      command: "curl -L -o /usr/local/bin/dbmate https://github.com/amacneil/dbmate/releases/download/v1.16.0/dbmate-linux-amd64"
+    - name: Make dbmate executable
+      when: "run_migrations is defined and (run_migrations | bool)"
+      command: "sudo chmod +x /usr/local/bin/dbmate"
     - name: Run database migrations
       when: "run_migrations is defined and (run_migrations | bool)"
-      command: "php migrate.php"
+      command: "dbmate --url {{ database_url }} up"
       become_user: deployer
       args:
         chdir: /data/www/library
