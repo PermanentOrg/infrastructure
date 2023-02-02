@@ -4,5 +4,5 @@
   "hostname": "cron-{{env `PERM_ENV`}}",
   "instance_type": "t2.micro",
   "volume_size": "100",
-  "image_name": "debian-10-amd64-20201214-484"
+  "image_name": "debian-10-amd64-20220911-1135"
 }
