@@ -71,6 +71,10 @@ then
    update-alternatives --quiet --install /usr/bin/nodejs nodejs /usr/bin/node 50 --slave /usr/share/man/man1/nodejs.1.gz nodejs.1.gz /usr/share/man/man1/node.1.gz
 fi
 
+# Update nodejs to version 14
+npm install -g n
+n 14.18.3
+
 # Install dbmate directly, since it isn't packaged
 echo "Install dbmate"
 curl -L -o /usr/local/bin/dbmate https://github.com/amacneil/dbmate/releases/download/v1.16.0/dbmate-linux-amd64
