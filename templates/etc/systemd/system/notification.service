@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/data/www/notification-service
-ExecStart=/usr/bin/nodejs /data/www/notification-service/lib/index.js
+ExecStart=node /data/www/notification-service/lib/index.js
 KillMode=process
 Restart=always
 User=www-data
