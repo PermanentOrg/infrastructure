@@ -1,0 +1,11 @@
+[Unit]
+Description=Regularly cleans out the temporary storage used by the sftp service
+Requires=sftp-storage-cleanup.service
+
+[Timer]
+Unit=sftp-storage-cleanup.service
+OnCalendar=Daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target

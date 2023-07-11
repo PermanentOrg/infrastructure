@@ -1,0 +1,7 @@
+[Unit]
+Description=Clear SFTP's temporary storage
+Wants=sftp-storage-cleanup.timer
+
+[Service]
+ExecStart=/usr/bin/find ${TMPDIR} -type f -mtime +5 -delete
+EnvironmentFile=/etc/permanent/sftp-service.env
