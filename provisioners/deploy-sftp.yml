@@ -41,6 +41,7 @@
         state: stopped
       loop:
         - sftp.service
+        - sftp-storage-cleanup.timer
     - name: Start all services
       service:
         name: "{{ item }}"
@@ -48,6 +49,7 @@
         state: started
       loop:
         - sftp.service
+        - sftp-storage-cleanup.timer
     - name: Restart nginx
       service:
         name: nginx

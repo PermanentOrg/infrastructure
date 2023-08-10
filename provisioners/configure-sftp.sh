@@ -60,9 +60,12 @@ sudo service nginx start
 
 echo "Configure SFTP Service"
 cp $TEMPLATES_PATH/etc/systemd/system/sftp.service /etc/systemd/system/sftp.service
+cp $TEMPLATES_PATH/etc/systemd/system/sftp-storage-cleanup.service /etc/systemd/system/sftp-storage-cleanup.service
+cp $TEMPLATES_PATH/etc/systemd/system/sftp-storage-cleanup.timer /etc/systemd/system/sftp-storage-cleanup.timer
 mkdir /etc/permanent/
 envsubst < $TEMPLATES_PATH/etc/permanent/sftp-service.env > /etc/permanent/sftp-service.env
 systemctl enable sftp.service
+systemctl enable sftp-storage-cleanup.timer
 
 # Set up generic deploy directories
 mkdir /var/www/.aws
