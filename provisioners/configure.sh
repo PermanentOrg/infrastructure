@@ -46,6 +46,7 @@ apt-get -qq install -y \
   mediainfo \
   newrelic-php5 \
   nodejs \
+  php \
   php-bcmath \
   php-cli \
   php-curl \
@@ -58,7 +59,6 @@ apt-get -qq install -y \
   php-pgsql \
   php-xml \
   php-zip \
-  php7.3 \
   postgresql-client \
   software-properties-common \
   wget \
