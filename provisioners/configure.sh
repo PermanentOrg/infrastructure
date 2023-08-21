@@ -38,7 +38,6 @@ apt-get -qq install -y \
   gnupg \
   htop \
   imagemagick \
-  libapache2-mod-php \
   libde265-dev \
   libheif-dev \
   libimage-exiftool-perl \
@@ -50,6 +49,7 @@ apt-get -qq install -y \
   php-bcmath \
   php-cli \
   php-curl \
+  php-fpm \
   php-gd \
   php-igbinary \
   php-imagick \
@@ -105,7 +105,6 @@ chown -R www-data /var/www/
 service apache2 stop
 a2dissite 000-default
 cp $TEMPLATES_PATH/etc/apache2/apache2.conf /etc/apache2/apache2.conf
-cp $TEMPLATES_PATH/etc/apache2/mods-enabled/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
 envsubst \
   < $TEMPLATES_PATH/etc/apache2/sites-enabled/$PERM_SUBDOMAIN.permanent.conf \
   > /etc/apache2/sites-enabled/$PERM_SUBDOMAIN.permanent.conf
@@ -115,11 +114,16 @@ envsubst \
 a2enmod \
   expires \
   headers \
+  http2 \
+  mpm_event \
   proxy \
+  proxy_fcgi \
   rewrite
+  setenvif \
 a2enconf \
   charset \
   other-vhosts-access-log \
+  'php*-fpm' \
   security
 
 echo "Configure Upload Service"
