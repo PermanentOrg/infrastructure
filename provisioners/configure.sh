@@ -112,13 +112,15 @@ envsubst \
 envsubst \
   < $TEMPLATES_PATH/etc/apache2/sites-enabled/preload.permanent.conf \
   > /etc/apache2/sites-enabled/preload.permanent.conf
-a2enmod expires
-a2enmod headers
-a2enmod rewrite
-a2enmod proxy
-a2enconf security
-a2enconf charset
-a2enconf other-vhosts-access-log
+a2enmod \
+  expires \
+  headers \
+  proxy \
+  rewrite
+a2enconf \
+  charset \
+  other-vhosts-access-log \
+  security
 
 echo "Configure Upload Service"
 envsubst \
