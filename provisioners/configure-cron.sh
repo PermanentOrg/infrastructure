@@ -32,7 +32,6 @@ apt-get -qq install -y \
   curl \
   gnupg \
   htop \
-  mysql-client \
   newrelic-php5 \
   php-cli \
   php-curl \

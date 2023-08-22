@@ -38,7 +38,6 @@ apt-get -qq install -y \
   libimage-exiftool-perl \
   libreoffice \
   mediainfo \
-  mysql-client \
   newrelic-php5 \
   nodejs \
   php-bcmath \
