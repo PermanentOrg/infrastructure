@@ -22,7 +22,7 @@ cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
 
 # Set up the correct node source
-export NODE_VERSION=12
+export NODE_VERSION=14
 envsubst \
   < $TEMPLATES_PATH/etc/apt/sources.list.d/nodesource.sources \
   > /etc/apt/sources.list.d/nodesource.sources
@@ -76,10 +76,6 @@ then
    # It does not exist, so create it
    update-alternatives --quiet --install /usr/bin/nodejs nodejs /usr/bin/node 50 --slave /usr/share/man/man1/nodejs.1.gz nodejs.1.gz /usr/share/man/man1/node.1.gz
 fi
-
-# Update nodejs to version 14
-npm install -g n
-n 14.18.3
 
 # Install dbmate directly, since it isn't packaged
 echo "Install dbmate"
