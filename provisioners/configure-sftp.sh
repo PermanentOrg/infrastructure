@@ -15,23 +15,22 @@ echo $PERM_ENV  > /data/www/host.txt
 
 echo "Add custom sources"
 cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
-cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
+
+# Set up the correct node source
+export NODE_VERSION=18
+envsubst \
+  < $TEMPLATES_PATH/etc/apt/sources.list.d/nodesource.sources \
+  > /etc/apt/sources.list.d/nodesource.sources
 
 echo "Install packages"
 apt -qq update
 apt -qq install -y \
   curl \
-  wget \
   nginx \
-	nginx-extras \
-	unzip
-
-echo "Install NodeJs"
-# The way to pin to a specific version of node is to load directly
-# See https://github.com/nodesource/distributions/issues/33#issuecomment-169345680
-curl -o nodejs.deb https://deb.nodesource.com/node_16.x/pool/main/n/nodejs/nodejs_16.17.1-deb-1nodesource1_amd64.deb
-apt -y install ./nodejs.deb
-rm ./nodejs.deb
+  nginx-extras \
+  nodejs \
+  unzip \
+  wget
 
 # Make sure nodejs exists
 if ! [[ -f /usr/bin/nodejs ]]
