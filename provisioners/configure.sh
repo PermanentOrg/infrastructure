@@ -105,6 +105,7 @@ chown -R www-data /var/www/
 service apache2 stop
 a2dissite 000-default
 cp $TEMPLATES_PATH/etc/apache2/apache2.conf /etc/apache2/apache2.conf
+cp "${TEMPLATES_PATH}/etc/apache2/conf-available/*" /etc/apache2/conf-available/
 envsubst \
   < $TEMPLATES_PATH/etc/apache2/sites-available/$PERM_SUBDOMAIN.permanent.conf \
   > /etc/apache2/sites-available/$PERM_SUBDOMAIN.permanent.conf
@@ -125,6 +126,7 @@ a2enmod \
   setenvif \
 a2enconf \
   charset \
+  no-etag \
   other-vhosts-access-log \
   'php*-fpm' \
   security
