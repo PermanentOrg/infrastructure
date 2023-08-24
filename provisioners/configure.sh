@@ -44,7 +44,6 @@ apt-get -qq install -y \
   libimage-exiftool-perl \
   libreoffice \
   mediainfo \
-  mysql-client \
   newrelic-php5 \
   nodejs \
   php-bcmath \
@@ -56,7 +55,6 @@ apt-get -qq install -y \
   php-mbstring \
   php-memcache \
   php-msgpack \
-  php-mysql \
   php-pgsql \
   php-xml \
   php-zip \
