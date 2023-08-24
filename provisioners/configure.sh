@@ -126,6 +126,7 @@ a2enmod \
   setenvif \
 a2enconf \
   charset \
+  global-server-name \
   no-etag \
   other-vhosts-access-log \
   'php*-fpm' \
