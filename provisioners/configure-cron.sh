@@ -57,8 +57,12 @@ update-rc.d apache2 disable
 
 mkdir /var/www/.aws
 mkdir /var/www/.cache
-envsubst < $TEMPLATES_PATH/var/www/.aws/credentials > /var/www/.aws/credentials
-envsubst < $TEMPLATES_PATH/var/www/.aws/config > /var/www/.aws/config
+envsubst \
+  < $TEMPLATES_PATH/var/www/.aws/credentials \
+  > /var/www/.aws/credentials
+envsubst \
+  < $TEMPLATES_PATH/var/www/.aws/config \
+  > /var/www/.aws/config
 chown -R www-data /var/www/
 
 mkdir /data/tmp

@@ -87,8 +87,12 @@ echo "Configure apache"
 # This is the Apache DocumentRoot, and where the aws php sdk will look for credentials
 mkdir /var/www/.aws
 mkdir /var/www/.cache
-envsubst < $TEMPLATES_PATH/var/www/.aws/credentials > /var/www/.aws/credentials
-envsubst < $TEMPLATES_PATH/var/www/.aws/config > /var/www/.aws/config
+envsubst \
+  < $TEMPLATES_PATH/var/www/.aws/credentials \
+  > /var/www/.aws/credentials
+envsubst \
+  < $TEMPLATES_PATH/var/www/.aws/config \
+  > /var/www/.aws/config
 
 # This is needed for our iOS app to open links to Permanent in the app
 # https://developer.apple.com/library/archive/documentation/General/Conceptual/AppSearch/UniversalLinks.html
@@ -104,8 +108,12 @@ service apache2 stop
 a2dissite 000-default
 cp $TEMPLATES_PATH/etc/apache2/apache2.conf /etc/apache2/apache2.conf
 cp $TEMPLATES_PATH/etc/apache2/mods-enabled/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
-envsubst < $TEMPLATES_PATH/etc/apache2/sites-enabled/$PERM_SUBDOMAIN.permanent.conf > /etc/apache2/sites-enabled/$PERM_SUBDOMAIN.permanent.conf
-envsubst < $TEMPLATES_PATH/etc/apache2/sites-enabled/preload.permanent.conf > /etc/apache2/sites-enabled/preload.permanent.conf
+envsubst \
+  < $TEMPLATES_PATH/etc/apache2/sites-enabled/$PERM_SUBDOMAIN.permanent.conf \
+  > /etc/apache2/sites-enabled/$PERM_SUBDOMAIN.permanent.conf
+envsubst \
+  < $TEMPLATES_PATH/etc/apache2/sites-enabled/preload.permanent.conf \
+  > /etc/apache2/sites-enabled/preload.permanent.conf
 a2enmod expires
 a2enmod headers
 a2enmod rewrite
@@ -115,13 +123,17 @@ a2enconf charset
 a2enconf other-vhosts-access-log
 
 echo "Configure Upload Service"
-envsubst < $TEMPLATES_PATH/etc/systemd/system/upload.service > /etc/systemd/system/upload.service
+envsubst \
+  < $TEMPLATES_PATH/etc/systemd/system/upload.service \
+  > /etc/systemd/system/upload.service
 systemctl enable upload.service
 
 echo "Configure Notification Service"
 cp $TEMPLATES_PATH/etc/systemd/system/notification.service /etc/systemd/system/notification.service
 mkdir /etc/permanent/
-envsubst < $TEMPLATES_PATH/etc/permanent/notification-service.env > /etc/permanent/notification-service.env
+envsubst \
+  < $TEMPLATES_PATH/etc/permanent/notification-service.env \
+  > /etc/permanent/notification-service.env
 
 systemctl enable notification.service
 

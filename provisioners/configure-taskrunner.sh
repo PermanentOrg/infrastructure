@@ -71,8 +71,12 @@ cp $TEMPLATES_PATH/etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml
 
 mkdir /var/www/.aws
 mkdir /var/www/.cache
-envsubst < $TEMPLATES_PATH/var/www/.aws/credentials > /var/www/.aws/credentials
-envsubst < $TEMPLATES_PATH/var/www/.aws/config > /var/www/.aws/config
+envsubst \
+  < $TEMPLATES_PATH/var/www/.aws/credentials \
+  > /var/www/.aws/credentials
+envsubst \
+  < $TEMPLATES_PATH/var/www/.aws/config \
+  > /var/www/.aws/config
 chown -R www-data /var/www/
 
 mkdir /data/tmp
