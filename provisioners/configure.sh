@@ -106,11 +106,14 @@ service apache2 stop
 a2dissite 000-default
 cp $TEMPLATES_PATH/etc/apache2/apache2.conf /etc/apache2/apache2.conf
 envsubst \
-  < $TEMPLATES_PATH/etc/apache2/sites-enabled/$PERM_SUBDOMAIN.permanent.conf \
-  > /etc/apache2/sites-enabled/$PERM_SUBDOMAIN.permanent.conf
+  < $TEMPLATES_PATH/etc/apache2/sites-available/$PERM_SUBDOMAIN.permanent.conf \
+  > /etc/apache2/sites-available/$PERM_SUBDOMAIN.permanent.conf
 envsubst \
-  < $TEMPLATES_PATH/etc/apache2/sites-enabled/preload.permanent.conf \
-  > /etc/apache2/sites-enabled/preload.permanent.conf
+  < $TEMPLATES_PATH/etc/apache2/sites-available/preload.permanent.conf \
+  > /etc/apache2/sites-available/preload.permanent.conf
+a2ensite \
+  "${PERM_SUBDOMAIN}.permanent" \
+  preload.permanent
 a2enmod \
   expires \
   headers \
