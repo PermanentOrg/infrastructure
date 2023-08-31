@@ -128,8 +128,13 @@ a2enconf \
   global-server-name \
   no-etag \
   other-vhosts-access-log \
+  performance \
   'php*-fpm' \
   security
+
+# Tune php_fpm
+patch -d /etc/php/7.3/fpm/pool.d < templates/etc/php/7.3/fpm/pool.d/www.conf.patch
+systemctl restart php7.3-fpm.service
 
 echo "Configure Upload Service"
 envsubst \
