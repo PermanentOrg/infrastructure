@@ -19,7 +19,6 @@ echo newrelic-php5 newrelic-php5/license-key string $NEW_RELIC_LICENSE_KEY | deb
 
 echo "Add custom sources"
 cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
-cp $TEMPLATES_PATH/etc/apt/sources.list.d/mysql.sources /etc/apt/sources.list.d/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/newrelic.sources /etc/apt/sources.list.d/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/postgresql.sources /etc/apt/sources.list.d/
 
@@ -32,7 +31,6 @@ apt-get -qq install -y \
   curl \
   gnupg \
   htop \
-  mysql-client \
   newrelic-php5 \
   php-cli \
   php-curl \
@@ -42,7 +40,6 @@ apt-get -qq install -y \
   php-mbstring \
   php-memcache \
   php-msgpack \
-  php-mysql \
   php-pgsql \
   php-xml \
   php-zip \
@@ -57,8 +54,12 @@ update-rc.d apache2 disable
 
 mkdir /var/www/.aws
 mkdir /var/www/.cache
-envsubst < $TEMPLATES_PATH/var/www/.aws/credentials > /var/www/.aws/credentials
-envsubst < $TEMPLATES_PATH/var/www/.aws/config > /var/www/.aws/config
+envsubst \
+  < $TEMPLATES_PATH/var/www/.aws/credentials \
+  > /var/www/.aws/credentials
+envsubst \
+  < $TEMPLATES_PATH/var/www/.aws/config \
+  > /var/www/.aws/config
 chown -R www-data /var/www/
 
 mkdir /data/tmp
