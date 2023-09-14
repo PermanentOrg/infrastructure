@@ -121,8 +121,8 @@ a2enmod \
   mpm_event \
   proxy \
   proxy_fcgi \
-  rewrite
-  setenvif \
+  rewrite \
+  setenvif
 a2enconf \
   charset \
   global-server-name \
