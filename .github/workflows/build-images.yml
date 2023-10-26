@@ -33,6 +33,7 @@ jobs:
             notification_firebase_credentials: DEV_NOTIFICATION_FIREBASE_CREDENTIALS
             fusion_auth_host_secret_key: DEV_FUSION_AUTH_HOST
             fusion_auth_key_sftp_secret_key: DEV_FUSION_AUTH_KEY_SFTP
+            fusion_auth_sftp_app_id: DEV_FUSION_AUTH_SFTP_APP_ID
           - perm_env: staging
             server_domain: "staging.permanent.org"
             app_id: "C8YKZNBVWT.org.permanent.permanent.staging"
@@ -44,6 +45,7 @@ jobs:
             notification_firebase_credentials: STAGING_NOTIFICATION_FIREBASE_CREDENTIALS
             fusion_auth_host_secret_key: STAGING_FUSION_AUTH_HOST
             fusion_auth_key_sftp_secret_key: STAGING_FUSION_AUTH_KEY_SFTP
+            fusion_auth_sftp_app_id: STAGING_FUSION_AUTH_SFTP_APP_ID
           - perm_env: prod
             server_domain: "www.permanent.org"
             app_id: "C8YKZNBVWT.org.permanent.PermanentArchive"
@@ -55,6 +57,7 @@ jobs:
             notification_firebase_credentials: PROD_NOTIFICATION_FIREBASE_CREDENTIALS
             fusion_auth_host_secret_key: PROD_FUSION_AUTH_HOST
             fusion_auth_key_sftp_secret_key: PROD_FUSION_AUTH_KEY_SFTP
+            fusion_auth_sftp_app_id: PROD_FUSION_AUTH_SFTP_APP_ID
     steps:
       - uses: actions/checkout@v1
       - name: Build image
@@ -79,6 +82,9 @@ jobs:
           SERVER_DOMAIN: ${{ matrix.environment.server_domain }}
           FUSION_AUTH_HOST: ${{ secrets[matrix.environment.fusion_auth_host_secret_key] }}
           FUSION_AUTH_KEY_SFTP: ${{ secrets[matrix.environment.fusion_auth_key_sftp_secret_key] }}
+          FUSION_AUTH_SFTP_APP_ID: ${{ secrets[matrix.environment.fusion_auth_sftp_app_id] }}
+          FUSION_AUTH_SFTP_CLIENT_ID: ${{ secrets[matrix.environment.fusion_auth_sftp_app_id] }}
+          FUSION_AUTH_SFTP_CLIENT_SECRET: ${{ secrets[matrix.environment.fusion_auth_key_sftp_secret_key] }}
   notify:
     runs-on: ubuntu-20.04
     needs: ["build"]
