@@ -82,6 +82,10 @@
         "--extra-vars",
         "fusion_auth_key_sftp={{user `fusion_auth_key_sftp`}}",
         "--extra-vars",
+        "fusion_auth_sftp_client_id={{user `fusion_auth_sftp_client_id`}}",
+        "--extra-vars",
+        "fusion_auth_sftp_client_secret={{user `fusion_auth_sftp_client_secret`}}",
+        "--extra-vars",
         "server_domain={{user `server_domain`}}"
       ],
       "playbook_file": "../provisioners/setup.yml",
@@ -114,6 +118,8 @@
     "templates_path": "/tmp/templates",
     "fusion_auth_host": "{{env `FUSION_AUTH_HOST`}}",
     "fusion_auth_key_sftp": "{{env `FUSION_AUTH_KEY_SFTP`}}",
+    "fusion_auth_sftp_client_id": "{{env `FUSION_AUTH_SFTP_CLIENT_ID`}}",
+    "fusion_auth_sftp_client_secret": "{{env `FUSION_AUTH_SFTP_CLIENT_SECRET`}}",
     "server_domain": "{{env `SERVER_DOMAIN`}}"
   }
 }
