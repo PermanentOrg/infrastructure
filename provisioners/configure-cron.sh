@@ -32,18 +32,18 @@ apt-get -qq install -y \
   gnupg \
   htop \
   newrelic-php5 \
-  php-cli \
-  php-curl \
-  php-gd \
-  php-igbinary \
-  php-imagick \
-  php-mbstring \
-  php-memcache \
-  php-msgpack \
-  php-pgsql \
-  php-xml \
-  php-zip \
-  php7.3 \
+  php7.4-cli \
+  php7.4-curl \
+  php7.4-gd \
+  php7.4-igbinary \
+  php7.4-imagick \
+  php7.4-mbstring \
+  php7.4-memcache \
+  php7.4-msgpack \
+  php7.4-pgsql \
+  php7.4-xml \
+  php7.4-zip \
+  php7.4 \
   postgresql-client \
   software-properties-common \
   wget \

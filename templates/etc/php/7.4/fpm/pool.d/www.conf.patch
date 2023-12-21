@@ -1,6 +1,6 @@
 @@@ Configure php_fpm to use a larger, fixed number of threads
---- debian/etc/php/7.3/fpm/pool.d/www.conf
-+++ permanent/etc/php/7.3/fpm/pool.d/www.conf
+--- debian/etc/php/7.4/fpm/pool.d/www.conf
++++ permanent/etc/php/7.4/fpm/pool.d/www.conf
 @@ -100,7 +100,7 @@
  ;             pm.process_idle_timeout   - The number of seconds after which
  ;                                         an idle process will be killed.
