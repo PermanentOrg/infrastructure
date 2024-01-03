@@ -11,6 +11,10 @@ jobs:
         machine: [backend, cron, taskrunner, sftp]
     steps:
       - uses: actions/checkout@v1
+      - name: Install packer plugins
+        run: |
+          packer plugins install "github.com/hashicorp/amazon"
+          packer plugins install "github.com/hashicorp/ansible"
       - name: Validate json
         run: |
           cd images
@@ -57,6 +61,10 @@ jobs:
             fusion_auth_key_sftp_secret_key: PROD_FUSION_AUTH_KEY_SFTP
     steps:
       - uses: actions/checkout@v1
+      - name: Install packer plugins
+        run: |
+          packer plugins install "github.com/hashicorp/amazon"
+          packer plugins install "github.com/hashicorp/ansible"
       - name: Build image
         run: |
           ansible-galaxy install willshersystems.sshd
