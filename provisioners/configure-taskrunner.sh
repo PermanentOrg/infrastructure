@@ -21,8 +21,7 @@ echo newrelic-php5 newrelic-php5/license-key string $NEW_RELIC_LICENSE_KEY | deb
 
 echo "Add custom sources"
 cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
-cp $TEMPLATES_PATH/etc/apt/sources.list.d/newrelic.sources /etc/apt/sources.list.d/
-cp $TEMPLATES_PATH/etc/apt/sources.list.d/postgresql.sources /etc/apt/sources.list.d/
+cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
 
 echo "Install packages"
 apt-get -qq update
