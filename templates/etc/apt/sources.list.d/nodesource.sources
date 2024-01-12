@@ -1,5 +1,5 @@
 Types: deb
 URIs: https://deb.nodesource.com/node_${NODE_VERSION}.x
-Suites: buster
+Suites: bullseye
 Components: main
 Signed-By: /usr/share/keyrings/nodesource-archive-keyring.asc
