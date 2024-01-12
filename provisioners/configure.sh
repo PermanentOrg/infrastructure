@@ -45,20 +45,20 @@ apt-get -qq install -y \
   mediainfo \
   newrelic-php5 \
   nodejs \
-  php7.4 \
-  php7.4-bcmath \
-  php7.4-cli \
-  php7.4-curl \
-  php7.4-fpm \
-  php7.4-gd \
-  php7.4-igbinary \
-  php7.4-imagick \
-  php7.4-mbstring \
-  php7.4-memcache \
-  php7.4-msgpack \
-  php7.4-pgsql \
-  php7.4-xml \
-  php7.4-zip \
+  php8.3 \
+  php8.3-bcmath \
+  php8.3-cli \
+  php8.3-curl \
+  php8.3-fpm \
+  php8.3-gd \
+  php8.3-igbinary \
+  php8.3-imagick \
+  php8.3-mbstring \
+  php8.3-memcache \
+  php8.3-msgpack \
+  php8.3-pgsql \
+  php8.3-xml \
+  php8.3-zip \
   postgresql-client \
   software-properties-common \
   wget \
@@ -133,8 +133,8 @@ a2enconf \
   security
 
 # Tune php_fpm
-patch -d /etc/php/7.4/fpm/pool.d < templates/etc/php/7.4/fpm/pool.d/www.conf.patch
-systemctl restart php7.4-fpm.service
+patch -d /etc/php/8.3/fpm/pool.d < templates/etc/php/8.3/fpm/pool.d/www.conf.patch
+systemctl restart php8.3-fpm.service
 
 echo "Configure Upload Service"
 envsubst \
