@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "org.permanent.PermanentArchive",
+      "sha256_cert_fingerprints": [
+        "40:2F:28:C5:7F:16:72:F4:FC:6D:7C:8D:50:95:D5:CA:E2:F9:45:6B:01:53:96:22:89:BB:CD:0A:90:78:3C:ED"
+      ]
+    }
+  }
+]
