@@ -7,7 +7,6 @@
         "paths": [
           "/share/*",
           "/p/*",
-          "/app/(private//dialog:storage/promo)?promoCode=*",
           "/app/pr/manage"
         ],
         "components": [
@@ -20,8 +19,9 @@
             "comment": "Matches public archive URLs"
           },
           {
-            "/": "app/(private//dialog:storage/promo)?promoCode=*",
-            "comment": "Matches redeem code URLs"
+            "/": "/app/(private//dialog:storage/promo)*",
+            "?": { "promoCode": "*" },
+            "comment": "Matches any URL with a path that starts with /app/(private//dialog:storage/promo)/and that has a query item with name 'promoCode."
           },
           {
             "/": "/app/pr/manage",
