@@ -2,4 +2,4 @@ Types: deb
 URIs: https://packages.sury.org/php/
 Suites: bullseye
 Components: main
-Signed-By: /usr/share/keyrings/php-archive-keyring.asc
+Signed-By: /usr/share/keyrings/deb.sury.org-php.gpg
