@@ -17,7 +17,13 @@ echo $PERM_ENV  > /data/www/host.txt
 echo newrelic-php5 newrelic-php5/application-name string $NEW_RELIC_APPLICATION_NAME | debconf-set-selections
 echo newrelic-php5 newrelic-php5/license-key string $NEW_RELIC_LICENSE_KEY | debconf-set-selections
 
+echo "Install curl"
+apt update
+apt install -y curl
+
 echo "Add custom sources"
+curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb
+dpkg -i /tmp/debsuryorg-archive-keyring.deb
 cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
 
@@ -33,7 +39,6 @@ apt-get -qq install -y \
   apache2 \
   awscli \
   build-essential \
-  curl \
   ffmpeg \
   gnupg \
   htop \
