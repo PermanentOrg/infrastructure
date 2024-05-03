@@ -28,7 +28,7 @@ cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
 
 # Set up the correct node source
-export NODE_VERSION=14
+export NODE_VERSION=16
 envsubst \
   < $TEMPLATES_PATH/etc/apt/sources.list.d/nodesource.sources \
   > /etc/apt/sources.list.d/nodesource.sources
@@ -50,6 +50,7 @@ apt-get -qq install -y \
   mediainfo \
   newrelic-php5 \
   nodejs \
+  npm \
   php8.3 \
   php8.3-bcmath \
   php8.3-cli \
