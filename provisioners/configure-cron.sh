@@ -33,7 +33,7 @@ apt-get -qq install -y \
   apache2 \
   awscli \
   build-essential \
-  crontab \
+  cron \
   gnupg \
   htop \
   newrelic-php5 \
