@@ -69,7 +69,8 @@ apt-get -qq install -y \
   software-properties-common \
   wget \
   wkhtmltopdf \
-  zip
+  zip \
+  cron
 
 echo "Configure ImageMagick"
 cp $TEMPLATES_PATH/etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml

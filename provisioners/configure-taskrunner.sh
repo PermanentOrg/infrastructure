@@ -62,7 +62,8 @@ apt-get -qq install -y \
   software-properties-common \
   wget \
   wkhtmltopdf \
-  zip
+  zip \
+  cron
 
 service apache2 stop
 update-rc.d apache2 disable

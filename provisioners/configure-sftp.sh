@@ -29,12 +29,14 @@ apt -qq install -y \
   nginx \
   nginx-extras \
   nodejs \
+  npm \
   unzip \
   wget
 
 # Make sure nodejs exists
 if ! [[ -f /usr/bin/nodejs ]]
 then
+   echo "Adding node"
    # It does not exist, so create it
    update-alternatives --quiet --install /usr/bin/nodejs nodejs /usr/bin/node 50 --slave /usr/share/man/man1/nodejs.1.gz nodejs.1.gz /usr/share/man/man1/node.1.gz
 fi
