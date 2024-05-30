@@ -4,5 +4,5 @@
   "hostname": "{{env `PERM_ENV` }}",
   "instance_type": "m4.large",
   "volume_size": "1000",
-  "image_name": "debian-12-amd64-20240211-1654"
+  "image_name": "debian-12-amd64-20240429-1732"
 }
