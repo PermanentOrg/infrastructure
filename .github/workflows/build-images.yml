@@ -95,6 +95,7 @@ jobs:
           FUSION_AUTH_KEY_SFTP: ${{ secrets[matrix.environment.fusion_auth_key_sftp] }}
           FUSION_AUTH_SFTP_CLIENT_ID: ${{ secrets[matrix.environment.fusion_auth_sftp_client_id] }}
           FUSION_AUTH_SFTP_CLIENT_SECRET: ${{ secrets[matrix.environment.fusion_auth_sftp_client_secret] }}
+          AWS_RDS_CERT_BUNDLE: ${{ secrets.AWS_RDS_CERT_BUNDLE }}
   notify:
     runs-on: ubuntu-20.04
     needs: ["build"]

@@ -14,6 +14,7 @@ fi
 echo "Install essential software pacakges"
 
 echo $PERM_ENV  > /data/www/host.txt
+echo $AWS_RDS_CERT_BUNDLE > /etc/ca-certificates/rds-us-west-2-ca-bundle.pem
 
 # Preseed responses to New Relic installation questions
 echo newrelic-php5 newrelic-php5/application-name string $NEW_RELIC_APPLICATION_NAME | debconf-set-selections
