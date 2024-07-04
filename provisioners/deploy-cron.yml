@@ -52,6 +52,5 @@
         - daily/account-engagement
         - daily/remove_deleted_records
         - daily/zip_cleanup
-        - daily/zoho_integration
         - weekly/file_upload_summary
         - monthly/validate-md5
