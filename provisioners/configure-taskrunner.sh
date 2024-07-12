@@ -14,7 +14,6 @@ fi
 echo "Install essential software pacakges"
 
 echo $PERM_ENV  > /data/www/host.txt
-echo $AWS_RDS_CERT_BUNDLE > /etc/ca-certificates/rds-us-west-2-ca-bundle.pem
 
 # Preseed responses to New Relic installation questions
 echo newrelic-php5 newrelic-php5/application-name string $NEW_RELIC_APPLICATION_NAME | debconf-set-selections
@@ -81,6 +80,7 @@ envsubst \
   < $TEMPLATES_PATH/var/www/.aws/config \
   > /var/www/.aws/config
 chown -R www-data /var/www/
+cp "${TEMPLATES_PATH}/etc/ca-certificates/rds-us-west-2-ca-bundle.pem" /etc/ca-certificates/rds-us-west-2-ca-bundle.pem
 
 mkdir /data/tmp
 mkdir /data/tmp/uploader

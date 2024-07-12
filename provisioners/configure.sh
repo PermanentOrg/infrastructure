@@ -12,7 +12,6 @@ if [[ -z "$AWS_REGION" || -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_ACCESS_SECRET" ]]
 fi
 
 echo $PERM_ENV  > /data/www/host.txt
-echo $AWS_RDS_CERT_BUNDLE > /etc/ca-certificates/rds-us-west-2-ca-bundle.pem
 
 # Preseed responses to New Relic installation questions
 echo newrelic-php5 newrelic-php5/application-name string $NEW_RELIC_APPLICATION_NAME | debconf-set-selections
@@ -99,6 +98,7 @@ envsubst \
 envsubst \
   < $TEMPLATES_PATH/var/www/.aws/config \
   > /var/www/.aws/config
+cp "${TEMPLATES_PATH}/etc/ca-certificates/rds-us-west-2-ca-bundle.pem" /etc/ca-certificates/rds-us-west-2-ca-bundle.pem
 
 # Create the .well-known directory for mobile site association
 mkdir /var/www/html/.well-known
