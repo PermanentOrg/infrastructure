@@ -28,10 +28,6 @@
             "comment": "Matches archive invite URLs"
           },
           {
-            "/": "/app/fa-reset/*",
-            "comment": "Matches forgot password URLs"
-          },
-          {
             "/": "/app/auth/signup",
             "comment": "Matches signup URL"
           }
