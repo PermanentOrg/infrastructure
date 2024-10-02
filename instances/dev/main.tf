@@ -43,6 +43,23 @@ resource "aws_instance" "api" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "api_outage_alarm" {
+  alarm_name          = "${var.perm_env.name}-api-instance-outage-alarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "StatusCheckFailed"
+  namespace           = "AWS/EC2"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "0.99"
+  actions_enabled     = "true"
+  alarm_actions       = ["arn:aws:sns:us-west-2:364159549467:ec2-outage-notifications"]
+  ok_actions          = ["arn:aws:sns:us-west-2:364159549467:ec2-outage-notifications"]
+  dimensions = {
+    InstanceId = aws_instance.api.id
+  }
+}
+
 resource "aws_instance" "taskrunner" {
   ami                    = module.perm_env_data.taskrunner_ami
   instance_type          = "c4.large"
@@ -53,6 +70,23 @@ resource "aws_instance" "taskrunner" {
   tags = {
     Name = "${var.perm_env.name} taskrunner ${count.index}"
     type = "${var.perm_env.name} taskrunner"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "taskrunner_outage_alarm" {
+  alarm_name          = "${var.perm_env.name}-taskrunner-instance-outage-alarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "StatusCheckFailed"
+  namespace           = "AWS/EC2"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "0.99"
+  actions_enabled     = "true"
+  alarm_actions       = ["arn:aws:sns:us-west-2:364159549467:ec2-outage-notifications"]
+  ok_actions          = ["arn:aws:sns:us-west-2:364159549467:ec2-outage-notifications"]
+  dimensions = {
+    InstanceId = aws_instance.taskrunner[0].id
   }
 }
 
@@ -68,6 +102,23 @@ resource "aws_instance" "cron" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "cron_outage_alarm" {
+  alarm_name          = "${var.perm_env.name}-cron-instance-outage-alarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "StatusCheckFailed"
+  namespace           = "AWS/EC2"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "0.99"
+  actions_enabled     = "true"
+  alarm_actions       = ["arn:aws:sns:us-west-2:364159549467:ec2-outage-notifications"]
+  ok_actions          = ["arn:aws:sns:us-west-2:364159549467:ec2-outage-notifications"]
+  dimensions = {
+    InstanceId = aws_instance.cron.id
+  }
+}
+
 resource "aws_instance" "sftp" {
   ami                    = module.perm_env_data.sftp_ami
   instance_type          = "c4.large"
@@ -78,6 +129,23 @@ resource "aws_instance" "sftp" {
   tags = {
     Name = "${var.perm_env.name} sftp"
     type = "${var.perm_env.name} sftp"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sftp_outage_alarm" {
+  alarm_name          = "${var.perm_env.name}-sftp-instance-outage-alarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "StatusCheckFailed"
+  namespace           = "AWS/EC2"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "0.99"
+  actions_enabled     = "true"
+  alarm_actions       = ["arn:aws:sns:us-west-2:364159549467:ec2-outage-notifications"]
+  ok_actions          = ["arn:aws:sns:us-west-2:364159549467:ec2-outage-notifications"]
+  dimensions = {
+    InstanceId = aws_instance.sftp.id
   }
 }
 
