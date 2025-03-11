@@ -17,7 +17,7 @@ echo "Add custom sources"
 cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
 
 # Set up the correct node source
-export NODE_VERSION=18
+export NODE_VERSION=22
 envsubst \
   < $TEMPLATES_PATH/etc/apt/sources.list.d/nodesource.sources \
   > /etc/apt/sources.list.d/nodesource.sources
