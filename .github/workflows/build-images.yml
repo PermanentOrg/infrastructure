@@ -28,6 +28,7 @@ jobs:
         environment:
           - perm_env: dev
             server_domain: "dev.permanent.org"
+            stela_domain: "api.dev.permanent.org"
             app_id: "TEST.org.permanent.permanent.dev"
             aws_deploy_key: DEV_AWS_ACCESS_KEY_ID
             aws_deploy_secret: DEV_AWS_SECRET_ACCESS_KEY
@@ -41,6 +42,7 @@ jobs:
             fusion_auth_sftp_client_secret: DEV_FUSION_AUTH_SFTP_CLIENT_SECRET
           - perm_env: staging
             server_domain: "staging.permanent.org"
+            stela_domain: "api.staging.permanent.org"
             app_id: "C8YKZNBVWT.org.permanent.permanent.staging"
             aws_deploy_key: STAGING_AWS_ACCESS_KEY_ID
             aws_deploy_secret: STAGING_AWS_SECRET_ACCESS_KEY
@@ -54,6 +56,7 @@ jobs:
             fusion_auth_sftp_client_secret: STAGING_FUSION_AUTH_SFTP_CLIENT_SECRET
           - perm_env: prod
             server_domain: "www.permanent.org"
+            stela_domain: "api.permanent.org"
             app_id: "C8YKZNBVWT.org.permanent.PermanentArchive"
             aws_deploy_key: PROD_AWS_ACCESS_KEY_ID
             aws_deploy_secret: PROD_AWS_SECRET_ACCESS_KEY
@@ -91,6 +94,7 @@ jobs:
           SENTRY_DSN: ${{ secrets.SENTRY_TOKEN }}
           PERM_ENV: ${{ matrix.environment.perm_env }}
           SERVER_DOMAIN: ${{ matrix.environment.server_domain }}
+          STELA_DOMAIN: ${{ matrix.environment.stela_domain }}
           FUSION_AUTH_HOST: ${{ secrets[matrix.environment.fusion_auth_host] }}
           FUSION_AUTH_KEY_SFTP: ${{ secrets[matrix.environment.fusion_auth_key_sftp] }}
           FUSION_AUTH_SFTP_CLIENT_ID: ${{ secrets[matrix.environment.fusion_auth_sftp_client_id] }}
