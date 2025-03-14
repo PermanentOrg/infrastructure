@@ -84,7 +84,9 @@
         "--extra-vars",
         "fusion_auth_sftp_client_secret={{user `fusion_auth_sftp_client_secret`}}",
         "--extra-vars",
-        "server_domain={{user `server_domain`}}"
+        "server_domain={{user `server_domain`}}",
+        "--extra-vars",
+        "stela_domain={{user `stela_domain`}}"
       ],
       "playbook_file": "../provisioners/setup.yml",
       "type": "ansible"
