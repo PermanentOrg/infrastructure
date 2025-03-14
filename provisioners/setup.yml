@@ -20,7 +20,7 @@
         - "../ssh/*"
     - name: Allow sudo without password for sudo group
       copy:
-        content: '%sudo  ALL=(ALL:ALL) NOPASSWD:ALL'
+        content: "%sudo  ALL=(ALL:ALL) NOPASSWD:ALL"
         dest: /etc/sudoers.d/sudo_nopasswd
         mode: 0440
 
@@ -50,10 +50,10 @@
         dev: /dev/xvdb
     - name: Mount block device to /data
       mount:
-       path: /data
-       src: /dev/xvdb
-       state: mounted
-       fstype: ext4
+        path: /data
+        src: /dev/xvdb
+        state: mounted
+        fstype: ext4
 
 - name: Perform system configuration
   hosts: default
@@ -111,4 +111,5 @@
         FUSION_AUTH_SFTP_CLIENT_ID: "{{ fusion_auth_sftp_client_id }}"
         FUSION_AUTH_SFTP_CLIENT_SECRET: "{{ fusion_auth_sftp_client_secret }}"
         SERVER_DOMAIN: "{{ server_domain }}"
+        STELA_DOMAIN: "{{ stela_domain }}"
         SENTRY_DSN: "{{ sentry_dsn }}"

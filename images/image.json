@@ -121,5 +121,6 @@
     "fusion_auth_sftp_client_id": "{{env `FUSION_AUTH_SFTP_CLIENT_ID`}}",
     "fusion_auth_sftp_client_secret": "{{env `FUSION_AUTH_SFTP_CLIENT_SECRET`}}",
     "server_domain": "{{env `SERVER_DOMAIN`}}"
+    "stela_domain": "{{env `STELA_DOMAIN`}}"
   }
 }
