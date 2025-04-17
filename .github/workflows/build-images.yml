@@ -5,7 +5,7 @@ on:
 
 jobs:
   validate:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         machine: [backend, cron, taskrunner, sftp]
@@ -20,7 +20,7 @@ jobs:
           cd images
           packer validate -var-file=${{ matrix.machine }}.json image.json
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     needs: ["validate"]
     strategy:
       matrix:
@@ -100,7 +100,7 @@ jobs:
           FUSION_AUTH_SFTP_CLIENT_ID: ${{ secrets[matrix.environment.fusion_auth_sftp_client_id] }}
           FUSION_AUTH_SFTP_CLIENT_SECRET: ${{ secrets[matrix.environment.fusion_auth_sftp_client_secret] }}
   notify:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     needs: ["build"]
     steps:
       - name: Send Slack notification
