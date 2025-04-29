@@ -167,13 +167,6 @@ envsubst \
 
 systemctl enable notification.service
 
-echo "Install node global packages"
-npm install npm@8.17.0 --global
-npm install -g gulp
-npm install -g bower
-npm install -g forever
-npm install -g @angular/cli@7.3.6
-
 mkdir /data/tmp
 mkdir /data/tmp/uploader
 chmod -R 774 /data/tmp
