@@ -29,6 +29,9 @@ cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
 
 # Set up the correct node source
 export NODE_VERSION=22
+export NODESOURCE_ARCHITECTURE=$(dpkg --print-architecture)
+export NODESOURCE_SUITE="bookworm"
+
 envsubst \
   < $TEMPLATES_PATH/etc/apt/sources.list.d/nodesource.sources \
   > /etc/apt/sources.list.d/nodesource.sources
