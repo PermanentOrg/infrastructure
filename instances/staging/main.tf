@@ -63,7 +63,7 @@ resource "aws_cloudwatch_metric_alarm" "api_outage_alarm" {
 resource "aws_instance" "taskrunner" {
   ami                    = module.perm_env_data.taskrunner_ami
   instance_type          = "c4.large"
-  count                  = 2
+  count                  = 10
   vpc_security_group_ids = [module.perm_env_data.security_group]
   monitoring             = true
   subnet_id              = module.perm_env_data.subnet
