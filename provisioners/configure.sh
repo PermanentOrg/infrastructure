@@ -152,6 +152,8 @@ a2enconf \
   security
 
 # Tune php_fpm
+## Make sure to also review this patch when updating the PHP version, as the
+## line numbers / hunk contents could shift between config versions.
 patch -d /etc/php/8.3/fpm/pool.d < templates/etc/php/8.3/fpm/pool.d/www.conf.patch
 systemctl restart php8.3-fpm.service
 
