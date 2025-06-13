@@ -29,3 +29,20 @@
 
  ; The timeout set by 'request_terminate_timeout' ini option is not engaged after
  ; application calls 'fastcgi_finish_request' or when application has finished and
+
+@@ -372,13 +372,13 @@
+ ; The log file for slow requests
+ ; Default Value: not set
+ ; Note: slowlog is mandatory if request_slowlog_timeout is set
+-;slowlog = log/$pool.log.slow
++slowlog = /var/log/php-fpm/$pool.slow.log
+
+ ; The timeout for serving a single request after which a PHP backtrace will be
+ ; dumped to the 'slowlog' file. A value of '0s' means 'off'.
+ ; Available units: s(econds)(default), m(inutes), h(ours), or d(ays)
+ ; Default Value: 0
+-;request_slowlog_timeout = 0
++request_slowlog_timeout = 10s
+
+ ; Depth of slow log stack trace.
+ ; Default Value: 20
