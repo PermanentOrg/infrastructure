@@ -2,7 +2,6 @@
   "configure_script": "configure-taskrunner.sh",
   "deploy_script": "deploy-taskrunner.yml",
   "hostname": "taskrunner-{{env `PERM_ENV`}}",
-  "instance_type": "c4.xlarge",
-  "volume_size": "1000",
+  "volume_size": "100",
   "image_name": "debian-12-amd64-20240429-1732"
 }
