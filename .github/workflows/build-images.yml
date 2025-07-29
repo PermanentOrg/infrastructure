@@ -15,6 +15,8 @@ jobs:
         run: |
           packer plugins install "github.com/hashicorp/amazon"
           packer plugins install "github.com/hashicorp/ansible"
+        env:
+          PACKER_GITHUB_API_TOKEN: ${{ secrets.CKRUM_PAT }}
       - name: Validate json
         run: |
           cd images
@@ -74,6 +76,8 @@ jobs:
         run: |
           packer plugins install "github.com/hashicorp/amazon"
           packer plugins install "github.com/hashicorp/ansible"
+        env:
+          PACKER_GITHUB_API_TOKEN: ${{ secrets.CKRUM_PAT }}
       - name: Build image
         run: |
           ansible-galaxy install willshersystems.sshd
