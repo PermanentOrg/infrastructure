@@ -7,7 +7,8 @@
       "namespace": "android_app",
       "package_name": "org.permanent.PermanentArchive",
       "sha256_cert_fingerprints": [
-        "40:2F:28:C5:7F:16:72:F4:FC:6D:7C:8D:50:95:D5:CA:E2:F9:45:6B:01:53:96:22:89:BB:CD:0A:90:78:3C:ED"
+        "40:2F:28:C5:7F:16:72:F4:FC:6D:7C:8D:50:95:D5:CA:E2:F9:45:6B:01:53:96:22:89:BB:CD:0A:90:78:3C:ED",
+        "6B:7B:0A:12:54:75:91:6E:2F:48:2E:1D:BF:43:9C:CA:97:77:BA:23:7D:1E:43:1E:E0:E1:B1:8F:1F:14:BB:5C"
       ]
     }
   }
