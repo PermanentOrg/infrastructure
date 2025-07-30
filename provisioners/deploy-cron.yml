@@ -50,7 +50,6 @@
         - minute/notification-runner
         - hourly/system-check
         - daily/account-engagement
-        - daily/remove_deleted_records
         - daily/zip_cleanup
         - weekly/file_upload_summary
         - monthly/validate-md5
