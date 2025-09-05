@@ -1,0 +1,53 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  build_archivematica:
+    uses: PermanentOrg/archivematica/.github/workflows/build.yml@main
+    secrets: inherit
+
+  build_archivematica_storage_service:
+    uses: PermanentOrg/archivematica-storage-service/.github/workflows/build.yml@main
+    secrets: inherit
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - build_archivematica
+      - build_archivematica_storage_service
+    env:
+      ARCHIVEMATICA_DASHBOARD_IMAGE_TAG: ${{ needs.build_archivematica.outputs.ARCHIVEMATICA_DASHBOARD_IMAGE_TAG }}
+      ARCHIVEMATICA_MCP_SERVER_IMAGE_TAG: ${{ needs.build_archivematica.outputs.ARCHIVEMATICA_MCP_SERVER_IMAGE_TAG }}
+      ARCHIVEMATICA_MCP_CLIENT_IMAGE_TAG: ${{ needs.build_archivematica.outputs.ARCHIVEMATICA_MCP_CLIENT_IMAGE_TAG }}
+      ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG: ${{ needs.build_archivematica_storage_service.outputs.ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG }}
+    defaults:
+      run:
+        working-directory: ./archivematica/test_cluster
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_API_TOKEN }}
+      - name: Terraform Init
+        run: terraform init
+      - name: Terraform Validate
+        run: terraform validate -no-color
+      - name: Terraform Plan
+        run: |
+          terraform plan -no-color -input=false \
+          -var "image_overrides={
+            \"archivematica-dashboard-dev\"       = \"$ARCHIVEMATICA_DASHBOARD_IMAGE_TAG\",
+            \"archivematica-mcp-client-dev\"      = \"$ARCHIVEMATICA_MCP_CLIENT_IMAGE_TAG\",
+            \"archivematica-mcp-server-dev\"      = \"$ARCHIVEMATICA_MCP_SERVER_IMAGE_TAG\",
+            \"archivematica-storage-service-dev\" = \"$ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG\"
+          }"
+      - name: Terraform Apply
+        run: |
+          terraform apply -auto-approve -input=false \
+          -var "image_overrides={
+            \"archivematica-dashboard-dev\"       = \"$ARCHIVEMATICA_DASHBOARD_IMAGE_TAG\",
+            \"archivematica-mcp-client-dev\"      = \"$ARCHIVEMATICA_MCP_CLIENT_IMAGE_TAG\",
+            \"archivematica-mcp-server-dev\"      = \"$ARCHIVEMATICA_MCP_SERVER_IMAGE_TAG\",
+            \"archivematica-storage-service-dev\" = \"$ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG\"
+          }"
