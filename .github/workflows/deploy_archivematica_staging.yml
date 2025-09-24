@@ -1,5 +1,15 @@
 on:
   workflow_dispatch:
+  workflow_call:
+    outputs:
+      ARCHIVEMATICA_DASHBOARD_IMAGE_TAG:
+        value: ${{ jobs.deploy.outputs.ARCHIVEMATICA_DASHBOARD_IMAGE_TAG }}
+      ARCHIVEMATICA_MCP_SERVER_IMAGE_TAG:
+        value: ${{ jobs.deploy.outputs.ARCHIVEMATICA_MCP_SERVER_IMAGE_TAG }}
+      ARCHIVEMATICA_MCP_CLIENT_IMAGE_TAG:
+        value: ${{ jobs.deploy.outputs.ARCHIVEMATICA_MCP_CLIENT_IMAGE_TAG }}
+      ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG:
+        value: ${{ jobs.deploy.outputs.ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG }}
 
 jobs:
   build_archivematica:
@@ -12,6 +22,11 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    outputs:
+      ARCHIVEMATICA_DASHBOARD_IMAGE_TAG: ${{ needs.build_archivematica.outputs.ARCHIVEMATICA_DASHBOARD_IMAGE_TAG }}
+      ARCHIVEMATICA_MCP_SERVER_IMAGE_TAG: ${{ needs.build_archivematica.outputs.ARCHIVEMATICA_MCP_SERVER_IMAGE_TAG }}
+      ARCHIVEMATICA_MCP_CLIENT_IMAGE_TAG: ${{ needs.build_archivematica.outputs.ARCHIVEMATICA_MCP_CLIENT_IMAGE_TAG }}
+      ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG: ${{ needs.build_archivematica_storage_service.outputs.ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG }}
     needs:
       - build_archivematica
       - build_archivematica_storage_service
