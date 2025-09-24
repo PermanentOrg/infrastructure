@@ -1,28 +1,30 @@
-data "kubernetes_resource" "archivematica_dev" {
+# Data source for existing deployment (for image management)
+data "kubernetes_resource" "archivematica_deployment" {
   kind        = "Deployment"
   api_version = "apps/v1"
-  metadata { name = "archivematica-dev" }
+  metadata { name = "${var.app_name}-${var.environment}" }
 }
 
-resource "kubernetes_deployment" "archivematica_dev" {
+# Main Archivematica deployment (storage service, dashboard, mcp server)
+resource "kubernetes_deployment" "archivematica" {
   metadata {
-    name = "archivematica-dev"
+    name = "${var.app_name}-${var.environment}"
     labels = {
-      App         = "archivematica-dev"
-      Environment = "dev"
+      App         = "${var.app_name}-${var.environment}"
+      Environment = var.environment
     }
   }
   spec {
-    replicas = 1
+    replicas = var.replicas
     selector {
       match_labels = {
-        App = "archivematica-dev"
+        App = "${var.app_name}-${var.environment}"
       }
     }
     template {
       metadata {
         labels = {
-          App = "archivematica-dev"
+          App = "${var.app_name}-${var.environment}"
         }
       }
       spec {
@@ -30,9 +32,11 @@ resource "kubernetes_deployment" "archivematica_dev" {
           fs_group               = 1000
           fs_group_change_policy = "OnRootMismatch"
         }
+
+        # Storage Service Container
         container {
-          image = local.desired_images["archivematica-storage-service-dev"]
-          name  = "archivematica-storage-service-dev"
+          image = var.storage_service_image
+          name  = "${var.app_name}-storage-service-${var.environment}"
           env {
             name  = "SS_GUNICORN_BIND"
             value = "0.0.0.0:8002"
@@ -65,7 +69,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "SS_DB_URL"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "SS_DB_URL"
                 optional = false
               }
@@ -85,13 +89,13 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           env {
             name  = "DJANGO_ALLOWED_HOSTS"
-            value = "dev.archivematica.permanent.org"
+            value = var.allowed_hosts
           }
           env {
-            name  = "DJANGO_SECRET_KEY"
+            name = "DJANGO_SECRET_KEY"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "DJANGO_SECRET_KEY"
                 optional = false
               }
@@ -102,29 +106,31 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           volume_mount {
             mount_path = "/var/archivematica/sharedDirectory"
-            name       = "dev-pipeline-data"
+            name       = "${var.environment}-pipeline-data"
           }
           volume_mount {
             mount_path = "/var/archivematica/storage_service"
-            name       = "dev-staging-data"
+            name       = "${var.environment}-staging-data"
           }
           volume_mount {
             mount_path = "/home"
-            name       = "dev-location-data"
+            name       = "${var.environment}-location-data"
             sub_path   = "sips"
           }
           volume_mount {
             mount_path = "/home/transfer"
-            name       = "dev-transfer-share"
+            name       = "${var.environment}-transfer-share"
           }
           volume_mount {
             mount_path = "/data/storage"
-            name       = "dev-storage-share"
+            name       = "${var.environment}-storage-share"
           }
         }
+
+        # Dashboard Container
         container {
-          image = local.desired_images["archivematica-dashboard-dev"]
-          name  = "archivematica-dashboard-dev"
+          image = var.dashboard_image
+          name  = "${var.app_name}-dashboard-${var.environment}"
           env {
             name  = "AM_GUNICORN_BIND"
             value = "0.0.0.0:8001"
@@ -181,7 +187,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "ARCHIVEMATICA_DASHBOARD_CLIENT_HOST"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "ARCHIVEMATICA_DASHBOARD_CLIENT_HOST"
                 optional = false
               }
@@ -195,7 +201,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "ARCHIVEMATICA_DASHBOARD_CLIENT_PASSWORD"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "ARCHIVEMATICA_DASHBOARD_CLIENT_PASSWORD"
                 optional = false
               }
@@ -203,11 +209,11 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           env {
             name  = "ARCHIVEMATICA_DASHBOARD_DASHBOARD_GEARMAN_SERVER"
-            value = "archivematica-gearman-dev:4730"
+            value = "${var.gearman_service_name}:4730"
           }
           env {
             name  = "ARCHIVEMATICA_DASHBOARD_DASHBOARD_DJANGO_ALLOWED_HOSTS"
-            value = "dev.archivematica.permanent.org"
+            value = var.allowed_hosts
           }
           env {
             name  = "ARCHIVEMATICA_DASHBOARD_DASHBOARD_SEARCH_ENABLED"
@@ -221,7 +227,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "ARCHIVEMATICA_DASHBOARD_DASHBOARD_DJANGO_SECRET_KEY"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "DJANGO_SECRET_KEY"
                 optional = false
               }
@@ -232,21 +238,23 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           volume_mount {
             mount_path = "/var/archivematica/sharedDirectory"
-            name       = "dev-pipeline-data"
+            name       = "${var.environment}-pipeline-data"
           }
           volume_mount {
             mount_path = "/home/transfer"
-            name       = "dev-transfer-share"
+            name       = "${var.environment}-transfer-share"
           }
         }
+
+        # MCP Server Container
         container {
-          image = local.desired_images["archivematica-mcp-server-dev"]
-          name  = "archivematica-mcp-server-dev"
+          image = var.mcp_server_image
+          name  = "${var.app_name}-mcp-server-${var.environment}"
           env {
-            name  = "DJANGO_SECRET_KEY"
+            name = "DJANGO_SECRET_KEY"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "DJANGO_SECRET_KEY"
                 optional = false
               }
@@ -264,7 +272,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "ARCHIVEMATICA_MCPSERVER_CLIENT_PASSWORD"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "ARCHIVEMATICA_DASHBOARD_CLIENT_PASSWORD"
                 optional = false
               }
@@ -274,7 +282,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "ARCHIVEMATICA_MCPSERVER_CLIENT_HOST"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "ARCHIVEMATICA_DASHBOARD_CLIENT_HOST"
                 optional = false
               }
@@ -286,7 +294,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           env {
             name  = "ARCHIVEMATICA_MCPSERVER_MCPSERVER_MCPARCHIVEMATICASERVER"
-            value = "archivematica-gearman-dev:4730"
+            value = "${var.gearman_service_name}:4730"
           }
           env {
             name  = "ARCHIVEMATICA_MCPSERVER_SEARCH_ENABLED"
@@ -306,25 +314,27 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           resources {
             requests = {
-              memory = "256Mi"
-              cpu    = "1m"
+              memory = var.mcp_server_memory_request
+              cpu    = var.mcp_server_cpu_request
             }
             limits = {
-              memory = "2048Mi"
-              cpu    = "333m"
+              memory = var.mcp_server_memory_limit
+              cpu    = var.mcp_server_cpu_limit
             }
           }
           volume_mount {
             mount_path = "/var/archivematica/sharedDirectory"
-            name       = "dev-pipeline-data"
+            name       = "${var.environment}-pipeline-data"
           }
           volume_mount {
             mount_path = "/home/transfer"
-            name       = "dev-transfer-share"
+            name       = "${var.environment}-transfer-share"
           }
         }
+
+        # Init Containers
         init_container {
-          image   = local.desired_images["archivematica-storage-service-dev"]
+          image   = var.storage_service_image
           name    = "archivematica-storage-service-migrations"
           command = ["sh"]
           args    = ["-c", "python manage.py migrate --noinput"]
@@ -356,16 +366,17 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "SS_DB_URL"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "SS_DB_URL"
                 optional = false
               }
             }
           }
         }
+
         init_container {
-          image   = local.desired_images["archivematica-storage-service-dev"]
-          name  = "archivematica-storage-service-create-user"
+          image   = var.storage_service_image
+          name    = "archivematica-storage-service-create-user"
           env {
             name  = "DJANGO_SETTINGS_MODULE"
             value = "storage_service.settings.local"
@@ -394,7 +405,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "SS_DB_URL"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "SS_DB_URL"
                 optional = false
               }
@@ -412,7 +423,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "AM_SS_PASSWORD"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "AM_SS_PASSWORD"
                 optional = false
               }
@@ -422,7 +433,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "AM_SS_API_KEY"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "AM_SS_API_KEY"
                 optional = false
               }
@@ -431,8 +442,9 @@ resource "kubernetes_deployment" "archivematica_dev" {
           command = ["sh"]
           args    = ["-c", "python manage.py create_user --username=$(AM_SS_USERNAME) --password='$(AM_SS_PASSWORD)' --email=$(AM_SS_EMAIL) --api-key=$(AM_SS_API_KEY) --superuser"]
         }
+
         init_container {
-          image   = local.desired_images["archivematica-dashboard-dev"]
+          image   = var.dashboard_image
           name    = "archivematica-dashboard-migration"
           command = ["sh"]
           args    = ["-c", "python /src/src/dashboard/src/manage.py migrate --noinput"]
@@ -472,7 +484,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "ARCHIVEMATICA_DASHBOARD_CLIENT_HOST"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "ARCHIVEMATICA_DASHBOARD_CLIENT_HOST"
                 optional = false
               }
@@ -486,15 +498,16 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "ARCHIVEMATICA_DASHBOARD_CLIENT_PASSWORD"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "ARCHIVEMATICA_DASHBOARD_CLIENT_PASSWORD"
                 optional = false
               }
             }
           }
         }
+
         init_container {
-          image   = local.desired_images["archivematica-storage-service-dev"]
+          image   = var.storage_service_image
           name    = "archivematica-rclone-configuration"
           command = ["sh"]
           args    = ["-c", "rclone config create permanentb2 b2 account $(BACKBLAZE_KEY_ID) key $(BACKBLAZE_APPLICATION_KEY) --obscure"]
@@ -502,7 +515,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "BACKBLAZE_KEY_ID"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "BACKBLAZE_KEY_ID"
                 optional = false
               }
@@ -512,7 +525,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             name = "BACKBLAZE_APPLICATION_KEY"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "BACKBLAZE_APPLICATION_KEY"
                 optional = false
               }
@@ -524,37 +537,39 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           volume_mount {
             mount_path = "/var/archivematica/storage_service"
-            name       = "dev-staging-data"
+            name       = "${var.environment}-staging-data"
+          }
+        }
+
+        # Volumes
+        volume {
+          name = "${var.environment}-pipeline-data"
+          persistent_volume_claim {
+            claim_name = "${var.environment}-pipeline-data"
           }
         }
         volume {
-          name = "dev-pipeline-data"
+          name = "${var.environment}-staging-data"
           persistent_volume_claim {
-            claim_name = "dev-pipeline-data"
+            claim_name = "${var.environment}-staging-data"
           }
         }
         volume {
-          name = "dev-staging-data"
+          name = "${var.environment}-location-data"
           persistent_volume_claim {
-            claim_name = "dev-staging-data"
+            claim_name = "${var.environment}-location-data"
           }
         }
         volume {
-          name = "dev-location-data"
+          name = "${var.environment}-transfer-share"
           persistent_volume_claim {
-            claim_name = "dev-location-data"
+            claim_name = "${var.environment}-transfer-share"
           }
         }
         volume {
-          name = "dev-transfer-share"
+          name = "${var.environment}-storage-share"
           persistent_volume_claim {
-            claim_name = "dev-transfer-share"
-          }
-        }
-        volume {
-          name = "dev-storage-share"
-          persistent_volume_claim {
-            claim_name = "dev-storage-share"
+            claim_name = "${var.environment}-storage-share"
           }
         }
       }
@@ -562,42 +577,44 @@ resource "kubernetes_deployment" "archivematica_dev" {
   }
 }
 
-data "kubernetes_resource" "mcp_client_dev" {
+# Data source for existing MCP client deployment
+data "kubernetes_resource" "mcp_client" {
   kind        = "Deployment"
   api_version = "apps/v1"
-  metadata { name = "archivematica-mcp-client-dev" }
+  metadata { name = "${var.app_name}-mcp-client-${var.environment}" }
 }
 
-resource "kubernetes_deployment" "mcp_client_dev" {
+# MCP Client deployment
+resource "kubernetes_deployment" "mcp_client" {
   metadata {
-    name = "archivematica-mcp-client-dev"
+    name = "${var.app_name}-mcp-client-${var.environment}"
     labels = {
-      App         = "archivematica-dev"
-      Environment = "dev"
+      App         = "${var.app_name}-${var.environment}"
+      Environment = var.environment
     }
   }
   spec {
-    replicas = 4
+    replicas = var.mcp_client_replicas
     selector {
       match_labels = {
-        App = "archivematica-mcp-client-dev"
+        App = "${var.app_name}-mcp-client-${var.environment}"
       }
     }
     template {
       metadata {
         labels = {
-          App = "archivematica-mcp-client-dev"
+          App = "${var.app_name}-mcp-client-${var.environment}"
         }
       }
       spec {
         container {
-          image = local.desired_images["archivematica-mcp-client-dev"]
-          name  = "archivematica-mcp-client-dev"
+          image = var.mcp_client_image
+          name  = "${var.app_name}-mcp-client-${var.environment}"
           env {
             name = "DJANGO_SECRET_KEY"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "DJANGO_SECRET_KEY"
                 optional = false
               }
@@ -627,7 +644,7 @@ resource "kubernetes_deployment" "mcp_client_dev" {
             name = "ARCHIVEMATICA_MCPCLIENT_CLIENT_PASSWORD"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "ARCHIVEMATICA_DASHBOARD_CLIENT_PASSWORD"
                 optional = false
               }
@@ -637,7 +654,7 @@ resource "kubernetes_deployment" "mcp_client_dev" {
             name = "ARCHIVEMATICA_MCPCLIENT_CLIENT_HOST"
             value_from {
               secret_key_ref {
-                name     = "dev-archivematica-secrets"
+                name     = "${var.environment}-archivematica-secrets"
                 key      = "ARCHIVEMATICA_DASHBOARD_CLIENT_HOST"
                 optional = false
               }
@@ -649,7 +666,7 @@ resource "kubernetes_deployment" "mcp_client_dev" {
           }
           env {
             name  = "ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_MCPARCHIVEMATICASERVER"
-            value = "archivematica-gearman-dev:4730"
+            value = "${var.gearman_service_name}:4730"
           }
           env {
             name  = "ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_SEARCH_ENABLED"
@@ -665,33 +682,33 @@ resource "kubernetes_deployment" "mcp_client_dev" {
           }
           resources {
             requests = {
-              memory = "256Mi"
-              cpu    = "1m"
+              memory = var.mcp_client_memory_request
+              cpu    = var.mcp_client_cpu_request
             }
             limits = {
-              memory = "2048Mi"
-              cpu    = "1000m"
+              memory = var.mcp_client_memory_limit
+              cpu    = var.mcp_client_cpu_limit
             }
           }
           volume_mount {
             mount_path = "/var/archivematica/sharedDirectory"
-            name       = "dev-pipeline-data"
+            name       = "${var.environment}-pipeline-data"
           }
           volume_mount {
             mount_path = "/home/transfer"
-            name       = "dev-transfer-share"
+            name       = "${var.environment}-transfer-share"
           }
         }
         volume {
-          name = "dev-pipeline-data"
+          name = "${var.environment}-pipeline-data"
           persistent_volume_claim {
-            claim_name = "dev-pipeline-data"
+            claim_name = "${var.environment}-pipeline-data"
           }
         }
         volume {
-          name = "dev-transfer-share"
+          name = "${var.environment}-transfer-share"
           persistent_volume_claim {
-            claim_name = "dev-transfer-share"
+            claim_name = "${var.environment}-transfer-share"
           }
         }
       }
@@ -699,14 +716,15 @@ resource "kubernetes_deployment" "mcp_client_dev" {
   }
 }
 
-resource "kubernetes_service" "archivematica_dashboard_service_dev" {
+# Services
+resource "kubernetes_service" "dashboard" {
   metadata {
-    name = "archivematica-dashboard-dev"
+    name = "${var.app_name}-dashboard-${var.environment}"
   }
   spec {
     type = "ClusterIP"
     selector = {
-      App = "archivematica-dev"
+      App = "${var.app_name}-${var.environment}"
     }
     port {
       port        = 8001
@@ -715,14 +733,14 @@ resource "kubernetes_service" "archivematica_dashboard_service_dev" {
   }
 }
 
-resource "kubernetes_service" "archivematica_storage_service_dev" {
+resource "kubernetes_service" "storage" {
   metadata {
-    name = "archivematica-storage-dev"
+    name = "${var.app_name}-storage-${var.environment}"
   }
   spec {
     type = "ClusterIP"
     selector = {
-      App = "archivematica-dev"
+      App = "${var.app_name}-${var.environment}"
     }
     port {
       port        = 8002
@@ -731,82 +749,78 @@ resource "kubernetes_service" "archivematica_storage_service_dev" {
   }
 }
 
-resource "kubernetes_persistent_volume_claim" "archivematica_dev_pipeline_data_pvc" {
+# Persistent Volume Claims
+resource "kubernetes_persistent_volume_claim" "pipeline_data" {
   metadata {
-    name = "dev-pipeline-data"
+    name = "${var.environment}-pipeline-data"
   }
   spec {
     access_modes = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = "2Gi"
+        storage = var.pipeline_data_storage
       }
     }
-
-    storage_class_name = "gp2"
+    storage_class_name = var.storage_class
   }
 }
 
-resource "kubernetes_persistent_volume_claim" "archivematica_dev_staging_data_pvc" {
+resource "kubernetes_persistent_volume_claim" "staging_data" {
   metadata {
-    name = "dev-staging-data"
+    name = "${var.environment}-staging-data"
   }
   spec {
     access_modes = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = "2Gi"
+        storage = var.staging_data_storage
       }
     }
-
-    storage_class_name = "gp2"
+    storage_class_name = var.storage_class
   }
 }
 
-resource "kubernetes_persistent_volume_claim" "archivematica_dev_location_data_pvc" {
+resource "kubernetes_persistent_volume_claim" "location_data" {
   metadata {
-    name = "dev-location-data"
+    name = "${var.environment}-location-data"
   }
   spec {
     access_modes = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = "2Gi"
+        storage = var.location_data_storage
       }
     }
-
-    storage_class_name = "gp2"
+    storage_class_name = var.storage_class
   }
 }
 
-resource "kubernetes_persistent_volume_claim" "archivematica_dev_transfer_share_pvc" {
+resource "kubernetes_persistent_volume_claim" "transfer_share" {
   metadata {
-    name = "dev-transfer-share"
+    name = "${var.environment}-transfer-share"
   }
   spec {
     access_modes = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = "2Gi"
+        storage = var.transfer_share_storage
       }
     }
-
-    storage_class_name = "gp2"
+    storage_class_name = var.storage_class
   }
 }
 
-resource "kubernetes_persistent_volume_claim" "archivematica_dev_storage_share_pvc" {
+resource "kubernetes_persistent_volume_claim" "storage_share" {
   metadata {
-    name = "dev-storage-share"
+    name = "${var.environment}-storage-share"
   }
   spec {
     access_modes = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = "2Gi"
+        storage = var.storage_share_storage
       }
     }
-
-    storage_class_name = "gp2"
+    storage_class_name = var.storage_class
   }
 }

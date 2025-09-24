@@ -22,7 +22,7 @@ jobs:
       ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG: ${{ needs.build_archivematica_storage_service.outputs.ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG }}
     defaults:
       run:
-        working-directory: ./archivematica/test_cluster
+        working-directory: ./archivematica/environments/dev
     steps:
       - uses: actions/checkout@v5
       - name: Setup Terraform
@@ -41,7 +41,16 @@ jobs:
             \"archivematica-mcp-client-dev\"      = \"$ARCHIVEMATICA_MCP_CLIENT_IMAGE_TAG\",
             \"archivematica-mcp-server-dev\"      = \"$ARCHIVEMATICA_MCP_SERVER_IMAGE_TAG\",
             \"archivematica-storage-service-dev\" = \"$ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG\"
-          }"
+          }" \
+          -var "dev_ss_database_url=${{ secrets.DEV_SS_DATABASE_URL }}" \
+          -var "dev_ss_password=${{ secrets.DEV_SS_PASSWORD }}" \
+          -var "dev_ss_api_key=${{ secrets.DEV_SS_API_KEY }}" \
+          -var "dev_archivematica_dashboard_db_host=${{ secrets.DEV_ARCHIVEMATICA_DASHBOARD_DB_HOST }}" \
+          -var "dev_archivematica_dashboard_db_password=${{ secrets.DEV_ARCHIVEMATICA_DASHBOARD_DB_PASSWORD }}" \
+          -var "dev_django_secret_key=${{ secrets.DEV_DJANGO_SECRET_KEY }}" \
+          -var "dev_backblaze_key_id=${{ secrets.DEV_BACKBLAZE_KEY_ID }}" \
+          -var "dev_backblaze_application_key=${{ secrets.DEV_BACKBLAZE_APPLICATION_KEY }}" \
+          -var "whitelisted_cidrs=${{ secrets.WHITELISTED_CIDRS }}"
       - name: Terraform Apply
         run: |
           terraform apply -auto-approve -input=false \
@@ -50,4 +59,13 @@ jobs:
             \"archivematica-mcp-client-dev\"      = \"$ARCHIVEMATICA_MCP_CLIENT_IMAGE_TAG\",
             \"archivematica-mcp-server-dev\"      = \"$ARCHIVEMATICA_MCP_SERVER_IMAGE_TAG\",
             \"archivematica-storage-service-dev\" = \"$ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG\"
-          }"
+          }" \
+          -var "dev_ss_database_url=${{ secrets.DEV_SS_DATABASE_URL }}" \
+          -var "dev_ss_password=${{ secrets.DEV_SS_PASSWORD }}" \
+          -var "dev_ss_api_key=${{ secrets.DEV_SS_API_KEY }}" \
+          -var "dev_archivematica_dashboard_db_host=${{ secrets.DEV_ARCHIVEMATICA_DASHBOARD_DB_HOST }}" \
+          -var "dev_archivematica_dashboard_db_password=${{ secrets.DEV_ARCHIVEMATICA_DASHBOARD_DB_PASSWORD }}" \
+          -var "dev_django_secret_key=${{ secrets.DEV_DJANGO_SECRET_KEY }}" \
+          -var "dev_backblaze_key_id=${{ secrets.DEV_BACKBLAZE_KEY_ID }}" \
+          -var "dev_backblaze_application_key=${{ secrets.DEV_BACKBLAZE_APPLICATION_KEY }}" \
+          -var "whitelisted_cidrs=${{ secrets.WHITELISTED_CIDRS }}"

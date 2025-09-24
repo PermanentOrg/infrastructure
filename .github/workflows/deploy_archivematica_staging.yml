@@ -22,7 +22,7 @@ jobs:
       ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG: ${{ needs.build_archivematica_storage_service.outputs.ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG }}
     defaults:
       run:
-        working-directory: ./archivematica/test_cluster
+        working-directory: ./archivematica/environments/staging
     steps:
       - uses: actions/checkout@v5
       - name: Setup Terraform
@@ -40,8 +40,17 @@ jobs:
             \"archivematica-dashboard-staging\"       = \"$ARCHIVEMATICA_DASHBOARD_IMAGE_TAG\",
             \"archivematica-mcp-client-staging\"      = \"$ARCHIVEMATICA_MCP_CLIENT_IMAGE_TAG\",
             \"archivematica-mcp-server-staging\"      = \"$ARCHIVEMATICA_MCP_SERVER_IMAGE_TAG\",
-            \"archivematica-storage-service-staging\" = \"$ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG\",
-          }"
+            \"archivematica-storage-service-staging\" = \"$ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG\"
+          }" \
+          -var "staging_ss_database_url=${{ secrets.STAGING_SS_DATABASE_URL }}" \
+          -var "staging_ss_password=${{ secrets.STAGING_SS_PASSWORD }}" \
+          -var "staging_ss_api_key=${{ secrets.STAGING_SS_API_KEY }}" \
+          -var "staging_archivematica_dashboard_db_host=${{ secrets.STAGING_ARCHIVEMATICA_DASHBOARD_DB_HOST }}" \
+          -var "staging_archivematica_dashboard_db_password=${{ secrets.STAGING_ARCHIVEMATICA_DASHBOARD_DB_PASSWORD }}" \
+          -var "staging_django_secret_key=${{ secrets.STAGING_DJANGO_SECRET_KEY }}" \
+          -var "staging_backblaze_key_id=${{ secrets.STAGING_BACKBLAZE_KEY_ID }}" \
+          -var "staging_backblaze_application_key=${{ secrets.STAGING_BACKBLAZE_APPLICATION_KEY }}" \
+          -var "whitelisted_cidrs=${{ secrets.WHITELISTED_CIDRS }}"
       - name: Terraform Apply
         run: |
           terraform apply -auto-approve -input=false \
@@ -49,5 +58,14 @@ jobs:
             \"archivematica-dashboard-staging\"       = \"$ARCHIVEMATICA_DASHBOARD_IMAGE_TAG\",
             \"archivematica-mcp-client-staging\"      = \"$ARCHIVEMATICA_MCP_CLIENT_IMAGE_TAG\",
             \"archivematica-mcp-server-staging\"      = \"$ARCHIVEMATICA_MCP_SERVER_IMAGE_TAG\",
-            \"archivematica-storage-service-staging\" = \"$ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG\",
-          }"
+            \"archivematica-storage-service-staging\" = \"$ARCHIVEMATICA_STORAGE_SERVICE_IMAGE_TAG\"
+          }" \
+          -var "staging_ss_database_url=${{ secrets.STAGING_SS_DATABASE_URL }}" \
+          -var "staging_ss_password=${{ secrets.STAGING_SS_PASSWORD }}" \
+          -var "staging_ss_api_key=${{ secrets.STAGING_SS_API_KEY }}" \
+          -var "staging_archivematica_dashboard_db_host=${{ secrets.STAGING_ARCHIVEMATICA_DASHBOARD_DB_HOST }}" \
+          -var "staging_archivematica_dashboard_db_password=${{ secrets.STAGING_ARCHIVEMATICA_DASHBOARD_DB_PASSWORD }}" \
+          -var "staging_django_secret_key=${{ secrets.STAGING_DJANGO_SECRET_KEY }}" \
+          -var "staging_backblaze_key_id=${{ secrets.STAGING_BACKBLAZE_KEY_ID }}" \
+          -var "staging_backblaze_application_key=${{ secrets.STAGING_BACKBLAZE_APPLICATION_KEY }}" \
+          -var "whitelisted_cidrs=${{ secrets.WHITELISTED_CIDRS }}"
