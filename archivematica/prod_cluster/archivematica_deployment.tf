@@ -88,7 +88,7 @@ resource "kubernetes_deployment" "archivematica_prod" {
             value = "archivematica.permanent.org"
           }
           env {
-            name  = "DJANGO_SECRET_KEY"
+            name = "DJANGO_SECRET_KEY"
             value_from {
               secret_key_ref {
                 name     = "prod-archivematica-secrets"
@@ -243,7 +243,7 @@ resource "kubernetes_deployment" "archivematica_prod" {
           image = local.desired_images["archivematica-mcp-server-prod"]
           name  = "archivematica-mcp-server-prod"
           env {
-            name  = "DJANGO_SECRET_KEY"
+            name = "DJANGO_SECRET_KEY"
             value_from {
               secret_key_ref {
                 name     = "prod-archivematica-secrets"
@@ -364,7 +364,7 @@ resource "kubernetes_deployment" "archivematica_prod" {
           }
         }
         init_container {
-          image   = local.desired_images["archivematica-storage-service-prod"]
+          image = local.desired_images["archivematica-storage-service-prod"]
           name  = "archivematica-storage-service-create-user"
           env {
             name  = "DJANGO_SETTINGS_MODULE"
