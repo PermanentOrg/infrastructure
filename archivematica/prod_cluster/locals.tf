@@ -1,6 +1,6 @@
 locals {
   current_archivematica_prod_deploy = data.kubernetes_resource.archivematica_prod.object
-  current_mcp_client_prod_deploy = data.kubernetes_resource.mcp_client_prod.object
+  current_mcp_client_prod_deploy    = data.kubernetes_resource.mcp_client_prod.object
 
   current_containers = concat(
     try(local.current_archivematica_prod_deploy.spec.template.spec.containers),
