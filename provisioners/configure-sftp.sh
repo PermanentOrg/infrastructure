@@ -17,7 +17,7 @@ echo "Add custom sources"
 cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
 
 # Set up the correct node source
-export NODE_VERSION=22
+export NODE_VERSION=24
 export NODESOURCE_ARCHITECTURE=$(dpkg --print-architecture)
 export NODESOURCE_SUITE="bookworm"
 envsubst \
