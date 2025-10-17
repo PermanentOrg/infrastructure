@@ -68,6 +68,19 @@ module "eks" {
   }
 }
 
+resource "kubernetes_storage_class" "gp3" {
+  metadata {
+    name = "gp3"
+  }
+  storage_provisioner = "ebs.csi.aws.com"
+  parameters = {
+    type = "gp3"
+  }
+  reclaim_policy = "Delete"
+  volume_binding_mode = "WaitForFirstConsumer"
+  allow_volume_expansion = true
+}
+
 resource "kubernetes_cluster_role_binding" "eks_admins_cluster_admin" {
   metadata {
     name = "eks-admins-cluster-admin"
