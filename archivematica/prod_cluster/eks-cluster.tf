@@ -22,6 +22,29 @@ module "eks" {
     }
   }
 
+  addons = {
+    coredns = {
+      most_recent                 = true
+      resolve_conflicts_on_create = "OVERWRITE"
+      resolve_conflicts           = "OVERWRITE"
+    }
+    kube-proxy = {
+      most_recent                 = true
+      resolve_conflicts_on_create = "OVERWRITE"
+      resolve_conflicts           = "OVERWRITE"
+    }
+    vpc-cni = {
+      most_recent                 = true
+      resolve_conflicts_on_create = "OVERWRITE"
+      resolve_conflicts           = "OVERWRITE"
+    }
+    aws-ebs-csi-driver = {
+      most_recent              = true
+      service_account_role_arn = module.ebs_csi_irsa.iam_role_arn
+      resolve_conflicts        = "OVERWRITE"
+    }
+  }
+
   eks_managed_node_groups = {
     one = {
       name     = "node-group-1"
@@ -45,6 +68,21 @@ module "eks" {
           }
         }
       }
+    }
+  }
+}
+
+module "ebs_csi_irsa" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.60.0"
+
+  role_name_prefix = "${local.cluster_name}-ebs-csi-"
+  attach_ebs_csi_policy = true
+
+  oidc_providers = {
+    main = {
+      provider_arn = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
     }
   }
 }
