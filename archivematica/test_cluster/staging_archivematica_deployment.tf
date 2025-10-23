@@ -31,7 +31,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           fs_group_change_policy = "OnRootMismatch"
         }
         container {
-          image = "364159549467.dkr.ecr.us-west-2.amazonaws.com/archivematica:storage-service-main-30826d7"
+          image = local.desired_images["archivematica-storage-service-staging"]
           name  = "archivematica-storage-service-staging"
           env {
             name  = "SS_GUNICORN_BIND"
@@ -123,7 +123,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           }
         }
         container {
-          image = "364159549467.dkr.ecr.us-west-2.amazonaws.com/archivematica:dashboard-main-0025af3"
+          image = local.desired_images["archivematica-dashboard-staging"]
           name  = "archivematica-dashboard-staging"
           env {
             name  = "AM_GUNICORN_BIND"
@@ -240,7 +240,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           }
         }
         container {
-          image = "364159549467.dkr.ecr.us-west-2.amazonaws.com/archivematica:mcp-server-main-0025af3"
+          image = local.desired_images["archivematica-mcp-server-staging"]
           name  = "archivematica-mcp-server-staging"
           env {
             name  = "DJANGO_SECRET_KEY"
@@ -324,7 +324,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           }
         }
         init_container {
-          image   = "364159549467.dkr.ecr.us-west-2.amazonaws.com/archivematica:storage-service-main-30826d7"
+          image = local.desired_images["archivematica-storage-service-staging"]
           name    = "archivematica-storage-service-migrations"
           command = ["sh"]
           args    = ["-c", "python manage.py migrate --noinput"]
@@ -364,7 +364,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           }
         }
         init_container {
-          image   = "364159549467.dkr.ecr.us-west-2.amazonaws.com/archivematica:storage-service-main-30826d7"
+          image = local.desired_images["archivematica-storage-service-staging"]
           name  = "archivematica-storage-service-create-user"
           env {
             name  = "DJANGO_SETTINGS_MODULE"
@@ -432,7 +432,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           args    = ["-c", "python manage.py create_user --username=$(AM_SS_USERNAME) --password='$(AM_SS_PASSWORD)' --email=$(AM_SS_EMAIL) --api-key='$(AM_SS_API_KEY)' --superuser"]
         }
         init_container {
-          image   = "364159549467.dkr.ecr.us-west-2.amazonaws.com/archivematica:dashboard-main-0025af3"
+          image = local.desired_images["archivematica-dashboard-staging"]
           name    = "archivematica-dashboard-migration"
           command = ["sh"]
           args    = ["-c", "python /src/src/dashboard/src/manage.py migrate --noinput"]
@@ -494,7 +494,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           }
         }
         init_container {
-          image   = "364159549467.dkr.ecr.us-west-2.amazonaws.com/archivematica:storage-service-main-30826d7"
+          image = local.desired_images["archivematica-storage-service-staging"]
           name    = "archivematica-rclone-configuration"
           command = ["sh"]
           args    = ["-c", "rclone config create permanentb2 b2 account $(BACKBLAZE_KEY_ID) key $(BACKBLAZE_APPLICATION_KEY) --obscure"]
@@ -591,7 +591,7 @@ resource "kubernetes_deployment" "mcp_client_staging" {
       }
       spec {
         container {
-          image = "364159549467.dkr.ecr.us-west-2.amazonaws.com/archivematica:mcp-client-main-0025af3"
+          image = local.desired_images["archivematica-mcp-client-staging"]
           name  = "archivematica-mcp-client-staging"
           env {
             name = "DJANGO_SECRET_KEY"
