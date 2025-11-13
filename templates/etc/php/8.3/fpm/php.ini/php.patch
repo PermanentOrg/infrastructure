@@ -1,0 +1,21 @@
+@@@ Extend timeouts and memory limits
+--- php.ini
++++ php.ini
+@@ -442,7 +442,7 @@
+
+ ; Maximum amount of memory a script may consume
+ ; https://php.net/memory-limit
+-memory_limit = 128M
++memory_limit = 1024M
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ; Error handling and logging ;
+@@ -1468,7 +1468,7 @@
+ ; After this number of seconds, stored data will be seen as 'garbage' and
+ ; cleaned up by the garbage collection process.
+ ; https://php.net/session.gc-maxlifetime
+-session.gc_maxlifetime = 1440
++session.gc_maxlifetime = 2592000
+
+ ; NOTE: If you are using the subdirectory option for storing session files
+ ;       (see session.save_path above), then garbage collection does *not*

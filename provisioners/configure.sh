@@ -155,7 +155,9 @@ a2enconf \
 ## Make sure to also review this patch when updating the PHP version, as the
 ## line numbers / hunk contents could shift between config versions.
 patch -d /etc/php/8.3/fpm/pool.d < $TEMPLATES_PATH/etc/php/8.3/fpm/pool.d/www.conf.patch
+patch /etc/php/8.3/fpm/php.ini < $TEMPLATES_PATH/etc/php/8.3/fpm/php.ini/php.patch
 systemctl restart php8.3-fpm.service
+systemctl restart apache2.service
 
 echo "Configure Upload Service"
 envsubst \
