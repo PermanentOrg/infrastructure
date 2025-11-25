@@ -1,6 +1,6 @@
 resource "kubernetes_ingress_v1" "archivematica_dashboard_ingress_prod" {
   metadata {
-    name = "archivematica-dashboard-ingress-dev"
+    name = "archivematica-dashboard-ingress-prod"
     annotations = {
       "alb.ingress.kubernetes.io/scheme"          = "internet-facing"
       "alb.ingress.kubernetes.io/subnets"         = "${var.subnet_ids[0]},${var.subnet_ids[1]},${var.subnet_ids[2]}"
@@ -11,6 +11,7 @@ resource "kubernetes_ingress_v1" "archivematica_dashboard_ingress_prod" {
       "alb.ingress.kubernetes.io/target-type"     = "ip"
       "alb.ingress.kubernetes.io/inbound-cidrs"   = join(",", var.whitelisted_cidrs)
     }
+    namespace = kubernetes_namespace.archivematica_prod.metadata[0].name
   }
   spec {
     ingress_class_name = "alb"
@@ -44,6 +45,7 @@ resource "kubernetes_ingress_v1" "archivematica_storage_ingress_prod" {
       "alb.ingress.kubernetes.io/target-type"     = "ip"
       "alb.ingress.kubernetes.io/inbound-cidrs"   = join(",", var.whitelisted_cidrs)
     }
+    namespace = kubernetes_namespace.archivematica_prod.metadata[0].name
   }
   spec {
     ingress_class_name = "alb"
@@ -77,6 +79,7 @@ resource "kubernetes_ingress_v1" "archivematica_dashboard_internal_ingress_prod"
       "alb.ingress.kubernetes.io/target-type"     = "ip"
       "alb.ingress.kubernetes.io/security-groups" = var.security_group_id
     }
+    namespace = kubernetes_namespace.archivematica_prod.metadata[0].name
   }
   spec {
     ingress_class_name = "alb"
@@ -110,6 +113,7 @@ resource "kubernetes_ingress_v1" "archivematica_storage_internal_ingress_prod" {
       "alb.ingress.kubernetes.io/target-type"     = "ip"
       "alb.ingress.kubernetes.io/security-groups" = var.security_group_id
     }
+    namespace = kubernetes_namespace.archivematica_prod.metadata[0].name
   }
   spec {
     ingress_class_name = "alb"

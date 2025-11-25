@@ -43,6 +43,12 @@ module "eks" {
       service_account_role_arn = module.ebs_csi_irsa.iam_role_arn
       resolve_conflicts        = "OVERWRITE"
     }
+    amazon-cloudwatch-observability = {
+      most_recent                 = true
+      resolve_conflicts_on_create = "OVERWRITE"
+      resolve_conflicts           = "OVERWRITE"
+      service_account_role_arn    = module.cloudwatch_observability_irsa.iam_role_arn
+    }
   }
 
   eks_managed_node_groups = {
@@ -116,5 +122,27 @@ resource "kubernetes_cluster_role_binding" "eks_admins_cluster_admin" {
     kind      = "Group"
     name      = "eks-admins"
     api_group = "rbac.authorization.k8s.io"
+  }
+}
+
+module "cloudwatch_observability_irsa" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.60.0"
+
+  // It is generally our practice to avoid abbreviations, but this actually does have a
+  // length limit we'd run into if we spelled out "observability"
+  role_name_prefix = "${local.cluster_name}-o11y-"
+
+  attach_cloudwatch_observability_policy = true
+
+  oidc_providers = {
+    main = {
+      provider_arn = module.eks.oidc_provider_arn
+
+      namespace_service_accounts = [
+        "amazon-cloudwatch:cloudwatch-agent",
+        "amazon-cloudwatch:adot-collector",
+      ]
+    }
   }
 }

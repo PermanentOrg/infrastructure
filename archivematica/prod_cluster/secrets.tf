@@ -1,6 +1,7 @@
 resource "kubernetes_secret" "prod-archivematica-secrets" {
   metadata {
-    name = "prod-archivematica-secrets"
+    name      = "prod-archivematica-secrets"
+    namespace = kubernetes_namespace.archivematica_prod.metadata[0].name
   }
 
   data = {

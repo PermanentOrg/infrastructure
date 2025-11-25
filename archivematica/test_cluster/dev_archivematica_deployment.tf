@@ -1,8 +1,17 @@
+resource "kubernetes_namespace" "archivematica_dev" {
+  metadata {
+    name = "archivematica-dev"
+  }
+}
+
 data "kubernetes_resource" "archivematica_dev" {
   count       = local.need_dev_images ? 1 : 0
   kind        = "Deployment"
   api_version = "apps/v1"
-  metadata { name = "archivematica-dev" }
+  metadata {
+    name = "archivematica-dev"
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
+  }
 }
 
 resource "kubernetes_deployment" "archivematica_dev" {
@@ -12,6 +21,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
       App         = "archivematica-dev"
       Environment = "dev"
     }
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
     replicas = 1
@@ -24,6 +34,9 @@ resource "kubernetes_deployment" "archivematica_dev" {
       metadata {
         labels = {
           App = "archivematica-dev"
+        }
+        annotations = {
+          "instrumentation.opentelemetry.io/inject-python" = "false"
         }
       }
       spec {
@@ -567,7 +580,10 @@ data "kubernetes_resource" "mcp_client_dev" {
   count       = local.need_dev_images ? 1 : 0
   kind        = "Deployment"
   api_version = "apps/v1"
-  metadata { name = "archivematica-mcp-client-dev" }
+  metadata {
+    name = "archivematica-mcp-client-dev"
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
+  }
 }
 
 resource "kubernetes_deployment" "mcp_client_dev" {
@@ -577,6 +593,7 @@ resource "kubernetes_deployment" "mcp_client_dev" {
       App         = "archivematica-dev"
       Environment = "dev"
     }
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
     replicas = 4
@@ -589,6 +606,9 @@ resource "kubernetes_deployment" "mcp_client_dev" {
       metadata {
         labels = {
           App = "archivematica-mcp-client-dev"
+        }
+        annotations = {
+          "instrumentation.opentelemetry.io/inject-python" = "false"
         }
       }
       spec {
@@ -703,7 +723,8 @@ resource "kubernetes_deployment" "mcp_client_dev" {
 
 resource "kubernetes_service" "archivematica_dashboard_service_dev" {
   metadata {
-    name = "archivematica-dashboard-dev"
+    name      = "archivematica-dashboard-dev"
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
     type = "ClusterIP"
@@ -719,7 +740,8 @@ resource "kubernetes_service" "archivematica_dashboard_service_dev" {
 
 resource "kubernetes_service" "archivematica_storage_service_dev" {
   metadata {
-    name = "archivematica-storage-dev"
+    name      = "archivematica-storage-dev"
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
     type = "ClusterIP"
@@ -735,7 +757,8 @@ resource "kubernetes_service" "archivematica_storage_service_dev" {
 
 resource "kubernetes_persistent_volume_claim" "archivematica_dev_pipeline_data_pvc" {
   metadata {
-    name = "dev-pipeline-data"
+    name      = "dev-pipeline-data"
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
     access_modes = ["ReadWriteOnce"]
@@ -751,7 +774,8 @@ resource "kubernetes_persistent_volume_claim" "archivematica_dev_pipeline_data_p
 
 resource "kubernetes_persistent_volume_claim" "archivematica_dev_staging_data_pvc" {
   metadata {
-    name = "dev-staging-data"
+    name      = "dev-staging-data"
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
     access_modes = ["ReadWriteOnce"]
@@ -767,7 +791,8 @@ resource "kubernetes_persistent_volume_claim" "archivematica_dev_staging_data_pv
 
 resource "kubernetes_persistent_volume_claim" "archivematica_dev_location_data_pvc" {
   metadata {
-    name = "dev-location-data"
+    name      = "dev-location-data"
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
     access_modes = ["ReadWriteOnce"]
@@ -783,7 +808,8 @@ resource "kubernetes_persistent_volume_claim" "archivematica_dev_location_data_p
 
 resource "kubernetes_persistent_volume_claim" "archivematica_dev_transfer_share_pvc" {
   metadata {
-    name = "dev-transfer-share"
+    name      = "dev-transfer-share"
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
     access_modes = ["ReadWriteOnce"]
@@ -799,7 +825,8 @@ resource "kubernetes_persistent_volume_claim" "archivematica_dev_transfer_share_
 
 resource "kubernetes_persistent_volume_claim" "archivematica_dev_storage_share_pvc" {
   metadata {
-    name = "dev-storage-share"
+    name      = "dev-storage-share"
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
     access_modes = ["ReadWriteOnce"]

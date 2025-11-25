@@ -1,8 +1,17 @@
+resource "kubernetes_namespace" "archivematica_staging" {
+  metadata {
+    name = "archivematica-staging"
+  }
+}
+
 data "kubernetes_resource" "archivematica_staging" {
   count       = local.need_staging_images ? 1 : 0
   kind        = "Deployment"
   api_version = "apps/v1"
-  metadata { name = "archivematica-staging" }
+  metadata {
+    name = "archivematica-staging"
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
+  }
 }
 
 resource "kubernetes_deployment" "archivematica_staging" {
@@ -12,6 +21,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
       App         = "archivematica-staging"
       Environment = "staging"
     }
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     replicas = 1
@@ -24,6 +34,9 @@ resource "kubernetes_deployment" "archivematica_staging" {
       metadata {
         labels = {
           App = "archivematica-staging"
+        }
+        annotations = {
+          "instrumentation.opentelemetry.io/inject-python" = "false"
         }
       }
       spec {
@@ -365,7 +378,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           }
         }
         init_container {
-          image = local.desired_images["archivematica-storage-service-staging"]
+          image   = local.desired_images["archivematica-storage-service-staging"]
           name  = "archivematica-storage-service-create-user"
           env {
             name  = "DJANGO_SETTINGS_MODULE"
@@ -567,7 +580,10 @@ data "kubernetes_resource" "mcp_client_staging" {
   count       = local.need_staging_images ? 1 : 0
   kind        = "Deployment"
   api_version = "apps/v1"
-  metadata { name = "archivematica-mcp-client-staging" }
+  metadata {
+    name = "archivematica-mcp-client-staging"
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
+  }
 }
 
 resource "kubernetes_deployment" "mcp_client_staging" {
@@ -577,6 +593,7 @@ resource "kubernetes_deployment" "mcp_client_staging" {
       App         = "archivematica-staging"
       Environment = "staging"
     }
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     replicas = 4
@@ -589,6 +606,9 @@ resource "kubernetes_deployment" "mcp_client_staging" {
       metadata {
         labels = {
           App = "archivematica-mcp-client-staging"
+        }
+        annotations = {
+          "instrumentation.opentelemetry.io/inject-python" = "false"
         }
       }
       spec {
@@ -703,7 +723,8 @@ resource "kubernetes_deployment" "mcp_client_staging" {
 
 resource "kubernetes_service" "archivematica_dashboard_service_staging" {
   metadata {
-    name = "archivematica-dashboard-staging"
+    name      = "archivematica-dashboard-staging"
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     type = "ClusterIP"
@@ -719,7 +740,8 @@ resource "kubernetes_service" "archivematica_dashboard_service_staging" {
 
 resource "kubernetes_service" "archivematica_storage_service_staging" {
   metadata {
-    name = "archivematica-storage-staging"
+    name      = "archivematica-storage-staging"
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     type = "ClusterIP"
@@ -735,7 +757,8 @@ resource "kubernetes_service" "archivematica_storage_service_staging" {
 
 resource "kubernetes_persistent_volume_claim" "archivematica_staging_pipeline_data_pvc" {
   metadata {
-    name = "staging-pipeline-data"
+    name      = "staging-pipeline-data"
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     access_modes = ["ReadWriteOnce"]
@@ -751,7 +774,8 @@ resource "kubernetes_persistent_volume_claim" "archivematica_staging_pipeline_da
 
 resource "kubernetes_persistent_volume_claim" "archivematica_staging_staging_data_pvc" {
   metadata {
-    name = "staging-staging-data"
+    name      = "staging-staging-data"
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     access_modes = ["ReadWriteOnce"]
@@ -767,7 +791,8 @@ resource "kubernetes_persistent_volume_claim" "archivematica_staging_staging_dat
 
 resource "kubernetes_persistent_volume_claim" "archivematica_staging_location_data_pvc" {
   metadata {
-    name = "staging-location-data"
+    name      = "staging-location-data"
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     access_modes = ["ReadWriteOnce"]
@@ -783,7 +808,8 @@ resource "kubernetes_persistent_volume_claim" "archivematica_staging_location_da
 
 resource "kubernetes_persistent_volume_claim" "archivematica_staging_transfer_share_pvc" {
   metadata {
-    name = "staging-transfer-share"
+    name      = "staging-transfer-share"
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     access_modes = ["ReadWriteOnce"]
@@ -799,7 +825,8 @@ resource "kubernetes_persistent_volume_claim" "archivematica_staging_transfer_sh
 
 resource "kubernetes_persistent_volume_claim" "archivematica_staging_storage_share_pvc" {
   metadata {
-    name = "staging-storage-share"
+    name      = "staging-storage-share"
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     access_modes = ["ReadWriteOnce"]
