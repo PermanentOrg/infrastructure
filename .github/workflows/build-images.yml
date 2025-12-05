@@ -29,7 +29,7 @@ jobs:
         machine: [backend, taskrunner, cron, sftp]
         environment:
           - perm_env: dev
-            server_domain: "dev.permanent.org"
+            server_domain: "app.dev.permanent.org"
             stela_domain: "api.dev.permanent.org"
             app_id: "TEST.org.permanent.permanent.dev"
             aws_deploy_key: DEV_AWS_ACCESS_KEY_ID
