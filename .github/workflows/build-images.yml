@@ -10,7 +10,7 @@ jobs:
       matrix:
         machine: [backend, cron, taskrunner, sftp]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install packer plugins
         run: |
           packer plugins install "github.com/hashicorp/amazon"
@@ -71,7 +71,7 @@ jobs:
             fusion_auth_sftp_client_id: PROD_FUSION_AUTH_SFTP_CLIENT_ID
             fusion_auth_sftp_client_secret: PROD_FUSION_AUTH_SFTP_CLIENT_SECRET
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install packer plugins
         run: |
           packer plugins install "github.com/hashicorp/amazon"

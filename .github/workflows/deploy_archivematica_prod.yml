@@ -20,7 +20,7 @@ jobs:
       run:
         working-directory: ./archivematica/prod_cluster
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
