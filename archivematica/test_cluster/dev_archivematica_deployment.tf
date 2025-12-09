@@ -1,4 +1,5 @@
 data "kubernetes_resource" "archivematica_dev" {
+  count       = local.need_dev_images ? 1 : 0
   kind        = "Deployment"
   api_version = "apps/v1"
   metadata { name = "archivematica-dev" }
@@ -563,6 +564,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
 }
 
 data "kubernetes_resource" "mcp_client_dev" {
+  count       = local.need_dev_images ? 1 : 0
   kind        = "Deployment"
   api_version = "apps/v1"
   metadata { name = "archivematica-mcp-client-dev" }

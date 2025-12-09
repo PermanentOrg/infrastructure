@@ -1,4 +1,5 @@
 data "kubernetes_resource" "archivematica_staging" {
+  count       = local.need_staging_images ? 1 : 0
   kind        = "Deployment"
   api_version = "apps/v1"
   metadata { name = "archivematica-staging" }
@@ -563,6 +564,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
 }
 
 data "kubernetes_resource" "mcp_client_staging" {
+  count       = local.need_staging_images ? 1 : 0
   kind        = "Deployment"
   api_version = "apps/v1"
   metadata { name = "archivematica-mcp-client-staging" }
