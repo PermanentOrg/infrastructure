@@ -88,7 +88,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
             value = "staging.archivematica.permanent.org"
           }
           env {
-            name  = "DJANGO_SECRET_KEY"
+            name = "DJANGO_SECRET_KEY"
             value_from {
               secret_key_ref {
                 name     = "staging-archivematica-secrets"
@@ -243,7 +243,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           image = local.desired_images["archivematica-mcp-server-staging"]
           name  = "archivematica-mcp-server-staging"
           env {
-            name  = "DJANGO_SECRET_KEY"
+            name = "DJANGO_SECRET_KEY"
             value_from {
               secret_key_ref {
                 name     = "staging-archivematica-secrets"
@@ -324,7 +324,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           }
         }
         init_container {
-          image = local.desired_images["archivematica-storage-service-staging"]
+          image   = local.desired_images["archivematica-storage-service-staging"]
           name    = "archivematica-storage-service-migrations"
           command = ["sh"]
           args    = ["-c", "python manage.py migrate --noinput"]
@@ -432,7 +432,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           args    = ["-c", "python manage.py create_user --username=$(AM_SS_USERNAME) --password='$(AM_SS_PASSWORD)' --email=$(AM_SS_EMAIL) --api-key='$(AM_SS_API_KEY)' --superuser"]
         }
         init_container {
-          image = local.desired_images["archivematica-dashboard-staging"]
+          image   = local.desired_images["archivematica-dashboard-staging"]
           name    = "archivematica-dashboard-migration"
           command = ["sh"]
           args    = ["-c", "python /src/src/dashboard/src/manage.py migrate --noinput"]
@@ -494,7 +494,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           }
         }
         init_container {
-          image = local.desired_images["archivematica-storage-service-staging"]
+          image   = local.desired_images["archivematica-storage-service-staging"]
           name    = "archivematica-rclone-configuration"
           command = ["sh"]
           args    = ["-c", "rclone config create permanentb2 b2 account $(BACKBLAZE_KEY_ID) key $(BACKBLAZE_APPLICATION_KEY) --obscure"]

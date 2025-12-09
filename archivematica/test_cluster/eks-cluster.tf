@@ -2,11 +2,11 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "21.2.0"
 
-  name    = local.cluster_name
+  name               = local.cluster_name
   kubernetes_version = "1.32"
 
-  vpc_id                         = var.vpc_id
-  subnet_ids                     = var.subnet_ids
+  vpc_id                 = var.vpc_id
+  subnet_ids             = var.subnet_ids
   endpoint_public_access = true
   security_group_id      = var.dev_security_group_id
   access_entries = {
@@ -47,7 +47,7 @@ module "eks" {
 
   eks_managed_node_groups = {
     one = {
-      name = "node-group-1"
+      name     = "node-group-1"
       ami_type = "AL2023_x86_64_STANDARD"
 
       vpc_security_group_ids = [var.dev_security_group_id, var.staging_security_group_id]
@@ -74,15 +74,15 @@ module "eks" {
 }
 
 module "ebs_csi_irsa" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.60.0"
 
-  role_name_prefix = "${local.cluster_name}-ebs-csi-"
+  role_name_prefix      = "${local.cluster_name}-ebs-csi-"
   attach_ebs_csi_policy = true
 
   oidc_providers = {
     main = {
-      provider_arn = module.eks.oidc_provider_arn
+      provider_arn               = module.eks.oidc_provider_arn
       namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
     }
   }
@@ -96,8 +96,8 @@ resource "kubernetes_storage_class" "gp3" {
   parameters = {
     type = "gp3"
   }
-  reclaim_policy = "Delete"
-  volume_binding_mode = "WaitForFirstConsumer"
+  reclaim_policy         = "Delete"
+  volume_binding_mode    = "WaitForFirstConsumer"
   allow_volume_expansion = true
 }
 
