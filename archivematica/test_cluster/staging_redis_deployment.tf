@@ -5,6 +5,7 @@ resource "kubernetes_deployment" "archivematica_redis_staging" {
       App         = "archivematica-staging"
       Environment = "staging"
     }
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     replicas = 1
@@ -54,7 +55,8 @@ resource "kubernetes_deployment" "archivematica_redis_staging" {
 
 resource "kubernetes_service" "archivematica_redis_staging" {
   metadata {
-    name = "archivematica-redis-staging"
+    name      = "archivematica-redis-staging"
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     selector = {
@@ -70,7 +72,8 @@ resource "kubernetes_service" "archivematica_redis_staging" {
 
 resource "kubernetes_persistent_volume_claim" "archivematica_redis_pvc_staging" {
   metadata {
-    name = "archivematica-redis-pvc-staging"
+    name      = "archivematica-redis-pvc-staging"
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     access_modes = ["ReadWriteOnce"]

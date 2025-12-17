@@ -5,6 +5,7 @@ resource "kubernetes_deployment" "archivematica_redis_dev" {
       App         = "archivematica-dev"
       Environment = "dev"
     }
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
     replicas = 1
@@ -54,7 +55,8 @@ resource "kubernetes_deployment" "archivematica_redis_dev" {
 
 resource "kubernetes_service" "archivematica_redis_dev" {
   metadata {
-    name = "archivematica-redis-dev"
+    name      = "archivematica-redis-dev"
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
     selector = {
@@ -70,7 +72,8 @@ resource "kubernetes_service" "archivematica_redis_dev" {
 
 resource "kubernetes_persistent_volume_claim" "archivematica_redis_pvc_dev" {
   metadata {
-    name = "archivematica-redis-pvc-dev"
+    name      = "archivematica-redis-pvc-dev"
+    namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
     access_modes = ["ReadWriteOnce"]

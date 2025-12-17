@@ -11,6 +11,7 @@ resource "kubernetes_ingress_v1" "archivematica_dashboard_ingress_staging" {
       "alb.ingress.kubernetes.io/target-type"     = "ip"
       "alb.ingress.kubernetes.io/inbound-cidrs"   = join(",", var.whitelisted_cidrs)
     }
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     ingress_class_name = "alb"
@@ -44,6 +45,7 @@ resource "kubernetes_ingress_v1" "archivematica_storage_ingress_staging" {
       "alb.ingress.kubernetes.io/target-type"     = "ip"
       "alb.ingress.kubernetes.io/inbound-cidrs"   = join(",", var.whitelisted_cidrs)
     }
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     ingress_class_name = "alb"
@@ -77,6 +79,7 @@ resource "kubernetes_ingress_v1" "archivematica_dashboard_internal_ingress_stagi
       "alb.ingress.kubernetes.io/target-type"     = "ip"
       "alb.ingress.kubernetes.io/security-groups" = var.staging_security_group_id
     }
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     ingress_class_name = "alb"
@@ -110,6 +113,7 @@ resource "kubernetes_ingress_v1" "archivematica_storage_internal_ingress_staging
       "alb.ingress.kubernetes.io/target-type"     = "ip"
       "alb.ingress.kubernetes.io/security-groups" = var.staging_security_group_id
     }
+    namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
     ingress_class_name = "alb"

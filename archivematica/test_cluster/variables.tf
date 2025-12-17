@@ -129,3 +129,9 @@ variable "image_overrides" {
   type        = map(string)
   default     = {}
 }
+
+variable "alert_email" {
+  description = "The email to which to send Cloudwatch alerts"
+  type        = string
+  default     = "engineering@permanent.org"
+}

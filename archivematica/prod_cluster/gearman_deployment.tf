@@ -5,6 +5,7 @@ resource "kubernetes_deployment" "archivematica_gearman_prod" {
       App         = "archivematica-prod"
       Environment = "prod"
     }
+    namespace = kubernetes_namespace.archivematica_prod.metadata[0].name
   }
   spec {
     replicas = 1
@@ -45,7 +46,8 @@ resource "kubernetes_deployment" "archivematica_gearman_prod" {
 
 resource "kubernetes_service" "archivematica_gearman_prod" {
   metadata {
-    name = "archivematica-gearman-prod"
+    name      = "archivematica-gearman-prod"
+    namespace = kubernetes_namespace.archivematica_prod.metadata[0].name
   }
   spec {
     selector = {
