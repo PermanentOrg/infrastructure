@@ -126,6 +126,6 @@ variable "whitelisted_cidrs" {
 
 variable "image_overrides" {
   description = "A map of docker images to be updated"
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
 }
