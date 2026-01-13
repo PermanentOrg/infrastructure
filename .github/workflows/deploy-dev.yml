@@ -14,7 +14,7 @@ jobs:
         machine: [backend, cron, taskrunner, sftp]
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
