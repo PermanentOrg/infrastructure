@@ -53,7 +53,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           env {
             name  = "DJANGO_SETTINGS_MODULE"
-            value = "storage_service.settings.production"
+            value = "archivematica.storage_service.storage_service.settings.production"
           }
           env {
             name  = "FORWARDED_ALLOW_IPS"
@@ -177,7 +177,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           env {
             name  = "AM_GUNICORN_CHDIR"
-            value = "/src/src/archivematicaCommon/lib/"
+            value = "/src/src/archivematica/archivematicaCommon"
           }
           env {
             name  = "ARCHIVEMATICA_DASHBOARD_EMAIL_PORT"
@@ -268,7 +268,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           env {
             name  = "DJANGO_SETTINGS_MODULE"
-            value = "settings.common"
+            value = "archivematica.MCPServer.settings.common"
           }
           env {
             name  = "ARCHIVEMATICA_MCPSERVER_CLIENT_USER"
@@ -341,10 +341,10 @@ resource "kubernetes_deployment" "archivematica_dev" {
           image   = local.desired_images["archivematica-storage-service-dev"]
           name    = "archivematica-storage-service-migrations"
           command = ["sh"]
-          args    = ["-c", "python manage.py migrate --noinput"]
+          args    = ["-c", "python -m archivematica.storage_service.manage migrate --noinput"]
           env {
             name  = "DJANGO_SETTINGS_MODULE"
-            value = "storage_service.settings.local"
+            value = "archivematica.storage_service.storage_service.settings.local"
           }
           env {
             name  = "FORWARDED_ALLOW_IPS"
@@ -382,7 +382,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
           name  = "archivematica-storage-service-create-user"
           env {
             name  = "DJANGO_SETTINGS_MODULE"
-            value = "storage_service.settings.local"
+            value = "archivematica.storage_service.storage_service.settings.local"
           }
           env {
             name  = "FORWARDED_ALLOW_IPS"
@@ -443,13 +443,13 @@ resource "kubernetes_deployment" "archivematica_dev" {
             }
           }
           command = ["sh"]
-          args    = ["-c", "python manage.py create_user --username=$(AM_SS_USERNAME) --password='$(AM_SS_PASSWORD)' --email=$(AM_SS_EMAIL) --api-key=$(AM_SS_API_KEY) --superuser"]
+          args    = ["-c", "python -m archivematica.storage_service.manage create_user --username=$(AM_SS_USERNAME) --password='$(AM_SS_PASSWORD)' --email=$(AM_SS_EMAIL) --api-key=$(AM_SS_API_KEY) --superuser"]
         }
         init_container {
           image   = local.desired_images["archivematica-dashboard-dev"]
           name    = "archivematica-dashboard-migration"
           command = ["sh"]
-          args    = ["-c", "python /src/src/dashboard/src/manage.py migrate --noinput"]
+          args    = ["-c", "python /src/src/archivematica/dashboard/manage.py migrate --noinput"]
           env {
             name  = "DJANGO_SETTINGS_MODULE"
             value = "settings.local"
@@ -627,7 +627,7 @@ resource "kubernetes_deployment" "mcp_client_dev" {
           }
           env {
             name  = "DJANGO_SETTINGS_MODULE"
-            value = "settings.common"
+            value = "archivematica.MCPClient.settings.common"
           }
           env {
             name  = "ARCHIVEMATICA_MCPCLIENT_EMAIL_BACKEND"
