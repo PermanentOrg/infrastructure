@@ -2,4 +2,4 @@ Types: deb
 URIs: http://apt.newrelic.com/debian/
 Suites: newrelic
 Components: non-free
-Signed-By: /usr/share/keyrings/newrelic-archive-keyring.asc
+Signed-By: /usr/share/keyrings/newrelic-archive-keyring.gpg

@@ -25,12 +25,13 @@ echo "Add custom sources"
 curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb
 dpkg -i /tmp/debsuryorg-archive-keyring.deb
 cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
+cp $TEMPLATES_PATH/usr/share/keyrings/*.gpg /usr/share/keyrings/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
 
 # Set up the correct node source
 export NODE_VERSION=24
 export NODESOURCE_ARCHITECTURE=$(dpkg --print-architecture)
-export NODESOURCE_SUITE="bookworm"
+export NODESOURCE_SUITE="trixie"
 
 envsubst \
   < $TEMPLATES_PATH/etc/apt/sources.list.d/nodesource.sources \
@@ -69,11 +70,14 @@ apt-get -qq install -y \
   php8.3-xml \
   php8.3-zip \
   postgresql-client \
-  software-properties-common \
   wget \
-  wkhtmltopdf \
   zip \
   cron
+
+# wkhtmltopdf was removed from Debian 13, install from archived release
+curl -fsSL -o /tmp/wkhtmltox.deb https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb
+apt-get install -y /tmp/wkhtmltox.deb
+rm /tmp/wkhtmltox.deb
 
 echo "Configure ImageMagick"
 cp $TEMPLATES_PATH/etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml

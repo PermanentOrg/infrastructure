@@ -25,6 +25,7 @@ echo "Add custom sources"
 curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb
 dpkg -i /tmp/debsuryorg-archive-keyring.deb
 cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
+cp $TEMPLATES_PATH/usr/share/keyrings/*.gpg /usr/share/keyrings/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
 
 echo "Install packages"
@@ -50,7 +51,6 @@ apt-get -qq install -y \
   php8.3-zip \
   php8.3 \
   postgresql-client \
-  software-properties-common \
   wget \
   zip
 
