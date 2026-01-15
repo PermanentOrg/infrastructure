@@ -1,5 +1,5 @@
 Types: deb deb-src
 URIs: https://apt.postgresql.org/pub/repos/apt
-Suites: bookworm-pgdg
+Suites: trixie-pgdg
 Components: main
 Signed-By: /usr/share/keyrings/postgresql-archive-keyring.asc

@@ -44,6 +44,11 @@
   hosts: default
   become: true
   tasks:
+    - name: Install python3-setuptools for distutils compatibility (Python 3.12+)
+      apt:
+        name: python3-setuptools
+        state: present
+        update_cache: yes
     - name: Format filesystem on block device
       filesystem:
         fstype: ext4
