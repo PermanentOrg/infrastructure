@@ -764,7 +764,7 @@ resource "kubernetes_persistent_volume_claim" "archivematica_dev_pipeline_data_p
     access_modes = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = "8Gi"
+        storage = "16Gi"
       }
     }
 
