@@ -99,7 +99,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           env {
             name  = "DJANGO_ALLOWED_HOSTS"
-            value = "dev.archivematica.permanent.org"
+            value = "*"
           }
           env {
             name = "DJANGO_SECRET_KEY"
