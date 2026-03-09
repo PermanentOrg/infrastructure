@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
           cli_config_credentials_token: ${{ secrets.TERRAFORM_API_TOKEN }}
       - name: Terraform Init
