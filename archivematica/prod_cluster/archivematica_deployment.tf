@@ -68,14 +68,6 @@ resource "kubernetes_deployment" "archivematica_prod" {
             value = "/dev/null"
           }
           env {
-            name  = "SS_GUNICORN_RELOAD"
-            value = "true"
-          }
-          env {
-            name  = "SS_GUNICORN_RELOAD_ENGINE"
-            value = "auto"
-          }
-          env {
             name = "SS_DB_URL"
             value_from {
               secret_key_ref {
@@ -154,14 +146,6 @@ resource "kubernetes_deployment" "archivematica_prod" {
           env {
             name  = "AM_GUNICORN_ACCESSLOG"
             value = "/dev/null"
-          }
-          env {
-            name  = "AM_GUNICORN_RELOAD"
-            value = "true"
-          }
-          env {
-            name  = "AM_GUNICORN_RELOAD_ENGINE"
-            value = "auto"
           }
           env {
             name  = "AM_GUNICORN_LOGLEVEL"
@@ -359,14 +343,6 @@ resource "kubernetes_deployment" "archivematica_prod" {
             value = "/dev/null"
           }
           env {
-            name  = "SS_GUNICORN_RELOAD"
-            value = "true"
-          }
-          env {
-            name  = "SS_GUNICORN_RELOAD_ENGINE"
-            value = "auto"
-          }
-          env {
             name = "SS_DB_URL"
             value_from {
               secret_key_ref {
@@ -395,14 +371,6 @@ resource "kubernetes_deployment" "archivematica_prod" {
           env {
             name  = "SS_GUNICORN_ACCESSLOG"
             value = "/dev/null"
-          }
-          env {
-            name  = "SS_GUNICORN_RELOAD"
-            value = "true"
-          }
-          env {
-            name  = "SS_GUNICORN_RELOAD_ENGINE"
-            value = "auto"
           }
           env {
             name = "SS_DB_URL"
@@ -461,14 +429,6 @@ resource "kubernetes_deployment" "archivematica_prod" {
           env {
             name  = "AM_GUNICORN_ACCESSLOG"
             value = "/dev/null"
-          }
-          env {
-            name  = "AM_GUNICORN_RELOAD"
-            value = "true"
-          }
-          env {
-            name  = "AM_GUNICORN_RELOAD_ENGINE"
-            value = "auto"
           }
           env {
             name  = "ARCHIVEMATICA_DASHBOARD_EMAIL_PORT"
