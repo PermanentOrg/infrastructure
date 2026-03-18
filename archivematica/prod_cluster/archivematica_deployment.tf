@@ -9,7 +9,7 @@ data "kubernetes_resource" "archivematica_prod" {
   kind        = "Deployment"
   api_version = "apps/v1"
   metadata {
-    name = "archivematica-prod"
+    name      = "archivematica-prod"
     namespace = kubernetes_namespace.archivematica_prod.metadata[0].name
   }
 }
@@ -581,7 +581,7 @@ data "kubernetes_resource" "mcp_client_prod" {
   kind        = "Deployment"
   api_version = "apps/v1"
   metadata {
-    name = "archivematica-mcp-client-prod"
+    name      = "archivematica-mcp-client-prod"
     namespace = kubernetes_namespace.archivematica_prod.metadata[0].name
   }
 }
@@ -596,7 +596,7 @@ resource "kubernetes_deployment" "mcp_client_prod" {
     namespace = kubernetes_namespace.archivematica_prod.metadata[0].name
   }
   spec {
-    replicas = 4
+    replicas = 10
     selector {
       match_labels = {
         App = "archivematica-mcp-client-prod"
