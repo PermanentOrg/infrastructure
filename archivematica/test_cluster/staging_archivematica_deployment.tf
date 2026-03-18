@@ -9,7 +9,7 @@ data "kubernetes_resource" "archivematica_staging" {
   kind        = "Deployment"
   api_version = "apps/v1"
   metadata {
-    name = "archivematica-staging"
+    name      = "archivematica-staging"
     namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
 }
@@ -378,7 +378,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           }
         }
         init_container {
-          image   = local.desired_images["archivematica-storage-service-staging"]
+          image = local.desired_images["archivematica-storage-service-staging"]
           name  = "archivematica-storage-service-create-user"
           env {
             name  = "DJANGO_SETTINGS_MODULE"
@@ -581,7 +581,7 @@ data "kubernetes_resource" "mcp_client_staging" {
   kind        = "Deployment"
   api_version = "apps/v1"
   metadata {
-    name = "archivematica-mcp-client-staging"
+    name      = "archivematica-mcp-client-staging"
     namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
 }
@@ -596,7 +596,7 @@ resource "kubernetes_deployment" "mcp_client_staging" {
     namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
   spec {
-    replicas = 4
+    replicas = 10
     selector {
       match_labels = {
         App = "archivematica-mcp-client-staging"
