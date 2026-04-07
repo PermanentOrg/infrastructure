@@ -296,7 +296,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           env {
             name  = "ARCHIVEMATICA_MCPSERVER_MCPSERVER_WORKER_THREADS"
-            value = "1"
+            value = "4"
           }
           env {
             name  = "ARCHIVEMATICA_MCPSERVER_MCPSERVER_CONCURRENT_PACKAGES"
