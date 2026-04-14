@@ -83,3 +83,8 @@ variable "alert_email" {
   type        = string
   default     = "engineering@permanent.org"
 }
+
+variable "new_relic_license_key" {
+  description = "New Relic license key"
+  type        = string
+}
