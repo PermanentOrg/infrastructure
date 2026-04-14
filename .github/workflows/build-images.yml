@@ -57,7 +57,7 @@ jobs:
             fusion_auth_sftp_client_id: STAGING_FUSION_AUTH_SFTP_CLIENT_ID
             fusion_auth_sftp_client_secret: STAGING_FUSION_AUTH_SFTP_CLIENT_SECRET
           - perm_env: prod
-            server_domain: "www.permanent.org"
+            server_domain: "app.permanent.org"
             stela_domain: "api.permanent.org"
             app_id: "C8YKZNBVWT.org.permanent.PermanentArchive"
             aws_deploy_key: PROD_AWS_ACCESS_KEY_ID
