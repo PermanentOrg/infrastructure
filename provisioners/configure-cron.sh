@@ -54,6 +54,9 @@ apt-get -qq install -y \
   wget \
   zip
 
+cp $TEMPLATES_PATH/etc/php/8.3/mods-available/newrelic-logging.ini /etc/php/8.3/mods-available/newrelic-logging.ini
+phpenmod newrelic-logging
+
 service apache2 stop
 update-rc.d apache2 disable
 

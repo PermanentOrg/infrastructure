@@ -160,6 +160,8 @@ a2enconf \
 ## line numbers / hunk contents could shift between config versions.
 patch -d /etc/php/8.3/fpm/pool.d < $TEMPLATES_PATH/etc/php/8.3/fpm/pool.d/www.conf.patch
 patch /etc/php/8.3/fpm/php.ini < $TEMPLATES_PATH/etc/php/8.3/fpm/php.ini/php.patch
+cp $TEMPLATES_PATH/etc/php/8.3/mods-available/newrelic-logging.ini /etc/php/8.3/mods-available/newrelic-logging.ini
+phpenmod newrelic-logging
 systemctl restart php8.3-fpm.service
 systemctl restart apache2.service
 

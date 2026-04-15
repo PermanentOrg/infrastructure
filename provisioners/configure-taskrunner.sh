@@ -78,6 +78,9 @@ curl -fsSL -o /tmp/wkhtmltox.deb https://github.com/wkhtmltopdf/packaging/releas
 apt-get install -y /tmp/wkhtmltox.deb
 rm /tmp/wkhtmltox.deb
 
+cp $TEMPLATES_PATH/etc/php/8.3/mods-available/newrelic-logging.ini /etc/php/8.3/mods-available/newrelic-logging.ini
+phpenmod newrelic-logging
+
 service apache2 stop
 update-rc.d apache2 disable
 
