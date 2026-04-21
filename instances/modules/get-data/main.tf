@@ -44,4 +44,5 @@ data "aws_security_group" "default" {
 
 data "aws_subnet" "default" {
   availability_zone = var.perm_env.zone
+  default_for_az    = true
 }
