@@ -109,6 +109,7 @@ module "cloudwatch_observability_irsa" {
 
       namespace_service_accounts = [
         "amazon-cloudwatch:cloudwatch-agent",
+        "amazon-cloudwatch:cloudwatch-agent-cluster-scraper",
         "amazon-cloudwatch:adot-collector",
       ]
     }
