@@ -140,3 +140,13 @@ variable "new_relic_license_key" {
   description = "New Relic license key"
   type        = string
 }
+
+variable "new_relic_account_id" {
+  description = "New Relic account ID"
+  type        = number
+}
+
+variable "new_relic_api_key" {
+  description = "New Relic User API key for Terraform provider"
+  type        = string
+}

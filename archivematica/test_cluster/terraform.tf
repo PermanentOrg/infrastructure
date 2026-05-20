@@ -37,6 +37,11 @@ terraform {
       source  = "hashicorp/helm"
       version = "~> 2.9.0"
     }
+
+    newrelic = {
+      source  = "newrelic/newrelic"
+      version = "~> 3.0"
+    }
   }
 
   required_version = "~> 1.5"
