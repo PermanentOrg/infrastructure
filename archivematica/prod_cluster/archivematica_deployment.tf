@@ -724,11 +724,11 @@ resource "kubernetes_persistent_volume_claim" "archivematica_prod_pipeline_data_
     access_modes = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = "256Gi"
+        storage = "512Gi"
       }
     }
 
-    storage_class_name = "gp2"
+    storage_class_name = "gp3"
   }
 }
 
