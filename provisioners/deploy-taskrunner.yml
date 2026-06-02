@@ -2,6 +2,7 @@
 - name: Perform taskrunner deployment steps
   hosts: default
   become: true
+  gather_facts: false
   tasks:
     - name: Create minute cron dir
       file:
@@ -15,7 +16,6 @@
         name: minute crontab
         job: "cd / && run-parts --report /etc/cron.minute"
     - name: Copy packages from S3
-      become_user: deployer
       command: "aws s3 cp s3://permanent-repos/{{ perm_env }}/{{ item }}.tar.gz /data/tmp/{{ item }}.tar.gz"
       loop:
         - api

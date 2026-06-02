@@ -27,22 +27,32 @@
 - name: Harden sshd_config
   hosts: default
   become: true
-  vars:
-    sshd:
-      X11Forwarding: no
-      UseDNS: yes
-      MaxAuthTries: 3
-      LoginGraceTime: 20
-      AllowAgentForwarding: no
-      AllowTcpForwarding: no
-      PasswordAuthentication: no
-      Port: 22222
-  roles:
-    - role: willshersystems.sshd
+  gather_facts: false
+  tasks:
+    - name: Write hardened sshd_config
+      copy:
+        dest: /etc/ssh/sshd_config
+        mode: '0644'
+        content: |
+          Include /etc/ssh/sshd_config.d/*.conf
+          AcceptEnv LANG LC_*
+          KbdInteractiveAuthentication no
+          PrintMotd no
+          Subsystem sftp /usr/lib/openssh/sftp-server
+          UsePAM yes
+          X11Forwarding no
+          UseDNS no
+          PasswordAuthentication no
+    - name: Write SSH port drop-in
+      copy:
+        dest: /etc/ssh/sshd_config.d/99-permanent-port.conf
+        mode: '0644'
+        content: "Port 22222\n"
 
 - name: Format and mount persistent storage
   hosts: default
   become: true
+  gather_facts: false
   tasks:
     - name: Install python3-setuptools for distutils compatibility (Python 3.12+)
       apt:
@@ -63,10 +73,18 @@
 - name: Perform system configuration
   hosts: default
   become: true
+  gather_facts: false
   tasks:
     - name: Create default code deployment directory
       file:
         path: /data/www
+        state: directory
+        mode: "0755"
+        owner: "www-data"
+        group: "deployer"
+    - name: Create default tmp directory
+      file:
+        path: /data/tmp
         state: directory
         mode: "0755"
         owner: "www-data"
@@ -78,6 +96,8 @@
         mode: "0755"
         owner: "www-data"
         group: "deployer"
+    - name: Update hosts to know about the new host name
+      shell: echo "127.0.0.1 {{ perm_hostname }}" >> /etc/hosts
     - name: Change hostname
       shell: hostnamectl set-hostname --static {{ perm_hostname }}
     - name: Preserve hostname between reboots
@@ -85,8 +105,6 @@
         path: /etc/cloud/cloud.cfg
         regexp: "^preserve_hostname:"
         line: "preserve_hostname: true"
-    - name: Update hosts to know about the new host name
-      shell: echo "127.0.0.1 {{ perm_hostname }}" >> /etc/hosts
     - name: Run the configure script
       script: "{{ script }}"
       environment:
@@ -118,3 +136,8 @@
         SERVER_DOMAIN: "{{ server_domain }}"
         STELA_DOMAIN: "{{ stela_domain }}"
         SENTRY_DSN: "{{ sentry_dsn }}"
+    - name: Restore sudo NOPASSWD rule after configure script
+      copy:
+        content: "%sudo  ALL=(ALL:ALL) NOPASSWD:ALL"
+        dest: /etc/sudoers.d/sudo_nopasswd
+        mode: 0440
