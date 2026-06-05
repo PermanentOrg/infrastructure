@@ -80,7 +80,8 @@ jobs:
           PACKER_GITHUB_API_TOKEN: ${{ secrets.CKRUM_PAT }}
       - name: Build image
         run: |
-          ansible-galaxy install willshersystems.sshd
+          ansible-galaxy install 'willshersystems.sshd,v0.30.0'
+          ansible-galaxy collection install ansible.posix
           ansible-galaxy collection install 'community.general:<3.3.0'
           cd images
           packer build -var-file=${{ matrix.machine }}.json image.json
