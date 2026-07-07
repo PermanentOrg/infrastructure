@@ -96,6 +96,7 @@ jobs:
           NOTIFICATION_DATABASE_URL: ${{ secrets[matrix.environment.notification_database_url] }}
           NOTIFICATION_FIREBASE_CREDENTIALS: ${{ secrets[matrix.environment.notification_firebase_credentials] }}
           SENTRY_DSN: ${{ secrets.SENTRY_TOKEN }}
+          SFTP_SENTRY_DSN: ${{ secrets.SFTP_SENTRY_DSN }}
           PERM_ENV: ${{ matrix.environment.perm_env }}
           SERVER_DOMAIN: ${{ matrix.environment.server_domain }}
           STELA_DOMAIN: ${{ matrix.environment.stela_domain }}

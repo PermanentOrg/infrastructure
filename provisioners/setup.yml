@@ -117,4 +117,4 @@
         FUSION_AUTH_SFTP_CLIENT_SECRET: "{{ fusion_auth_sftp_client_secret }}"
         SERVER_DOMAIN: "{{ server_domain }}"
         STELA_DOMAIN: "{{ stela_domain }}"
-        SENTRY_DSN: "{{ sentry_dsn }}"
+        SFTP_SENTRY_DSN: "{{ sftp_sentry_dsn }}"
