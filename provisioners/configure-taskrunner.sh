@@ -101,6 +101,10 @@ chmod -R 774 /data/tmp
 chown -R www-data /data/tmp
 chgrp -R $APP_USER /data/tmp
 
+# Redirect any temp file creation that doesn't explicitly target /data/tmp
+# (e.g. system default temp dir lookups) away from the small root volume
+echo "TMPDIR=/data/tmp" >> /etc/environment
+
 # For the deployer user to download packages from S3
 cp -R /var/www/.aws /home/$APP_USER/
 chown -R $APP_USER /home/$APP_USER/.aws
