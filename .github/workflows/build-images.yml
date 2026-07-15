@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-24.04
     needs: ["validate"]
     strategy:
+      fail-fast: false
       matrix:
         machine: [backend, taskrunner, cron, sftp]
         environment:
