@@ -83,7 +83,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           env {
             name  = "SS_GUNICORN_WORKERS"
-            value = "3"
+            value = "10"
           }
           env {
             name  = "RCLONE_CONFIG"
