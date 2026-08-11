@@ -309,7 +309,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
             }
             limits = {
               memory = "2048Mi"
-              cpu    = "333m"
+              cpu    = "1"
             }
           }
           volume_mount {
