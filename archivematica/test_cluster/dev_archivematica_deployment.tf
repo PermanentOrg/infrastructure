@@ -292,7 +292,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           env {
             name  = "ARCHIVEMATICA_MCPSERVER_MCPSERVER_RPC_THREADS"
-            value = "8"
+            value = "50"
           }
           env {
             name  = "ARCHIVEMATICA_MCPSERVER_MCPSERVER_WORKER_THREADS"
