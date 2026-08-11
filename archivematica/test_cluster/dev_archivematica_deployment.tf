@@ -153,7 +153,7 @@ resource "kubernetes_deployment" "archivematica_dev" {
           }
           env {
             name  = "AM_GUNICORN_WORKERS"
-            value = "1"
+            value = "10"
           }
           env {
             name  = "AM_GUNICORN_PROC_NAME"
