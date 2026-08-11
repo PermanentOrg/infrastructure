@@ -741,11 +741,11 @@ resource "kubernetes_persistent_volume_claim" "archivematica_dev_staging_data_pv
     access_modes = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = "2Gi"
+        storage = "8Gi"
       }
     }
 
-    storage_class_name = "gp2"
+    storage_class_name = "gp3"
   }
 }
 
