@@ -721,14 +721,16 @@ resource "kubernetes_persistent_volume_claim" "archivematica_dev_pipeline_data_p
     namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
-    access_modes = ["ReadWriteOnce"]
+    access_modes = ["ReadWriteMany"]
     resources {
+      # Not enforced by EFS -- required by the Kubernetes API, but the driver doesn't apply
+      # a quota. EFS itself is elastic; this volume grows/shrinks with what's stored in it.
       requests = {
-        storage = "16Gi"
+        storage = "1Gi"
       }
     }
 
-    storage_class_name = "gp3"
+    storage_class_name = kubernetes_storage_class.efs_dev.metadata[0].name
   }
 }
 
@@ -745,7 +747,7 @@ resource "kubernetes_persistent_volume_claim" "archivematica_dev_staging_data_pv
       }
     }
 
-    storage_class_name = "gp2"
+    storage_class_name = "gp3"
   }
 }
 
@@ -762,7 +764,7 @@ resource "kubernetes_persistent_volume_claim" "archivematica_dev_location_data_p
       }
     }
 
-    storage_class_name = "gp2"
+    storage_class_name = "gp3"
   }
 }
 
@@ -772,14 +774,14 @@ resource "kubernetes_persistent_volume_claim" "archivematica_dev_transfer_share_
     namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
   spec {
-    access_modes = ["ReadWriteOnce"]
+    access_modes = ["ReadWriteMany"]
     resources {
       requests = {
-        storage = "2Gi"
+        storage = "1Gi"
       }
     }
 
-    storage_class_name = "gp2"
+    storage_class_name = kubernetes_storage_class.efs_dev.metadata[0].name
   }
 }
 
@@ -796,6 +798,6 @@ resource "kubernetes_persistent_volume_claim" "archivematica_dev_storage_share_p
       }
     }
 
-    storage_class_name = "gp2"
+    storage_class_name = "gp3"
   }
 }
