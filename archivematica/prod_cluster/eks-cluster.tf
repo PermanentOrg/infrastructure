@@ -58,7 +58,7 @@ module "eks" {
 
       vpc_security_group_ids = [var.security_group_id]
 
-      instance_types = ["m6i.2xlarge"]
+      instance_types = ["t3.large"]
 
       min_size     = 3
       max_size     = 3
