@@ -1,6 +1,6 @@
 resource "kubernetes_secret" "dev-archivematica-secrets" {
   metadata {
-    name = "dev-archivematica-secrets"
+    name      = "dev-archivematica-secrets"
     namespace = kubernetes_namespace.archivematica_dev.metadata[0].name
   }
 
@@ -18,7 +18,7 @@ resource "kubernetes_secret" "dev-archivematica-secrets" {
 
 resource "kubernetes_secret" "staging-archivematica-secrets" {
   metadata {
-    name = "staging-archivematica-secrets"
+    name      = "staging-archivematica-secrets"
     namespace = kubernetes_namespace.archivematica_staging.metadata[0].name
   }
 

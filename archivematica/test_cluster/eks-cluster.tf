@@ -43,6 +43,11 @@ module "eks" {
       service_account_role_arn = module.ebs_csi_irsa.iam_role_arn
       resolve_conflicts        = "OVERWRITE"
     }
+    aws-efs-csi-driver = {
+      most_recent              = true
+      service_account_role_arn = module.efs_csi_irsa.iam_role_arn
+      resolve_conflicts        = "OVERWRITE"
+    }
     amazon-cloudwatch-observability = {
       most_recent                 = true
       resolve_conflicts_on_create = "OVERWRITE"
