@@ -86,6 +86,10 @@ resource "kubernetes_deployment" "archivematica_prod" {
             value = "3"
           }
           env {
+            name  = "GUNICORN_CMD_ARGS"
+            value = "--keep-alive 75"
+          }
+          env {
             name  = "RCLONE_CONFIG"
             value = "/var/archivematica/storage_service/.rclone.conf"
           }
