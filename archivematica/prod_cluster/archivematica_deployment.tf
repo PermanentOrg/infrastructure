@@ -300,7 +300,7 @@ resource "kubernetes_deployment" "archivematica_prod" {
           }
           env {
             name  = "ARCHIVEMATICA_MCPSERVER_MCPSERVER_WORKER_THREADS"
-            value = "4"
+            value = "25"
           }
           env {
             name  = "ARCHIVEMATICA_MCPSERVER_MCPSERVER_CONCURRENT_PACKAGES"
@@ -313,7 +313,7 @@ resource "kubernetes_deployment" "archivematica_prod" {
             }
             limits = {
               memory = "2048Mi"
-              cpu    = "333m"
+              cpu    = "1.7"
             }
           }
           volume_mount {
