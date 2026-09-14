@@ -46,3 +46,16 @@ jobs:
     steps:
       - name: Trigger the functional test
         run: curl -X POST -H 'Accept:application/vnd.github.v3+json' -H 'Authorization:Bearer ${{ secrets.CKRUM_PAT }}' https://api.github.com/repos/PermanentOrg/functional-test/dispatches -d '{"event_type":"dev_deployed"}'
+      # automated-qa is a private repository, so it needs its own token rather
+      # than the one above. The request fails the job on an HTTP error: a 404
+      # from a token without access would otherwise stop the browser tests
+      # without telling anybody.
+      - name: Trigger the browser QA suite
+        env:
+          QA_TOKEN: ${{ secrets.AUTOMATED_QA_PAT }}
+        run: |
+          if [ -z "$QA_TOKEN" ]; then
+            echo "AUTOMATED_QA_PAT is not set. Add a token with Contents write access to PermanentOrg/automated-qa." >&2
+            exit 1
+          fi
+          curl --fail-with-body -X POST -H 'Accept:application/vnd.github.v3+json' -H "Authorization:Bearer $QA_TOKEN" https://api.github.com/repos/PermanentOrg/automated-qa/dispatches -d '{"event_type":"dev_deployed"}'
