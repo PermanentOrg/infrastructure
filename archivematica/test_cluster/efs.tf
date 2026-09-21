@@ -71,7 +71,7 @@ resource "kubernetes_storage_class" "efs_dev" {
     gid              = "1000"
     basePath         = "/dev"
   }
-  mount_options       = ["actimeo=1", "lookupcache=positive"]
+  mount_options       = ["actimeo=1", "lookupcache=none"]
   reclaim_policy      = "Delete"
   volume_binding_mode = "Immediate"
 }
@@ -89,7 +89,7 @@ resource "kubernetes_storage_class" "efs_staging" {
     gid              = "1000"
     basePath         = "/staging"
   }
-  mount_options       = ["actimeo=1", "lookupcache=positive"]
+  mount_options       = ["actimeo=1", "lookupcache=none"]
   reclaim_policy      = "Delete"
   volume_binding_mode = "Immediate"
 }
