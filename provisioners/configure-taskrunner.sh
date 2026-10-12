@@ -30,14 +30,8 @@ cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
 cp $TEMPLATES_PATH/usr/share/keyrings/*.gpg /usr/share/keyrings/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
 
-# Set up the correct node source
-export NODE_VERSION=24
-export NODESOURCE_ARCHITECTURE=$(dpkg --print-architecture)
-export NODESOURCE_SUITE="trixie"
-
-envsubst \
-  < $TEMPLATES_PATH/etc/apt/sources.list.d/nodesource.sources \
-  > /etc/apt/sources.list.d/nodesource.sources
+# The task runner does not use node, so it does not need the node source
+rm /etc/apt/sources.list.d/nodesource.sources
 
 echo "Install packages"
 apt-get -qq update
