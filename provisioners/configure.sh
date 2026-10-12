@@ -31,7 +31,7 @@ cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
 # Set up the correct node source
 export NODE_VERSION=24
 export NODESOURCE_ARCHITECTURE=$(dpkg --print-architecture)
-export NODESOURCE_SUITE="trixie"
+export NODESOURCE_SUITE="nodistro"
 
 envsubst \
   < $TEMPLATES_PATH/etc/apt/sources.list.d/nodesource.sources \
@@ -54,7 +54,6 @@ apt-get -qq install -y \
   mediainfo \
   newrelic-php5 \
   nodejs \
-  npm \
   php8.3 \
   php8.3-bcmath \
   php8.3-cli \
@@ -81,6 +80,13 @@ rm /tmp/wkhtmltox.deb
 
 echo "Configure ImageMagick"
 cp $TEMPLATES_PATH/etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml
+
+# Make sure we installed the node version we asked for
+if [[ "$(node --version)" != v${NODE_VERSION}.* ]]
+then
+   echo "ERROR! Expected node ${NODE_VERSION} but found $(node --version)"
+   exit 1
+fi
 
 # Make sure nodejs exists
 if ! [[ -f /usr/bin/nodejs ]]

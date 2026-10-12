@@ -19,7 +19,7 @@ cp $TEMPLATES_PATH/usr/share/keyrings/*.asc /usr/share/keyrings/
 # Set up the correct node source
 export NODE_VERSION=24
 export NODESOURCE_ARCHITECTURE=$(dpkg --print-architecture)
-export NODESOURCE_SUITE="trixie"
+export NODESOURCE_SUITE="nodistro"
 envsubst \
   < $TEMPLATES_PATH/etc/apt/sources.list.d/nodesource.sources \
   > /etc/apt/sources.list.d/nodesource.sources
@@ -31,9 +31,15 @@ apt -qq install -y \
   nginx \
   nginx-extras \
   nodejs \
-  npm \
   unzip \
   wget
+
+# Make sure we installed the node version we asked for
+if [[ "$(node --version)" != v${NODE_VERSION}.* ]]
+then
+   echo "ERROR! Expected node ${NODE_VERSION} but found $(node --version)"
+   exit 1
+fi
 
 # Make sure nodejs exists
 if ! [[ -f /usr/bin/nodejs ]]
