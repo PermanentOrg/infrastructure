@@ -29,7 +29,7 @@ cp $TEMPLATES_PATH/usr/share/keyrings/*.gpg /usr/share/keyrings/
 cp $TEMPLATES_PATH/etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/
 
 # Set up the correct node source
-export NODE_VERSION=24
+export NODE_VERSION=26
 export NODESOURCE_ARCHITECTURE=$(dpkg --print-architecture)
 export NODESOURCE_SUITE="nodistro"
 
