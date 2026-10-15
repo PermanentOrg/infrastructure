@@ -105,6 +105,28 @@ jobs:
           FUSION_AUTH_KEY_SFTP: ${{ secrets[matrix.environment.fusion_auth_key_sftp] }}
           FUSION_AUTH_SFTP_CLIENT_ID: ${{ secrets[matrix.environment.fusion_auth_sftp_client_id] }}
           FUSION_AUTH_SFTP_CLIENT_SECRET: ${{ secrets[matrix.environment.fusion_auth_sftp_client_secret] }}
+      - name: Clean up old images
+        run: |
+          set -euo pipefail
+          # Must match the hostname variable in images/${MACHINE}.json
+          case "$MACHINE" in
+            backend) name="$PERM_ENV" ;;
+            *) name="$MACHINE-$PERM_ENV" ;;
+          esac
+          old_images=$(aws ec2 describe-images --region "$AWS_REGION" --owners self \
+            --filters "Name=tag:Name,Values=$name" "Name=tag:built_by,Values=packer" \
+            --query 'sort_by(Images, &CreationDate)[:-3].ImageId' --output text)
+          for image_id in $old_images; do
+            echo "Deregistering $image_id and its snapshots"
+            aws ec2 deregister-image --region "$AWS_REGION" --image-id "$image_id" \
+              --delete-associated-snapshots
+          done
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          MACHINE: ${{ matrix.machine }}
+          PERM_ENV: ${{ matrix.environment.perm_env }}
   notify:
     runs-on: ubuntu-24.04
     needs: ["build"]
