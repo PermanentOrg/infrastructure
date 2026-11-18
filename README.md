@@ -16,9 +16,10 @@ This is the general workflow for provisioning and deploying a new images. Reason
 
 ## Infrastructure Modification Worflow
 
-The `instances` directory contains the Terraform configuration. You would want to make changes to Terraform to modify the infrastructure layout or hardware (e.g. new autoscaling groups, larger or more EC2 instances, etc). Our Terraform configuration currently manages all Permanent AMIs, EC2 instances, Autoscaling Groups, Launch Configurations, and Target Groups for the Load Balacers. Terraform does NOT manage: the Load Balancer itself, S3 buckets, SQS queues, VPCs, Security Groups, subnets, IAM, etc. To make changes to the infrastructure, push your changes to a branch, open a PR, and get a code review. Once the PR is merged, the change (depending on the directory they are in), should queue a `terraform plan` job our [Terraform Cloud organization](https://app.terraform.io/app/PermanentOrg/workspaces). Review the plan, and approve the changes if they look good. Terraform will then roll-out the new infrastructure.
+The `instances` directory contains the Terraform configuration. You would want to make changes to Terraform to modify the infrastructure layout or hardware (e.g. new autoscaling groups, larger or more EC2 instances, etc). Our Terraform configuration currently manages all Permanent AMIs, EC2 instances, Autoscaling Groups, Launch Configurations, and Target Groups for the Load Balacers. Terraform does NOT manage: the Load Balancer itself, S3 buckets (though it does manage S3 lifecycle rules), SQS queues, VPCs, Security Groups, subnets, IAM, etc. To make changes to the infrastructure, push your changes to a branch, open a PR, and get a code review. Once the PR is merged, the change (depending on the directory they are in), should queue a `terraform plan` job our [Terraform Cloud organization](https://app.terraform.io/app/PermanentOrg/workspaces). Review the plan, and approve the changes if they look good. Terraform will then roll-out the new infrastructure.
 
 ## Local development
+
 ### Install required software
 
 Install [Terraform](https://www.terraform.io/downloads.html), [Packer](https://www.packer.io/downloads) and [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-debian) to get started with infrastructure provisioning.
@@ -31,9 +32,11 @@ sudo apt install terraform packer
 sudo pip3 install ansible
 ansible-galaxy install willshersystems.sshd
 ```
+
 Ansible can also be installed with your preferred local package manager (e.g. apt).
 
 ### Create Images
+
 The easiest way to create an image is to use the ["Build Images" Github Action](https://github.com/PermanentOrg/infrastructure/actions?query=workflow%3A%22Build+Dev+Image%22).
 Image creation can also be done manually on your local machine. The following example illustrates the steps for building the cron image.
 
@@ -46,7 +49,7 @@ packer build -var-file=cron.json image.json
 
 For Permanent employees: use the AWS access keys associated with the `build` IAM user, not the keys associated with your personal AWS account.
 
-If a new category of image is being established by a Pull Request then it is possible that automated checks will fail without first manually invoking the `Build Images` Github Action.  This is because Terraform expects the images to exist in the AMI registry in order to succeed.
+If a new category of image is being established by a Pull Request then it is possible that automated checks will fail without first manually invoking the `Build Images` Github Action. This is because Terraform expects the images to exist in the AMI registry in order to succeed.
 
 ### Deploy Images
 
