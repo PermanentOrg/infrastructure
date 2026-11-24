@@ -32,7 +32,8 @@ resource "aws_security_group" "test_archivematica_efs" {
 }
 
 resource "aws_efs_file_system" "test_archivematica" {
-  encrypted = true
+  encrypted       = true
+  throughput_mode = "elastic"
 }
 
 resource "aws_efs_mount_target" "test_archivematica" {
