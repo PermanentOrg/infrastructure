@@ -304,7 +304,7 @@ resource "kubernetes_deployment" "archivematica_staging" {
           }
           env {
             name  = "ARCHIVEMATICA_MCPSERVER_MCPSERVER_CONCURRENT_PACKAGES"
-            value = "100"
+            value = "25"
           }
           resources {
             requests = {
